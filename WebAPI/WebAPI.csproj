@@ -7,19 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\Otp\OtpController.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ENT.BL\ENT.BL.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\Otp\" />
   </ItemGroup>
 
 </Project>
