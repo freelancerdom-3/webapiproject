@@ -1,3 +1,4 @@
+using ENT.BL.Category;
 using ENT.BL.User;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,8 @@ builder.Services.AddSwaggerGen();
 //builder.Services.AddSingleton // one instance per application
 builder.Services.AddScoped<IUser, User>(); // one instance, per request value will be assigned
 //builder.Services.AddTransient // new instance per request
+
+builder.Services.AddScoped<ICategory, Category>();
 
 var app = builder.Build();
 
