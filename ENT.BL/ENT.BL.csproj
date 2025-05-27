@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Otp\**" />
+    <EmbeddedResource Remove="Otp\**" />
+    <None Remove="Otp\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ENT.Model\ENT.Model.csproj" />
   </ItemGroup>
 
