@@ -9,7 +9,7 @@ namespace ENT.Model.Users
 {
     public class UserModel
     {
-        [Key]
+        //[Key]
         public int UserId { get; set; }
         public string? FullName { get; set; }
         public string? Email { get; set; }
