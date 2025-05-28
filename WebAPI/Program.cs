@@ -1,4 +1,5 @@
 using ENT.BL.Category;
+using ENT.BL.Otp;
 using ENT.BL.User;
 using ENT.Model.EntityFramework;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ builder.Services.AddScoped<IUser, User>(); // one instance, per request value wi
 //builder.Services.AddTransient // new instance per request
 
 builder.Services.AddScoped<ICategory, Category>();
+builder.Services.AddScoped<IOtp, Otp>();
 
 var app = builder.Build();
 
