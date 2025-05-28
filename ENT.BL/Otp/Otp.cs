@@ -1,6 +1,5 @@
 ﻿using ENT.Model.Common;
 using ENT.Model.Otp;
-using ENT.Model.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +12,7 @@ namespace ENT.BL.Otp
     {
         public Otp()
         {
-            
+
         }
         public async Task<APIResponseModel> Add(OtpModel objOtp)
         {
