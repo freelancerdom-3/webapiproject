@@ -2,6 +2,7 @@
 using ENT.Model.Services;
 using ENT.Model.SubCategory;
 using ENT.Model.Users;
+using ENT.Model.Cart;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -10,6 +11,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ENT.Model.ServiceAreaMapping;
+using ENT.Model.ServiceCartMapping;
+using ENT.Model.UserCartMapping;
 
 namespace ENT.Model.EntityFramework
 {
@@ -29,7 +32,16 @@ namespace ENT.Model.EntityFramework
             //optionsBuilder.UseSqlServer(@"Server= (localdb)\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;");
             
             //optionsBuilder.UseSqlServer("Server= (localdb)\\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;");
-          optionsBuilder.UseSqlServer("Server= MOHSINMOMIN\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
+         // optionsBuilder.UseSqlServer("Server= MOHSINMOMIN\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
+                        
+          //optionsBuilder.UseSqlServer("Server= MOHSINMOMIN\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
+        
+            //optionsBuilder.UseSqlServer("Server= (localdb)\\MSSQLLocalDB; Database= MyDB; Integrated Security=True; Encrypt=false;");
+            //  optionsBuilder.UseSqlServer("Server= (localdb)\\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;");
+
+            //NENCY
+            optionsBuilder.UseSqlServer("Server= NENCY-PATEL21\\SQLEXPRESS; Database= MyDB; Integrated Security=True; Encrypt=false;");
+
             base.OnConfiguring(optionsBuilder);
         }
 
@@ -39,6 +51,9 @@ namespace ENT.Model.EntityFramework
             modelBuilder.Entity<CategoryModel>().ToTable("TblCategorys");
             modelBuilder.Entity<SubCategoryModel>().ToTable("TblSubCategorys");
             modelBuilder.Entity<ServicesModel>().ToTable("TblServices");
+            modelBuilder.Entity<CartModel>().ToTable("TblCarts");
+            modelBuilder.Entity<ServiceCartMappingModel>().ToTable("TblServiceCartMappings");
+            modelBuilder.Entity<UserCartMappingModel>().ToTable("TblUserCartMappings");
         }
 
         public DbSet<UserModel> TblUsers { get; set; }
@@ -46,5 +61,8 @@ namespace ENT.Model.EntityFramework
         public DbSet<CategoryModel> TblCategorys { get; set; }
         public DbSet<SubCategoryModel> TblSubCategorys { get; set; }
         public DbSet<ServicesModel> TblServices { get; set; }
+        public DbSet<CartModel> TblCarts { get; set; }
+        public DbSet<ServiceCartMappingModel> TblServiceCartMappings { get; set; }
+        public DbSet<UserCartMappingModel> TblUserCartMappings {  get; set; }
     }
 }
