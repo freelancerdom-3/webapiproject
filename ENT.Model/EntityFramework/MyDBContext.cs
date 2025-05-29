@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ENT.Model.ServiceAreaMapping;
 
 namespace ENT.Model.EntityFramework
 {
@@ -19,6 +20,12 @@ namespace ENT.Model.EntityFramework
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            //General-connection string
+            //optionsBuilder.UseSqlServer("Server= (localdb)\\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;");
+
+            //Hemil-Fichadia
+            optionsBuilder.UseSqlServer(@"Server= (localdb)\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;");
+            
             optionsBuilder.UseSqlServer("Server= (localdb)\\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;");
           //optionsBuilder.UseSqlServer("Server= MOHSINMOMIN\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
             base.OnConfiguring(optionsBuilder);
@@ -26,10 +33,12 @@ namespace ENT.Model.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             modelBuilder.Entity<UserModel>().ToTable("TblUsers");
+            modelBuilder.Entity<ServiceAreaMappingModel>().ToTable("TblServiceAreaMappings");
             modelBuilder.Entity<CategoryModel>().ToTable("TblCategorys");
         }
 
         public DbSet<UserModel> TblUsers { get; set; }
+        public DbSet<ServiceAreaMappingModel> TblServiceAreaMappings { get; set; }
         public DbSet<CategoryModel> TblCategorys { get; set; }
     }
 }

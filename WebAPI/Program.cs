@@ -1,5 +1,6 @@
 using ENT.BL.Category;
 using ENT.BL.Otp;
+using ENT.BL.ServiceAreaMapping;
 using ENT.BL.User;
 using ENT.Model.EntityFramework;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ builder.Services.AddScoped<IUser, User>(); // one instance, per request value wi
 
 builder.Services.AddScoped<ICategory, Category>();
 builder.Services.AddScoped<IOtp, Otp>();
+builder.Services.AddScoped<IServiceAreaMapping, ServiceAreaMapping>();
 
 var app = builder.Build();
 

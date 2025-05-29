@@ -1,68 +1,71 @@
-﻿using ENT.Model.Common;
+﻿using Azure;
+using ENT.Model.Common;
 using ENT.Model.EntityFramework;
-using ENT.Model.Users;
+using ENT.Model.ServiceAreaMapping;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ENT.BL.User
+namespace ENT.BL.ServiceAreaMapping
 {
-    public class User : IUser
+    public class ServiceAreaMapping : IServiceAreaMapping
     {
         private readonly MyDBContext _context;
-        public User(MyDBContext context)
+
+        public ServiceAreaMapping(MyDBContext context)
         {
             _context = context;
         }
-        public async Task<APIResponseModel> Add(UserModel objUser)
+        public async Task<APIResponseModel> Add(ServiceAreaMappingModel objServiceAreaMapping)
         {
             APIResponseModel response = new APIResponseModel();
             try
             {
-                using (MyDBContext connection = _context)
+                using(MyDBContext connection = _context)
                 {
-                    await connection.TblUsers.AddAsync(objUser);
+                    await connection.TblServiceAreaMappings.AddAsync(objServiceAreaMapping);
                     await connection.SaveChangesAsync();
                 }
                 response.Data = true;
-                response.statusCode = 200;
-                response.Message = "Data inserted successfully";
+                response.statusCode = 201;
                 return response;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                response.Data = false;
                 response.statusCode = 400;
+                response.Data = false;
                 response.Message = ex.Message;
                 return response;
             }
         }
 
-        public async Task<APIResponseModel> Delete(int userId)
+        public async Task<APIResponseModel> Delete(int serviceAreaMappingId)
         {
             APIResponseModel response = new APIResponseModel();
             try
             {
                 using (MyDBContext connection = _context)
                 {
-                    bool objectExists = await connection.TblUsers.AnyAsync(x => x.UserId == userId);
+                    bool objectExists = await connection.TblServiceAreaMappings.AnyAsync(x => x.MappingId == serviceAreaMappingId);
                     if (objectExists)
                     {
-                        UserModel deleteObject = await connection.TblUsers.Where(x => x.UserId == userId).FirstAsync();
-                        connection.TblUsers.Remove(deleteObject);
-
+                        var deleteObject = await connection.TblServiceAreaMappings.FirstAsync(x => x.MappingId == serviceAreaMappingId);
+                        
+                        connection.TblServiceAreaMappings.Remove(deleteObject);
                         await connection.SaveChangesAsync();
 
+                        response.Data = true;
                         response.Message = "Data deleted successfully";
                     }
                     else
                     {
-                        response.Data = true;
-                        response.Message = "Id " + userId + " does not exists";
+                        response.Data = false;
+                        response.Message = "Id " + serviceAreaMappingId + " does not exists";
                     }
                     response.statusCode = 200;
                 }
@@ -71,8 +74,8 @@ namespace ENT.BL.User
             catch (Exception ex)
             {
                 response.statusCode = 400;
-                response.Message = ex.Message;
                 response.Data = false;
+                response.Message = ex.Message;
                 return response;
             }
         }
@@ -82,71 +85,71 @@ namespace ENT.BL.User
             APIResponseModel response = new APIResponseModel();
             try
             {
-                using(MyDBContext connection = _context)
+                using (MyDBContext connection = _context)
                 {
-                    response.Data = await _context.TblUsers.ToListAsync();
+                    response.Data = await _context.TblServiceAreaMappings.ToListAsync();
                 }
                 response.statusCode = 200;
                 return response;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.Data = false;
-                response.statusCode = 400;
+                response.statusCode = 404;
                 response.Message = ex.Message;
                 return response;
             }
         }
 
-        public async Task<APIResponseModel> GetById(int userId)
+        public async Task<APIResponseModel> GetById(int serviceAreaMappingId)
         {
             APIResponseModel response = new APIResponseModel();
             try
             {
+                
                 using(MyDBContext connection = _context)
                 {
-                    bool objectExists = await connection.TblUsers.AnyAsync(x => x.UserId == userId);
+                    bool objectExists = await connection.TblServiceAreaMappings.AnyAsync(x => x.MappingId == serviceAreaMappingId);
                     if (objectExists)
                     {
-                        response.Data = await connection.TblUsers.Where(x => x.UserId == userId).FirstAsync();
+                        response.Data = await connection.TblServiceAreaMappings.Where(x => x.MappingId == serviceAreaMappingId).FirstAsync();
+                        response.Message = "Data inserted successfully";
                     }
                     else
                     {
-                        response.Data = true;
-                        response.Message = "Id " + userId + " does not exists";
+                        response.Message = "Id " + serviceAreaMappingId + " does not exists";
                     }
-                    response.statusCode = 200;
                 }
+                response.statusCode = 200;
                 return response;
             }
-            catch(Exception ex){
-                response.statusCode = 400;
-                response.Message = ex.Message;
+            catch (Exception ex)
+            {
                 response.Data = false;
+                response.Message = ex.Message;
+                response.statusCode = 400;
                 return response;
             }
         }
 
-        public async Task<APIResponseModel> Update(UserModel objUser)
+        public async Task<APIResponseModel> Update(ServiceAreaMappingModel objServiceAreaMapping)
         {
             APIResponseModel response = new APIResponseModel();
             try
             {
                 using(MyDBContext connection = _context)
                 {
-                    bool objectExists = await connection.TblUsers.AnyAsync(x => x.UserId == objUser.UserId);
+                    bool objectExists = await connection.TblServiceAreaMappings.AnyAsync(x => x.MappingId == objServiceAreaMapping.MappingId);
                     if (objectExists)
                     {
-                        connection.Update(objUser);
+                        connection.Update(objServiceAreaMapping);
                         await connection.SaveChangesAsync();
-
                         response.Message = "Data updated successfully";
                     }
                     else
                     {
-                        response.Message = "User with id " + objUser.UserId + " does not exists";
+                        response.Message = "Given object does not exists";
                     }
-                    response.statusCode = 200;
                 }
                 return response;
             }
