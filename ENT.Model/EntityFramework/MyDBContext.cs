@@ -1,6 +1,7 @@
 ﻿using ENT.Model.Category;
 using ENT.Model.Services;
 using ENT.Model.SubCategory;
+using ENT.Model.Otp;
 using ENT.Model.Users;
 using ENT.Model.Cart;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +43,9 @@ namespace ENT.Model.EntityFramework
             //NENCY
             optionsBuilder.UseSqlServer("Server= NENCY-PATEL21\\SQLEXPRESS; Database= MyDB; Integrated Security=True; Encrypt=false;");
 
+          //optionsBuilder.UseSqlServer("Server= MOHSINMOMIN\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
+                    
+            optionsBuilder.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;");
             base.OnConfiguring(optionsBuilder);
         }
 
@@ -54,6 +58,7 @@ namespace ENT.Model.EntityFramework
             modelBuilder.Entity<CartModel>().ToTable("TblCarts");
             modelBuilder.Entity<ServiceCartMappingModel>().ToTable("TblServiceCartMappings");
             modelBuilder.Entity<UserCartMappingModel>().ToTable("TblUserCartMappings");
+            modelBuilder.Entity<OtpModel>().ToTable("TblOtp");
         }
 
         public DbSet<UserModel> TblUsers { get; set; }
@@ -64,5 +69,6 @@ namespace ENT.Model.EntityFramework
         public DbSet<CartModel> TblCarts { get; set; }
         public DbSet<ServiceCartMappingModel> TblServiceCartMappings { get; set; }
         public DbSet<UserCartMappingModel> TblUserCartMappings {  get; set; }
+        public DbSet<OtpModel> TblOtp {  get; set; }
     }
 }

@@ -11,11 +11,9 @@ namespace ENT.BL.Otp
 {
     public interface IOtp
     {
-
-        Task<APIResponseModel> Add(OtpModel objOtp);
-     
+       
         Task<APIResponseModel> GetById(int OtpId);
-        Task<APIResponseModel> Update(OtpModel objOtp);
-        
+        Task<APIResponseModel> Add(OtpModel objOtp);
+        Task<APIResponseModel> Verify(int Otp, string mobileNumber);
     }
 }
