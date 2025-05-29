@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using ENT.Model.ServiceAreaMapping;
 using ENT.Model.ServiceCartMapping;
 using ENT.Model.UserCartMapping;
+using ENT.Model.Offer;
 
 namespace ENT.Model.EntityFramework
 {
@@ -30,22 +31,17 @@ namespace ENT.Model.EntityFramework
             //optionsBuilder.UseSqlServer("Server= (localdb)\\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;");
 
             //Hemil-Fichadia
-            //optionsBuilder.UseSqlServer(@"Server= (localdb)\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;");
+            optionsBuilder.UseSqlServer(@"Server= (localdb)\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;");
             
-            //optionsBuilder.UseSqlServer("Server= (localdb)\\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;");
-         // optionsBuilder.UseSqlServer("Server= MOHSINMOMIN\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
-                        
-          //optionsBuilder.UseSqlServer("Server= MOHSINMOMIN\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
-        
-            //optionsBuilder.UseSqlServer("Server= (localdb)\\MSSQLLocalDB; Database= MyDB; Integrated Security=True; Encrypt=false;");
-            //  optionsBuilder.UseSqlServer("Server= (localdb)\\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;");
 
             //NENCY
-            optionsBuilder.UseSqlServer("Server= NENCY-PATEL21\\SQLEXPRESS; Database= MyDB; Integrated Security=True; Encrypt=false;");
+            //optionsBuilder.UseSqlServer("Server= NENCY-PATEL21\\SQLEXPRESS; Database= MyDB; Integrated Security=True; Encrypt=false;");
 
-          //optionsBuilder.UseSqlServer("Server= MOHSINMOMIN\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
-                    
-            optionsBuilder.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;");
+            //Alpesh-Gami          
+            //optionsBuilder.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;");
+            
+            //Mohsin-Ali-Momin
+            //optionsBuilder.UseSqlServer("Server= MOHSINMOMIN\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
             base.OnConfiguring(optionsBuilder);
         }
 
@@ -59,6 +55,7 @@ namespace ENT.Model.EntityFramework
             modelBuilder.Entity<ServiceCartMappingModel>().ToTable("TblServiceCartMappings");
             modelBuilder.Entity<UserCartMappingModel>().ToTable("TblUserCartMappings");
             modelBuilder.Entity<OtpModel>().ToTable("TblOtp");
+            modelBuilder.Entity<OfferModel>().ToTable("TblOffers");
         }
 
         public DbSet<UserModel> TblUsers { get; set; }
@@ -70,5 +67,6 @@ namespace ENT.Model.EntityFramework
         public DbSet<ServiceCartMappingModel> TblServiceCartMappings { get; set; }
         public DbSet<UserCartMappingModel> TblUserCartMappings {  get; set; }
         public DbSet<OtpModel> TblOtp {  get; set; }
+        public DbSet<OfferModel> TblOffers { get; set; }
     }
 }
