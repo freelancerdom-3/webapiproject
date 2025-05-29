@@ -26,14 +26,14 @@ namespace WebAPI.Controllers.Category
             return await _Category.Update(objCategoryModel);
         }
         [HttpDelete]
-        public async Task<APIResponseModel> Delete(int userId)
+        public async Task<APIResponseModel> Delete(int CategoryId)
         {
-            return await _Category.Delete(userId);
+            return await _Category.Delete(CategoryId);
         }
         [HttpGet("GetById")]
-        public async Task<APIResponseModel> GetById(int userId)
+        public async Task<APIResponseModel> GetById(int CategoryId)
         {
-            return await _Category.GetById(userId);
+            return await _Category.GetById(CategoryId);
         }
         [HttpGet]
         public async Task<APIResponseModel> GetAll()
