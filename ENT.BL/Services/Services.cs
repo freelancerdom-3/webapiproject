@@ -25,12 +25,23 @@ namespace ENT.BL.Services
             {
                 using (var connection = _context)
                 {
+                    bool isDuplicate = await _context.TblServices.AnyAsync(x => x.SubCategoryId == objServices.SubCategoryId 
+                                                                            && x.ServiceName == objServices.ServiceName);
+
+                    if (isDuplicate)
+                    {
+                        response.Data = false;
+                        response.statusCode = 409;
+                        response.Message = "Service with same name already exists";
+                        return response;
+                    }
                     await _context.TblServices.AddAsync(objServices);
                     await _context.SaveChangesAsync();
+
+                    response.Data = true;
+                    response.statusCode = 200;
+                    return response;
                 }
-                response.Data = true;
-                response.statusCode = 200;
-                return response;
             }
             catch (Exception ex)
             {
@@ -38,7 +49,7 @@ namespace ENT.BL.Services
                 response.statusCode = 400;
                 response.Message = ex.Message;
                 return response;
-                throw;
+                
             }
         }
 
@@ -85,10 +96,20 @@ namespace ENT.BL.Services
             {
                 using (var connection = _context)
                 {
-                    response.Data = _context.TblServices.ToList();
+                    //var result = await (from sr in _context.TblServices
+                    //                    join sc in _context.TblSubCategorys
+                    //                    on sr.SubCategoryId equals sc.SubCategoryId
+                    //                    select new ServiceWithSubCatagoryViewModel
+                    //                    {
+                    //                        SubCategoryName = sc.SubCategoryName,
+                    //                        ServiceName = sr.ServiceName
+                    //                    }).ToListAsync();
+
+                    //response.Data = result;
+                    response.statusCode = 200;
+                    return response;
                 }
-                response.statusCode = 200;
-                return response;
+               
             }
             catch (Exception ex)
             {
@@ -96,18 +117,18 @@ namespace ENT.BL.Services
                 response.statusCode = 400;
                 response.Message = ex.Message;
                 return response;
-                throw;
+               
             }
         }
 
-        public async Task<APIResponseModel> GetById(int ServiceId)
+        public async Task<APIResponseModel> GetByName(string ServiceName)
         {
             APIResponseModel response = new APIResponseModel();
             try
             {
                 using (var connection = _context)
                 {
-                    response.Data = _context.TblServices.Where(x => x.ServiceId == ServiceId).ToList();
+                    response.Data = await _context.TblServices.Where(x => x.ServiceName == ServiceName).ToListAsync();
                 }
                 response.statusCode = 200;
                 return response;
@@ -118,7 +139,7 @@ namespace ENT.BL.Services
                 response.statusCode = 400;
                 response.Message = ex.Message;
                 return response;
-                throw;
+                
             }
         }
 
@@ -129,21 +150,34 @@ namespace ENT.BL.Services
             {
                 using (var context = _context)
                 {
-                    var existingService = await context.TblServices.FirstOrDefaultAsync(x => x.ServiceId == objServices.ServiceId);
-                    if (existingService != null)
+                    bool isDuplicate = await context.TblServices.AnyAsync(x => x.ServiceId != objServices.ServiceId && x.SubCategoryId == objServices.SubCategoryId
+                                                                                                                    && x.ServiceName == objServices.ServiceName);
+                    if (isDuplicate)
                     {
-                        existingService.ServiceName = objServices.ServiceName;
-                        existingService.SubCategoryId = objServices.SubCategoryId;
-                        existingService.Price = objServices.Price;
-                        existingService.TimeTaken = objServices.TimeTaken;
-                        await context.SaveChangesAsync();
-                        response.statusCode = 200;
-                        response.Message = "Service updated successfully.";
+                        response.Data = false;
+                        response.statusCode = 409;
+                        response.Message = "Cannot update as given data exists";
+                        return response;
                     }
                     else
                     {
-                        response.statusCode = 404;
-                        response.Message = "Service not found.";
+                        var existingService = await context.TblServices.FirstOrDefaultAsync(x => x.ServiceId == objServices.ServiceId);
+                        if (existingService != null)
+                        {
+                            existingService.ServiceName = objServices.ServiceName;
+                            existingService.SubCategoryId = objServices.SubCategoryId;
+                            existingService.Price = objServices.Price;
+                            existingService.TimeTaken = objServices.TimeTaken;
+
+                            await context.SaveChangesAsync();
+                            response.statusCode = 200;
+                            response.Message = "Service updated successfully.";
+                        }
+                        else
+                        {
+                            response.statusCode = 404;
+                            response.Message = "Service not found.";
+                        }
                     }
                 }
                 return response;
@@ -154,7 +188,7 @@ namespace ENT.BL.Services
                 response.statusCode = 500;
                 response.Message = ex.Message;
                 return response;
-                throw;
+                
             }
         }
     }

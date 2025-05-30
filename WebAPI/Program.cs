@@ -25,6 +25,7 @@ builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer(@"Ser
 //Alpesh-Gami
 //builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;"));
 
+//builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;"));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

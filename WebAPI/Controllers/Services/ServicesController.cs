@@ -31,10 +31,10 @@ namespace WebAPI.Controllers.Services
         {
             return await _Services.Delete(ServiceId);
         }
-        [HttpGet("GetById")]
-        public async Task<APIResponseModel> GetById(int ServiceId)
+        [HttpGet("GetByName")]
+        public async Task<APIResponseModel> GetByName(string ServiceName)
         {
-            return await _Services.GetById(ServiceId);
+            return await _Services.GetByName(ServiceName);
         }
         [HttpGet]
         public async Task<APIResponseModel> GetAll()

@@ -13,7 +13,7 @@ namespace ENT.BL.Services
         // subcategoryid , service name should unique add and update, nency will take care
         Task<APIResponseModel> Add(ServicesModel objServices);
         Task<APIResponseModel> GetAll(); // user inner join
-        Task<APIResponseModel> GetById(int ServiceId);  // string service name
+        Task<APIResponseModel> GetByName(string ServiceName);  // string service name
         Task<APIResponseModel> Update(ServicesModel objServices);
         Task<APIResponseModel> Delete(int ServiceId);
     }

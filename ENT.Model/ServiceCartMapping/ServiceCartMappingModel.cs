@@ -13,6 +13,8 @@ namespace ENT.Model.ServiceCartMapping
         public int MappingId { get; set; }
         public int ServicesId { get; set; }
         public int CartId { get; set; }
+        public decimal Price { get; set; }
+        public int Quantity { get; set; }
 
     }
 }
