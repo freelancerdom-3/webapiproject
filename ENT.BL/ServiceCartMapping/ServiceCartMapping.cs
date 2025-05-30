@@ -27,6 +27,11 @@ namespace ENT.BL.ServiceCartMapping
                 using (MyDBContext connection = _context)
                 {
                     await _context.TblServiceCartMappings.AddAsync(objServiceCartMapping);
+
+                    // find all service for cart
+                    // sum of all service price
+                    //update cart table
+
                     await _context.SaveChangesAsync();
                 }
 
@@ -127,7 +132,14 @@ namespace ENT.BL.ServiceCartMapping
             {
                 using (MyDBContext connection = _context)
                 {
+
                     var deleteObject = await _context.TblServiceCartMappings.FindAsync(ServiceCartMappingId);
+
+                    // find all service for cart
+                    // sum of all service price
+                    //update cart table
+
+
                     if (deleteObject == null)
                     {
                         response.Data = "id does not exists";

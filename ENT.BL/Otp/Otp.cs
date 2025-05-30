@@ -22,7 +22,11 @@ namespace ENT.BL.Otp
             try
             {
                 using (var connection = _context)
-                {                 
+                {          
+                    //add logic to create random 6 digit code -- 123456
+                    // add expiration time = current time + 5 mins
+                    //create final objOtp model and then submit to db
+
                     await connection.TblOtp.AddAsync(objOtp);
                     await connection.SaveChangesAsync();
                 }
@@ -37,7 +41,7 @@ namespace ENT.BL.Otp
                 response.Message= ex.Message;
             }
             return response;
-        }
+        } //10:30 -- 10:35
         public async Task<APIResponseModel> GetById(int OtpId)
         {
             APIResponseModel response = new APIResponseModel();
@@ -59,8 +63,8 @@ namespace ENT.BL.Otp
                 response.Message = ex.Message;
             }        
             return response;
-        }
-        public async Task<APIResponseModel> Verify(int Otp, string mobileNumber)
+        } // remove this api
+        public async Task<APIResponseModel> Verify(int Otp, string mobileNumber) //123456, 9033342003
         {
             APIResponseModel response = new APIResponseModel();
             try
@@ -68,7 +72,7 @@ namespace ENT.BL.Otp
                 using (var context = _context)
                 {
                     var record =  await context.TblOtp.Where(x => x.MobileNumber == mobileNumber && x.OTP == Otp)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(); //isused=false && (expirationtime 10:35 less than expirationime)
                     
                     if (record == null)
                     {
@@ -78,6 +82,8 @@ namespace ENT.BL.Otp
                     }
                     else 
                     {
+
+                        // update same otp as isused=true;
                         response.Data = record;
                         response.statusCode = 200;
                         response.Message = "OTP has already been used.";

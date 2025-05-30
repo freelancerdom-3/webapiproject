@@ -11,9 +11,10 @@ namespace ENT.BL.SubCategory
 {
     public interface ISubCategory
     {
+        // sub category name should be unique in add and update,  alpesh will take care
         Task<APIResponseModel> Add(SubCategoryModel objSubCategory);
-        Task<APIResponseModel> GetAll();
-        Task<APIResponseModel> GetById(int SubCategoryId);
+        Task<APIResponseModel> GetAll(); // inner join
+        Task<APIResponseModel> GetById(int SubCategoryId);// add same for categoryId and result should ne in list
         Task<APIResponseModel> Update(SubCategoryModel objSubCategory);
         Task<APIResponseModel> Delete(int SubCategoryId);
     }

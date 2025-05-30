@@ -11,6 +11,7 @@ namespace ENT.BL.Category
 {
     public interface ICategory
     {
+        // check category name should be unique in entire application , paresh will take care
         Task<APIResponseModel> Add(CategoryModel objCategory);
         Task<APIResponseModel> GetAll();
         Task<APIResponseModel> GetById(int CategoryId);

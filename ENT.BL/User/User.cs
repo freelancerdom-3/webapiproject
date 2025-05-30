@@ -5,7 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -158,5 +160,47 @@ namespace ENT.BL.User
                 return response;
             }
         }
+
+
+        //public async Task<APIResponseModel> GetAll(string? searchBy = null)
+        //{
+        //    APIResponseModel responseModel = new();
+        //    try
+        //    {
+        //        List<GetTblUserViewModel> lstUsers = new();
+        //        using (var connection = _hsmDbContext)
+        //        {
+        //            //lstUsers = string.IsNullOrEmpty(searchBy)? connection.TblUsers.ToList():
+        //            //    connection.TblUsers.Where(x=>x.FullName.ToLower()==searchBy.ToLower()).
+        //            //    ToList();
+
+        //            lstUsers = connection.GetTblUserViewModel.FromSqlRaw($@"SELECT tuser.*,trole.rolename 
+        //            FROM [HSMDB].[dbo].[TblUser] tuser
+        //            inner join tblrole trole on trole.roleid=tuser.roleid where RoleName like '%{searchBy}%'").ToList();
+        //            responseModel.Data = lstUsers;
+        //            responseModel.StatusCode = HttpStatusCode.OK;
+        //            responseModel.Message = "Successfully";
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        responseModel.StatusCode = HttpStatusCode.InternalServerError;
+        //        responseModel.Message = ex.InnerException.Message;
+        //        responseModel.Data = null;
+        //    }
+        //    return responseModel;
+        //}
+
+        //public class GetTblUserViewModel
+        //{
+        //    [Key]
+        //    public int UserId { get; set; }
+        //    public string? FullName { get; set; }
+        //    public string? Email { get; set; }
+        //    public string? Password { get; set; }
+        //    public string? RoleName { get; set; }
+        //}
+
+        //public DbSet<GetTblUserViewModel> GetTblUserViewModel { get; set; }
     }
 }

@@ -12,10 +12,11 @@ namespace ENT.BL.Offer
 
     public interface IOffer
     {
-        Task<APIResponseModel> Add(OfferModel OfferUser);
+        // remove dependecy of service Id , paresh will take care
+        Task<APIResponseModel> Add(OfferModel OfferUser); // one startdate should have only one offer
         Task<APIResponseModel> GetAll();
-        Task<APIResponseModel> GetById(int OfferId);
-        Task<APIResponseModel> Update(OfferModel OfferUser);
+        Task<APIResponseModel> GetById(int OfferId); // datetime startdate 
+        Task<APIResponseModel> Update(OfferModel OfferUser);  // one startdate should have only one offer
         Task<APIResponseModel> Delete(int OfferId);
     }
 

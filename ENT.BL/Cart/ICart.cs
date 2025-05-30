@@ -9,7 +9,9 @@ using ENT.Model.Cart;
 namespace ENT.BL.Cart
 {
     public interface ICart
-    {
+    { 
+
+        //Hemil will take care
         Task<APIResponseModel> Add(CartModel ObjCart);
         Task<APIResponseModel> GetAll();
         Task<APIResponseModel> GetById(int CartId);
