@@ -1,9 +1,11 @@
 ﻿using Azure;
 using ENT.Model.Common;
+using ENT.Model.CustomModel;
 using ENT.Model.EntityFramework;
 using ENT.Model.ServiceAreaMapping;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +28,7 @@ namespace ENT.BL.ServiceAreaMapping
             APIResponseModel response = new APIResponseModel();
             try
             {
-                using(MyDBContext connection = _context)
+                using (MyDBContext connection = _context)
                 {
                     await connection.TblServiceAreaMappings.AddAsync(objServiceAreaMapping);
                     await connection.SaveChangesAsync();
@@ -35,7 +37,7 @@ namespace ENT.BL.ServiceAreaMapping
                 response.statusCode = 201;
                 return response;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.statusCode = 400;
                 response.Data = false;
@@ -55,7 +57,7 @@ namespace ENT.BL.ServiceAreaMapping
                     if (objectExists)
                     {
                         var deleteObject = await connection.TblServiceAreaMappings.FirstAsync(x => x.MappingId == serviceAreaMappingId);
-                        
+
                         connection.TblServiceAreaMappings.Remove(deleteObject);
                         await connection.SaveChangesAsync();
 
@@ -106,8 +108,8 @@ namespace ENT.BL.ServiceAreaMapping
             APIResponseModel response = new APIResponseModel();
             try
             {
-                
-                using(MyDBContext connection = _context)
+
+                using (MyDBContext connection = _context)
                 {
                     bool objectExists = await connection.TblServiceAreaMappings.AnyAsync(x => x.MappingId == serviceAreaMappingId);
                     if (objectExists)
@@ -132,12 +134,13 @@ namespace ENT.BL.ServiceAreaMapping
             }
         }
 
+
         public async Task<APIResponseModel> Update(ServiceAreaMappingModel objServiceAreaMapping)
         {
             APIResponseModel response = new APIResponseModel();
             try
             {
-                using(MyDBContext connection = _context)
+                using (MyDBContext connection = _context)
                 {
                     bool objectExists = await connection.TblServiceAreaMappings.AnyAsync(x => x.MappingId == objServiceAreaMapping.MappingId);
                     if (objectExists)
@@ -153,11 +156,104 @@ namespace ENT.BL.ServiceAreaMapping
                 }
                 return response;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 response.statusCode = 400;
                 response.Message = ex.Message;
                 response.Data = false;
+                return response;
+            }
+        }
+
+        public async Task<APIResponseModel> GetAreaBySearch(string? name)
+        {
+            APIResponseModel response = new();
+            try
+            {
+                List<GetAreaBySearchViewModel> searchResults = new();
+                using (MyDBContext connection = _context)
+                {
+                    //lstUsers = string.IsNullOrEmpty(searchBy)? connection.TblUsers.ToList():
+                    //    connection.TblUsers.Where(x=>x.FullName.ToLower()==searchBy.ToLower()).
+                    //    ToList();
+
+                    //            lstUsers = connection.GetTblUserViewModel.FromSqlRaw($@"SELECT tuser.*,trole.rolename 
+                    //            FROM [HSMDB].[dbo].[TblUser] tuser
+                    //            inner join tblrole trole on trole.roleid=tuser.roleid where RoleName like '%{searchBy}%'").ToList();
+
+                    
+
+                    searchResults = await connection.GetAreaBySearchViewModel.FromSqlRaw($@"
+                    SELECT TOP 10
+                        Id,
+                        Name,
+                        Type,
+                        Parent
+                    FROM (
+                        SELECT 
+                            CAST(c.CityId AS INT) AS Id,
+                            c.CityName AS Name,
+                            'City' AS Type,
+                            CONCAT(s.StateName, ' > ', co.CountryName) AS Parent
+                        FROM TblCities c
+                        INNER JOIN TblStates s ON c.StateId = s.StateId
+                        INNER JOIN TblCountries co ON s.CountryId = co.CountryId
+                        WHERE c.CityName LIKE '{name}%'
+
+                        UNION
+
+                        SELECT 
+                            CAST(a.AreaId AS INT) AS Id,
+                            a.AreaName AS Name,
+                            'Area' AS Type,
+                            CONCAT(c.CityName, ' > ', s.StateName, ' > ', co.CountryName) AS Parent
+                        FROM TblAreas a
+                        INNER JOIN TblCities c ON a.CityId = c.CityId
+                        INNER JOIN TblStates s ON c.StateId = s.StateId
+                        INNER JOIN TblCountries co ON s.CountryId = co.CountryId
+                        WHERE a.AreaName LIKE '{name}%'
+
+                        UNION
+
+                        SELECT 
+                            CAST(s.StateId AS INT) AS Id,
+                            s.StateName AS Name,
+                            'State' AS Type,
+                            co.CountryName AS Parent
+                        FROM TblStates s
+                        INNER JOIN TblCountries co ON s.CountryId = co.CountryId
+                        WHERE s.StateName LIKE '{name}%'
+
+                        UNION
+
+                        SELECT 
+                            CAST(co.CountryId AS INT) AS Id,
+                            co.CountryName AS Name,
+                            'Country' AS Type,
+                            NULL AS Parent
+                        FROM TblCountries co
+                        WHERE co.CountryName LIKE '{name}%'
+                    ) AS AllResults
+                    GROUP BY Id, Name, Type, Parent
+                    ").ToListAsync();
+                    
+                }
+                if(searchResults.Count() == 0)
+                {
+                    response.Message = "Data does not exists";
+                    response.statusCode = 204;
+                }
+                else
+                {
+                    response.Data = searchResults;
+                    response.statusCode = 200;
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.statusCode = 400;
+                response.Message = ex.InnerException.Message;
                 return response;
             }
         }

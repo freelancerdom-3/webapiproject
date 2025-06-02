@@ -45,6 +45,12 @@ namespace WebAPI.Controllers.ServiceAreaMapping
         {
             return await _serviceAreaMapping.Update(objServiceAreaMapping);
         }
-        
+
+        [HttpGet("GetAreaBySearch")]
+        public async Task<APIResponseModel> GetAreaBySearch(string? name)
+        {
+            return await _serviceAreaMapping.GetAreaBySearch(name);
+        }
+
     }
 }
