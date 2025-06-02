@@ -11,7 +11,7 @@ namespace ENT.Model.ServiceCartMapping
     {
         [Key]
         public int MappingId { get; set; }
-        public int ServicesId { get; set; }
+        public int ServiceId { get; set; }
         public int CartId { get; set; }
         public decimal Price { get; set; }
         public int Quantity { get; set; }

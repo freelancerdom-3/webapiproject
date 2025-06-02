@@ -26,8 +26,8 @@ namespace ENT.BL.Cart
             {
                 using (MyDBContext connection = _context)
                 {
-                    await _context.TblCarts.AddAsync(objCart);
-                    await _context.SaveChangesAsync();
+                    await connection.TblCarts.AddAsync(objCart);
+                    await connection.SaveChangesAsync();
                 }
 
                 response.Data = true;
@@ -50,7 +50,7 @@ namespace ENT.BL.Cart
             {
                 using (MyDBContext connection = _context)
                 {
-                    response.Data = _context.TblCarts.ToList();
+                    response.Data = connection.TblCarts.ToList();
                 }
 
                 
@@ -73,18 +73,18 @@ namespace ENT.BL.Cart
             {
                 using (MyDBContext connection = _context)
                 {
-                    var cartObject = await _context.TblCarts.Where(x => x.CartId == CartId).FirstOrDefaultAsync();
+                    var cartObject = await connection.TblCarts.Where(x => x.CartId == CartId).FirstOrDefaultAsync();
                     if (cartObject == null)
                     {
                         response.Data = "Id does not exists";
+                        response.statusCode = 204;
                     }
                     else
                     {
                         response.Data = cartObject;
+                        response.statusCode = 200;
                     }
-                        await _context.SaveChangesAsync();
                 }
-                    response.statusCode = 200;
                     return response;
             }
             catch(Exception ex) 
@@ -103,10 +103,10 @@ namespace ENT.BL.Cart
             {
                 using (MyDBContext connection = _context)
                 {
-                    _context.TblCarts.Update(objCart);
-                    await _context.SaveChangesAsync();
+                    connection.TblCarts.Update(objCart);
+                    await connection.SaveChangesAsync();
                 }
-
+                response.Message = "Data updated successfully";
                 response.Data = true;
                 response.statusCode = 200;
                 return response;
@@ -130,17 +130,21 @@ namespace ENT.BL.Cart
                     var deleteObject = await _context.TblCarts.FindAsync(CartId);
                     if (deleteObject == null)
                     {
-                        response.Data = "id does not exists";
+                        response.Message = "id does not exists";
+                        response.Data = false;
+                        response.statusCode = 204;
                     }
                     else
                     {
-                        _context.TblCarts.Remove(deleteObject);
+                        connection.TblCarts.Remove(deleteObject);
+                        response.Message = "Data deleted successfully";
+                        response.Data = false;
+                        response.statusCode = 200;
                        
                     }
-                         await _context.SaveChangesAsync();
+                    await connection.SaveChangesAsync();
                 }
-                response.Data = true;
-                response.statusCode = 200;
+                
                 return response;
             }
             catch (Exception ex)

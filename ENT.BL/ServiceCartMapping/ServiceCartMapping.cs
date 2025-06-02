@@ -1,13 +1,15 @@
-﻿using System;
+﻿using ENT.BL.Cart;
+using ENT.Model.Cart;
+using ENT.Model.Common;
+using ENT.Model.EntityFramework;
+using ENT.Model.ServiceCartMapping;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ENT.Model.ServiceCartMapping;
-using ENT.Model.Common;
-using ENT.Model.EntityFramework;
-using ENT.BL.Cart;
-using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace ENT.BL.ServiceCartMapping
 {
@@ -18,6 +20,36 @@ namespace ENT.BL.ServiceCartMapping
         {
             _context = context;
         }
+
+        //Update cart method that comes to effect after any kind of change in service cart mappings table
+        public async Task updateCart(int cartId)
+        {
+            using(MyDBContext connection = _context)
+            {
+                var listOfServicesInGivenCartId = await connection.TblServiceCartMappings
+                                                        .Where(x => x.CartId == cartId)
+                                                        .ToListAsync();
+                decimal subTotal = 0;
+                CartModel? cart = await connection.TblCarts.Where(x => x.CartId == cartId).FirstOrDefaultAsync();
+                if (listOfServicesInGivenCartId.Count > 0)
+                {
+                    foreach (var service in listOfServicesInGivenCartId)
+                    {
+                        subTotal += service.Quantity * service.Price;
+                    }
+                }
+                if (cart != null)
+                {
+                    cart.Price = subTotal;
+                }
+                // find all service for cart
+                // sum of all service price
+                //update cart table
+
+                await connection.SaveChangesAsync();
+            }
+        }
+
         public async Task<APIResponseModel> Add(ServiceCartMappingModel objServiceCartMapping)
         {
 
@@ -26,17 +58,17 @@ namespace ENT.BL.ServiceCartMapping
             {
                 using (MyDBContext connection = _context)
                 {
-                    await _context.TblServiceCartMappings.AddAsync(objServiceCartMapping);
-
-                    // find all service for cart
-                    // sum of all service price
-                    //update cart table
-
-                    await _context.SaveChangesAsync();
+                    await connection.TblServiceCartMappings.AddAsync(objServiceCartMapping);
+                    await connection.SaveChangesAsync();
+                    //Logic to update the respective cart's subtotal amount
+                    //Update status of cart after every change
+                    await updateCart(objServiceCartMapping.CartId);
+                    
                 }
 
                 response.Data = true;
-                response.statusCode = 200;
+                response.Message = "Data created successfully";
+                response.statusCode = 201;
                 return response;
             }
             catch (Exception ex)
@@ -71,23 +103,22 @@ namespace ENT.BL.ServiceCartMapping
             }
         }
 
-        public async Task<APIResponseModel> GetById(int ServiceCartMappingId)
+        public async Task<APIResponseModel> GetByCartId(int cartId)
         {
             APIResponseModel response = new APIResponseModel();
             try
             {
                 using (MyDBContext connection = _context)
                 {
-                    var cartObject = await _context.TblServiceCartMappings.Where(x => x.MappingId == ServiceCartMappingId).FirstOrDefaultAsync();
-                    if (cartObject == null)
+                    var cartServiceObject = await connection.TblServiceCartMappings.Where(x => x.CartId == cartId).ToListAsync();
+                    if (cartServiceObject == null)
                     {
-                        response.Data = "Id does not exists";
+                        response.Data = "Cart Id does not exists";
                     }
                     else
                     {
-                        response.Data = cartObject;
+                        response.Data = cartServiceObject;
                     }
-                    await _context.SaveChangesAsync();
                 }
                 response.statusCode = 200;
                 return response;
@@ -108,12 +139,22 @@ namespace ENT.BL.ServiceCartMapping
             {
                 using (MyDBContext connection = _context)
                 {
-                    _context.TblServiceCartMappings.Update(objServiceCartMapping);
-                    await _context.SaveChangesAsync();
+                    bool updateObjectExists = await connection.TblServiceCartMappings.AnyAsync(x => x.CartId == objServiceCartMapping.CartId);
+                    if (updateObjectExists)
+                    {
+                        connection.TblServiceCartMappings.Update(objServiceCartMapping);
+                        await connection.SaveChangesAsync();
+                        response.Message = "Data updated successfully";
+                        response.statusCode = 200;
+                        //Update status of cart after every change
+                        await updateCart(objServiceCartMapping.CartId);
+                    }
+                    else
+                    {
+                        response.statusCode = 204;
+                        response.Message = "Data does not exists";
+                    }
                 }
-
-                response.Data = true;
-                response.statusCode = 200;
                 return response;
             }
             catch (Exception ex)
@@ -125,7 +166,7 @@ namespace ENT.BL.ServiceCartMapping
             }
         }
 
-        public async Task<APIResponseModel> Delete(int ServiceCartMappingId)
+        public async Task<APIResponseModel> Delete(int serviceCartMappingId)
         {
             APIResponseModel response = new APIResponseModel();
             try
@@ -133,26 +174,32 @@ namespace ENT.BL.ServiceCartMapping
                 using (MyDBContext connection = _context)
                 {
 
-                    var deleteObject = await _context.TblServiceCartMappings.FindAsync(ServiceCartMappingId);
+                    bool deleteObjectExists = await connection.TblServiceCartMappings.AnyAsync(x => x.MappingId == serviceCartMappingId);
 
                     // find all service for cart
                     // sum of all service price
                     //update cart table
 
 
-                    if (deleteObject == null)
+                    if (deleteObjectExists)
                     {
-                        response.Data = "id does not exists";
+                        ServiceCartMappingModel? deleteObject = connection.TblServiceCartMappings.Where(x => x.MappingId == serviceCartMappingId).FirstOrDefault();
+                        _ = connection.TblServiceCartMappings.Remove(deleteObject);
+                        response.Message = "Service deleted successfully";
+                        response.statusCode = 200;
+                        await connection.SaveChangesAsync();
+
+                        //Update cart with latest services total
+                        await updateCart(deleteObject.CartId);
                     }
                     else
                     {
-                        _context.TblServiceCartMappings.Remove(deleteObject);
+                        response.Message = "Data does not exists";
+                        response.statusCode = 204;
 
                     }
-                    await _context.SaveChangesAsync();
+                    
                 }
-                response.Data = true;
-                response.statusCode = 200;
                 return response;
             }
             catch (Exception ex)

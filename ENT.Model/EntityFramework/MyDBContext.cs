@@ -33,7 +33,7 @@ namespace ENT.Model.EntityFramework
             //optionsBuilder.UseSqlServer("Server= (localdb)\\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;");
 
             //Hemil-Fichadia
-            optionsBuilder.UseSqlServer(@"Server= (localdb)\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;");
+            optionsBuilder.UseSqlServer(@"Server= LAPTOP-LHKLMKKD\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
             
 
             //NENCY
@@ -53,7 +53,7 @@ namespace ENT.Model.EntityFramework
             //  optionsBuilder.UseSqlServer("Server= (localdb)\\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;");
 
             //NENCY
-            optionsBuilder.UseSqlServer("Server= NENCY-PATEL21\\SQLEXPRESS; Database= MyDB; Integrated Security=True; Encrypt=false;");
+            //optionsBuilder.UseSqlServer("Server= NENCY-PATEL21\\SQLEXPRESS; Database= MyDB; Integrated Security=True; Encrypt=false;");
 
           //optionsBuilder.UseSqlServer("Server= MOHSINMOMIN\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
                     

@@ -31,10 +31,10 @@ namespace WebAPI.Controllers.ServiceCartMapping
             return await _ServiceCartMapping.GetAll();
         }
 
-        [HttpGet("GetById")]
-        public async Task<APIResponseModel> GetById(int ServiceCartMappingId)
+        [HttpGet("GetByCartId")]
+        public async Task<APIResponseModel> GetByCartId(int ServiceCartMappingId)
         {
-            return await _ServiceCartMapping.GetById(ServiceCartMappingId);
+            return await _ServiceCartMapping.GetByCartId(ServiceCartMappingId);
         }
 
         [HttpPut]

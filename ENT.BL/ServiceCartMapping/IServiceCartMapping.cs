@@ -12,7 +12,7 @@ namespace ENT.BL.ServiceCartMapping
     {
         Task<APIResponseModel> Add(ServiceCartMappingModel ObjServiceCartMapping);
         Task<APIResponseModel> GetAll();
-        Task<APIResponseModel> GetById(int ServiceCartMappingId);
+        Task<APIResponseModel> GetByCartId(int cartId);
         Task<APIResponseModel> Update(ServiceCartMappingModel ObjServiceCartMapping);
         Task<APIResponseModel> Delete(int ServiceCartMappingId);
     }
