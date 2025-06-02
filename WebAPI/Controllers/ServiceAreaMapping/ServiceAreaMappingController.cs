@@ -52,5 +52,11 @@ namespace WebAPI.Controllers.ServiceAreaMapping
             return await _serviceAreaMapping.GetAreaBySearch(name);
         }
 
+        [HttpGet("GetServicesByRegionType")]
+        public async Task<APIResponseModel> GetServicesByRegionType(string regionType, int regionId)
+        {
+            return await _serviceAreaMapping.GetServicesByRegionType(regionType, regionId);
+        }
+
     }
 }

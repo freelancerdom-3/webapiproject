@@ -20,5 +20,7 @@ namespace ENT.BL.ServiceAreaMapping
 
         Task<APIResponseModel> Update(ServiceAreaMappingModel objServiceAreaMapping);
         Task<APIResponseModel> GetAreaBySearch(string name);
+
+        Task<APIResponseModel> GetServicesByRegionType(string regionType, int regionId);
     }
 }

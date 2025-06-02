@@ -3,6 +3,7 @@ using ENT.Model.Common;
 using ENT.Model.CustomModel;
 using ENT.Model.EntityFramework;
 using ENT.Model.ServiceAreaMapping;
+using ENT.Model.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -253,7 +254,47 @@ namespace ENT.BL.ServiceAreaMapping
             catch (Exception ex)
             {
                 response.statusCode = 400;
-                response.Message = ex.InnerException.Message;
+                response.Message = ex.Message;
+                return response;
+            }
+        }
+
+        public async Task<APIResponseModel> GetServicesByRegionType(string regionType, int regionId)
+        {
+            APIResponseModel response = new APIResponseModel();
+            try
+            {
+                List<ServicesModel> serviceList = new List<ServicesModel>();
+                using(MyDBContext connection = _context)
+                {
+                    if (regionType.Equals("Area"))
+                    {
+                        serviceList = await connection.TblServices.FromSqlRaw($@"
+                            SELECT s.ServiceId AS ServiceId, s.ServiceName AS ServiceName, s.SubCategoryId AS SubCategoryId, s.Price AS Price, s.TimeTaken AS TimeTaken
+                            FROM TblServices s
+                            JOIN TblServiceAreaMappings sa
+                            ON s.ServiceId = sa.ServiceId
+                            WHERE sa.AreaId = '{regionId}'
+                        ").ToListAsync();
+                        if(serviceList.Count == 0)
+                        {
+                            response.Message = "Sorry we are not there yet";
+                        }
+                    }
+                    else
+                    {
+                        serviceList = await connection.TblServices.ToListAsync();
+                        response.Data = serviceList;
+                    }
+                }
+                response.Data = serviceList;
+                response.statusCode = 200;
+                return response;
+            }
+            catch(Exception ex)
+            {
+                response.statusCode = 400;
+                response.Message = ex.Message;
                 return response;
             }
         }
