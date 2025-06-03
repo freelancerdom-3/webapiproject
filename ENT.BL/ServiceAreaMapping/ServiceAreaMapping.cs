@@ -166,7 +166,7 @@ namespace ENT.BL.ServiceAreaMapping
             }
         }
 
-        public async Task<APIResponseModel> GetAreaBySearch(string? name)
+        public async Task<APIResponseModel> GetAreaBySearch(string? name, int maxrecord)
         {
             APIResponseModel response = new();
             try
@@ -185,7 +185,7 @@ namespace ENT.BL.ServiceAreaMapping
                     
 
                     searchResults = await connection.GetAreaBySearchViewModel.FromSqlRaw($@"
-                    SELECT TOP 10
+                    SELECT TOP {maxrecord}
                         Id,
                         Name,
                         Type,
