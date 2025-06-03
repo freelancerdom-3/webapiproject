@@ -47,9 +47,9 @@ namespace WebAPI.Controllers.ServiceAreaMapping
         }
 
         [HttpGet("GetAreaBySearch")]
-        public async Task<APIResponseModel> GetAreaBySearch(string? name)
+        public async Task<APIResponseModel> GetAreaBySearch(string? name, int maxrecord)
         {
-            return await _serviceAreaMapping.GetAreaBySearch(name);
+            return await _serviceAreaMapping.GetAreaBySearch(name, maxrecord);
         }
 
         [HttpGet("GetServicesByRegionType")]
