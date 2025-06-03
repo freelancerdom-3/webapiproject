@@ -23,26 +23,35 @@ namespace ENT.BL.SubCategory
             APIResponseModel response = new APIResponseModel();
             try
             {
-                using (var connection = _context)
+               
+                bool isDuplicate = await _context.TblSubCategorys
+                    .AnyAsync(sub => sub.SubCategoryName == objSubCategory.SubCategoryName);
+
+                if (isDuplicate)
                 {
-                    await _context.TblSubCategorys.AddAsync(objSubCategory);
-                    await _context.SaveChangesAsync();
+                    response.Data = false;
+                    response.statusCode = 409; 
+                    response.Message = "A subcategory with the same name already exists.";
+                    return response;
                 }
+
+                
+                await _context.TblSubCategorys.AddAsync(objSubCategory);
+                await _context.SaveChangesAsync();
+
                 response.Data = true;
-                response.statusCode = 200;
+                response.statusCode = 201; 
                 return response;
             }
             catch (Exception ex)
             {
                 response.Data = false;
-                response.statusCode = 400;
+                response.statusCode = 500; 
                 response.Message = ex.Message;
                 return response;
-                throw;
             }
         }
-
-
+        
         public async Task<APIResponseModel> Delete(int SubCategoryId)
         {
             APIResponseModel response = new APIResponseModel();
@@ -78,16 +87,27 @@ namespace ENT.BL.SubCategory
                 throw;
             }
         }
-
         public async Task<APIResponseModel> GetAll()
         {
-            APIResponseModel response = new APIResponseModel();
+            var response = new APIResponseModel();
+
             try
             {
-                using (var connection = _context)
-                {
-                    response.Data = _context.TblSubCategorys.ToList();
-                }
+                var data = await _context.TblSubCategorys
+                    .Join(
+                        _context.TblCategorys,
+                        sub => sub.CategoryId,
+                        cat => cat.CategoryId,
+                        (sub, cat) => new
+                        {
+                           // SubCategoryId = sub.SubCategoryId,
+                            SubCategoryName = sub.SubCategoryName,
+                          //  CategoryId = cat.CategoryId,
+                            CategoryName = cat.CategoryName
+                        })
+                    .ToListAsync();
+
+                response.Data = data;
                 response.statusCode = 200;
                 return response;
             }
@@ -97,9 +117,8 @@ namespace ENT.BL.SubCategory
                 response.statusCode = 400;
                 response.Message = ex.Message;
                 return response;
-                throw;
             }
-        }
+        }       
 
         public async Task<APIResponseModel> GetById(int SubCategoryId)
         {
@@ -122,40 +141,70 @@ namespace ENT.BL.SubCategory
                 throw;
             }
         }
-
         public async Task<APIResponseModel> Update(SubCategoryModel objSubCategory)
         {
             APIResponseModel response = new APIResponseModel();
             try
-            {
-                using (var context = _context)
+            {               
+                var existingSubCategory = await _context.TblSubCategorys
+                    .FirstOrDefaultAsync(x => x.SubCategoryId == objSubCategory.SubCategoryId);
+
+                if (existingSubCategory == null)
                 {
-                    var existingSubCategory = await context.TblSubCategorys.FirstOrDefaultAsync(x => x.SubCategoryId == objSubCategory.SubCategoryId);
-                    if (existingSubCategory != null)
-                    {
-                        existingSubCategory.SubCategoryName = objSubCategory.SubCategoryName;
-                        existingSubCategory.CategoryId = objSubCategory.CategoryId;
-                        existingSubCategory.SubCategoreId = objSubCategory.SubCategoreId;
-                        await context.SaveChangesAsync();
-                        response.statusCode = 200;
-                        response.Message = "SubCategory updated successfully.";
-                    }
-                    else
-                    {
-                        response.statusCode = 404;
-                        response.Message = "SubCategory not found.";
-                    }
+                    response.statusCode = 404;
+                    response.Message = "SubCategory not found.";
+                    return response;
                 }
+               
+                bool isDuplicate = await _context.TblSubCategorys
+                    .AnyAsync(x => x.SubCategoryId != objSubCategory.SubCategoryId &&
+                                   x.SubCategoryName.ToLower() == objSubCategory.SubCategoryName.ToLower());
+
+                if (isDuplicate)
+                {
+                    response.statusCode = 409; 
+                    response.Message = "A subcategory with the same name already exists.";
+                    return response;
+                }
+              
+                existingSubCategory.SubCategoryName = objSubCategory.SubCategoryName;
+                existingSubCategory.CategoryId = objSubCategory.CategoryId;
+                existingSubCategory.SubCategoreId = objSubCategory.SubCategoreId;              
+                await _context.SaveChangesAsync();
+
+                response.statusCode = 200;
+                response.Message = "SubCategory updated successfully.";
                 return response;
             }
             catch (Exception ex)
             {
                 response.Data = false;
-                response.statusCode = 500;
+                response.statusCode = 500; 
                 response.Message = ex.Message;
                 return response;
-                throw;
             }
+        }
+
+        public async Task<APIResponseModel> GetByName(string subCategoryName)
+        {
+            APIResponseModel response = new APIResponseModel();
+            try
+            {
+                using (var connection = _context)
+                {
+                    response.Data = _context.TblSubCategorys.Where(x => x.SubCategoryName == subCategoryName).ToList();
+                }
+                response.statusCode = 200;
+                return response;
+            }
+            catch (Exception ex) 
+            {
+                response.Data = false;
+                response.statusCode = 400;
+                response.Message = ex.Message;
+                return response;
+            }
+
         }
 
     }

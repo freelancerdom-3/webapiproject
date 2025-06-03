@@ -17,11 +17,7 @@ namespace WebAPI.Controllers.Otp
             _otp = otp;
         }
        
-        [HttpGet("GetById")]
-        public async Task<APIResponseModel> GetById(int OtpId)
-        {
-            return await _otp.GetById(OtpId);
-        }
+      
 
         [HttpPost]
         public async Task<APIResponseModel> Add(OtpModel objOtpModel)

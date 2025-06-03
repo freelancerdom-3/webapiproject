@@ -2,6 +2,7 @@
 using ENT.Model.EntityFramework;
 using ENT.Model.Otp;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 
 namespace ENT.BL.Otp
@@ -21,10 +22,19 @@ namespace ENT.BL.Otp
             APIResponseModel response = new APIResponseModel();
             try
             {
+
+              
+
                 using (var connection = _context)
-                {          
+                {
                     //add logic to create random 6 digit code -- 123456
+
+                    Random random = new Random();
+                    int otpCode = random.Next(100000, 999999);
+                    objOtp.OTP = otpCode;
                     // add expiration time = current time + 5 mins
+                    objOtp.ExpiryTime = DateTime.UtcNow.AddMinutes(5);
+                    objOtp.IsUsed = false;
                     //create final objOtp model and then submit to db
 
                     await connection.TblOtp.AddAsync(objOtp);
@@ -38,32 +48,11 @@ namespace ENT.BL.Otp
             {
                 response.Data = false;
                 response.statusCode = 400;
-                response.Message= ex.Message;
+                response.Message = ex.Message;
             }
             return response;
         } //10:30 -- 10:35
-        public async Task<APIResponseModel> GetById(int OtpId)
-        {
-            APIResponseModel response = new APIResponseModel();
-            try 
-            {
-                using (var context = _context)
-                {
-                    response.Data =  _context.TblOtp.Where(x => x.OTPId == OtpId).ToList();
-                   
-                }
-              Console.WriteLine(response.Data);
-                response.statusCode = 200;
-                return response;
-            }
-             catch(Exception ex)
-            {
-                response.Data = false;
-                response.statusCode = 400;
-                response.Message = ex.Message;
-            }        
-            return response;
-        } // remove this api
+
         public async Task<APIResponseModel> Verify(int Otp, string mobileNumber) //123456, 9033342003
         {
             APIResponseModel response = new APIResponseModel();
@@ -71,7 +60,7 @@ namespace ENT.BL.Otp
             {
                 using (var context = _context)
                 {
-                    var record =  await context.TblOtp.Where(x => x.MobileNumber == mobileNumber && x.OTP == Otp)
+                    var record =  await context.TblOtp.Where(x => x.MobileNumber == mobileNumber && x.OTP == Otp && x.IsUsed == false && x.ExpiryTime > DateTime.Now)
                     .FirstOrDefaultAsync(); //isused=false && (expirationtime 10:35 less than expirationime)
                     
                     if (record == null)
@@ -84,6 +73,7 @@ namespace ENT.BL.Otp
                     {
 
                         // update same otp as isused=true;
+                        record.IsUsed = true;
                         response.Data = record;
                         response.statusCode = 200;
                         response.Message = "OTP has already been used.";

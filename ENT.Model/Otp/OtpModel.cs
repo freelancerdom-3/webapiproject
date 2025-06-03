@@ -16,5 +16,6 @@ namespace ENT.Model.Otp
         public int OTP {  get; set; }
         public DateTime ExpiryTime { get; set; }
         public bool IsUsed {  get; set; }
+      
     }
 }

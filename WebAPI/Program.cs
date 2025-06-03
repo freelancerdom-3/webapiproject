@@ -18,12 +18,12 @@ var builder = WebApplication.CreateBuilder(args);
 //builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer("Server= MOHSINMOMIN\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;"));
 //builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer("Server= (localdb)\\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;"));
 //Hemil-Fichadia
-builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer(@"Server= (localdb)\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;"));
+//builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer(@"Server= (localdb)\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;"));
 //Nency-Patel
 //builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer("Server= NENCY-PATEL21\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;"));
 
 //Alpesh-Gami
-//builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;"));
+builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;"));
 
 //builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;"));
 builder.Services.AddControllers();

@@ -40,5 +40,11 @@ namespace WebAPI.Controllers.SubCategory
         {
             return await _SubCategory.GetAll();
         }
+        [HttpGet("GetByName")]
+        public async Task<APIResponseModel> GetByName(string subCategoryName)
+        {
+            return await _SubCategory.GetByName(subCategoryName);
+        }
+
     }
 }
