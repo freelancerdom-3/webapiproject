@@ -12,7 +12,7 @@ namespace ENT.Model.Otp
     {
         [Key]
         public int OTPId { get; set; }
-        public string? MobileNumber { get; set; }
+        public string MobileNumber { get; set; }
         public int OTP {  get; set; }
         public DateTime ExpiryTime { get; set; }
         public bool IsUsed {  get; set; }

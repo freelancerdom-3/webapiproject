@@ -20,10 +20,11 @@ namespace WebAPI.Controllers.Otp
       
 
         [HttpPost]
-        public async Task<APIResponseModel> Add(OtpModel objOtpModel)
+        public async Task<APIResponseModel> Add(string mobileNumber)
         {
-            return await _otp.Add(objOtpModel);
+            return await _otp.Add(mobileNumber);
         }
+
         [HttpGet("Verify")]
         public async Task<APIResponseModel> Verify(int Otp, string mobileNumber)
         {

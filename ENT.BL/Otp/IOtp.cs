@@ -13,7 +13,7 @@ namespace ENT.BL.Otp
     {
        
        
-        Task<APIResponseModel> Add(OtpModel objOtp);
+        Task<APIResponseModel> Add(string mobileNumber);
         Task<APIResponseModel> Verify(int Otp, string mobileNumber);
     }
 }
