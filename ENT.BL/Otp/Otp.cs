@@ -1,8 +1,15 @@
-﻿using ENT.Model.Common;
+﻿using ENT.BL.Common;
+using ENT.Model.Common;
 using ENT.Model.EntityFramework;
 using ENT.Model.Otp;
+using ENT.Model.Users;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 
 namespace ENT.BL.Otp
@@ -10,31 +17,108 @@ namespace ENT.BL.Otp
     public class Otp : IOtp
     {
         private readonly MyDBContext _context;
-        public Otp(MyDBContext context)
+        //This is for jwt token generation
+        private readonly IConfiguration _configuration;
+        public Otp(MyDBContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
-        public object OtpRecord { get; private set; }
+        private OtpModel GenerateOtpObject(string mobileNumber)
+        {
+            //add logic to create random 6 digit code -- 123456
+            Random random = new Random();
+            OtpModel otpObject = new OtpModel();
+            otpObject.OTP = random.Next(100000, 1000000);
+            otpObject.MobileNumber = mobileNumber;
+            
+            // add expiration time = current time + 5 mins
+            otpObject.ExpiryTime = DateTime.Now.AddMinutes(5);
+            otpObject.IsUsed = false;
+            
+            return otpObject;
+        }
 
-        public async Task<APIResponseModel> Add( string mobileNumber)
+        public async Task<APIResponseModel> GenerateOtpForAdmin(string mobileNumber)
         {
             APIResponseModel response = new APIResponseModel();
             try
             {
-
-                //add logic to create random 6 digit code -- 123456
-                OtpModel otpObject = new OtpModel();
-                Random random = new Random();
-                int otpCode = random.Next(100000, 999999);
-                otpObject.OTP = otpCode;
-                otpObject.MobileNumber = mobileNumber;
-                // add expiration time = current time + 5 mins
-                otpObject.ExpiryTime = DateTime.Now.AddMinutes(5);
-                otpObject.IsUsed = false;
-
+                
                 using (var connection = _context)
                 {
+                    bool userExists = await connection.TblUsers.AnyAsync(x => x.MobileNumber == mobileNumber);
+                    if (userExists == false)
+                    {
+                        UserModel newUser = new UserModel() { MobileNumber = mobileNumber, UserTypeId = 1};
+                        await connection.TblUsers.AddAsync(newUser);
+                    }
+                    OtpModel otpObject = GenerateOtpObject(mobileNumber);
+                    response.Data = otpObject;
+                    response.Message = "OTP Generated successfully";
+                    response.statusCode = 200;
+
+                    await connection.TblOtp.AddAsync(otpObject);
+                    await connection.SaveChangesAsync();
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Data = false;
+                response.statusCode = 400;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<APIResponseModel> GenerateOtpForEndUser(string mobileNumber)
+        {
+            APIResponseModel response = new APIResponseModel();
+            try
+            {
+                using (var connection = _context)
+                {
+                    bool userExists = await connection.TblUsers.AnyAsync(x => x.MobileNumber == mobileNumber);
+                    if (userExists == false)
+                    {
+                        UserModel newUser = new UserModel() { MobileNumber = mobileNumber, UserTypeId = 2 };
+                        await connection.TblUsers.AddAsync(newUser);
+                    }
+                    OtpModel otpObject = GenerateOtpObject(mobileNumber);
+                    response.Data = otpObject;
+                    response.Message = "OTP Generated successfully";
+                    response.statusCode = 200;
+
+                    await connection.TblOtp.AddAsync(otpObject);
+                    await connection.SaveChangesAsync();
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Data = false;
+                response.statusCode = 400;
+                response.Message = ex.Message;
+            }
+            return response;
+        }
+
+        public async Task<APIResponseModel> GenerateOtpForServiceProvider(string mobileNumber)
+        {
+            APIResponseModel response = new APIResponseModel();
+            try
+            {
+                OtpModel otpObject = GenerateOtpObject(mobileNumber);
+                using (var connection = _context)
+                {
+                    bool userExists = await connection.TblUsers.AnyAsync(x => x.MobileNumber == mobileNumber);
+                    if (userExists == false)
+                    {
+                        UserModel newUser = new UserModel() { MobileNumber = mobileNumber, UserTypeId = 3 };
+                        await connection.TblUsers.AddAsync(newUser);
+                    }
                     await connection.TblOtp.AddAsync(otpObject);
                     await connection.SaveChangesAsync();
                 }
@@ -50,7 +134,9 @@ namespace ENT.BL.Otp
                 response.Message = ex.Message;
             }
             return response;
-        } //10:30 -- 10:35
+        }
+
+        
 
         public async Task<APIResponseModel> Verify(int Otp, string mobileNumber) //123456, 9033342003
         {
@@ -62,7 +148,7 @@ namespace ENT.BL.Otp
                    
 
                     //mobile number does not exists
-                    OtpModel otpObject = await connection.TblOtp.Where(x => x.MobileNumber == mobileNumber).OrderByDescending(x => x.OTPId).LastAsync();
+                    OtpModel otpObject = await connection.TblOtp.Where(x => x.MobileNumber == mobileNumber).OrderByDescending(x => x.OTPId).FirstAsync();
 
                     if(otpObject != null)
                     {
@@ -70,10 +156,23 @@ namespace ENT.BL.Otp
                         {
                             if(otpObject.OTP == Otp && otpObject.IsUsed == false)
                             {
-                                //write update logic
+                                //Update otp flag to true
                                 otpObject.IsUsed = true;
                                 await connection.SaveChangesAsync();
                                 response.Message = "OTP verified";
+                                //Generate token if OTP is verified
+                                //Get exisiting user
+                                UserModel existingUser = await connection.TblUsers.FirstOrDefaultAsync(x => x.MobileNumber.Equals(mobileNumber));
+                                
+                                //Generate token
+                                string token = GenerateJSONWebToken(existingUser);
+                                response.Data = new
+                                {
+                                    data = token,
+                                    userId = existingUser.UserId,
+                                    mobileNumber = existingUser.MobileNumber,
+                                    userTypeId = existingUser.UserTypeId
+                                };
                             }
                             else
                             {
@@ -98,6 +197,30 @@ namespace ENT.BL.Otp
                 response.Message = ex.Message;
             }
             return response;
+        }
+
+        public string GenerateJSONWebToken(UserModel objUser)
+        {
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, JwtSettings.subject),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("UserId", objUser.UserId.ToString()),
+                new Claim("MobileNumber", objUser.MobileNumber.ToString()),
+                new Claim("UserTypeId", objUser.UserTypeId.ToString()),
+                new Claim("ExpiryTime", DateTime.Now.AddMinutes(JwtSettings.expiryMinutes).ToString())
+            };
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtSettings.jwtKey));
+            var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(
+                    JwtSettings.issuer,
+                    JwtSettings.audience,
+                    claims,
+                    expires : DateTime.Now.AddMinutes(JwtSettings.expiryMinutes),
+                    signingCredentials: signIn
+                );
+            string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
+            return tokenValue;
         }
     }   
 }

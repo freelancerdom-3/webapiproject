@@ -32,9 +32,9 @@ namespace WebAPI.Controllers.UserCartMapping
         }
 
         [HttpGet("GetById")]
-        public async Task<APIResponseModel> GetById(int UserCartMappingId)
+        public async Task<APIResponseModel> GetById(int userId)
         {
-            return await _UserCartMapping.GetById(UserCartMappingId);
+            return await _UserCartMapping.GetCartByUserId(userId);
         }
 
         [HttpPut]
@@ -45,9 +45,9 @@ namespace WebAPI.Controllers.UserCartMapping
 
 
         [HttpDelete]
-        public async Task<APIResponseModel> Delete(int UserCartMappingId)
+        public async Task<APIResponseModel> Delete(int userId)
         {
-            return await _UserCartMapping.Delete(UserCartMappingId);
+            return await _UserCartMapping.DeleteByUserId(userId);
         }
     }
 }

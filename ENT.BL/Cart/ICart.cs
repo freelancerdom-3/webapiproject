@@ -12,7 +12,7 @@ namespace ENT.BL.Cart
     { 
 
         //Hemil will take care
-        Task<APIResponseModel> Add(CartModel ObjCart);
+        Task<APIResponseModel> Add();
         Task<APIResponseModel> GetAll();
         Task<APIResponseModel> GetById(int CartId);
         Task<APIResponseModel> Update(CartModel ObjCart);

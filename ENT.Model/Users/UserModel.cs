@@ -11,10 +11,11 @@ namespace ENT.Model.Users
     {
         [Key]
         public int UserId { get; set; }
+        public string MobileNumber { get; set; }
         public string? FullName { get; set; }
         public string? Email { get; set; }
         public string? Gender { get; set; }
-        public DateTime DOB { get; set; }
+        public DateOnly? DateOfBirth { get; set; }
         public int UserTypeId { get; set; }
     }
 }

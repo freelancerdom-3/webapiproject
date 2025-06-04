@@ -19,10 +19,22 @@ namespace WebAPI.Controllers.Otp
        
       
 
-        [HttpPost]
-        public async Task<APIResponseModel> Add(string mobileNumber)
+        [HttpPost("OtpForAdmin")]
+        public async Task<APIResponseModel> GenerateOtpForAdmin(string mobileNumber)
         {
-            return await _otp.Add(mobileNumber);
+            return await _otp.GenerateOtpForAdmin(mobileNumber);
+        }
+
+        [HttpPost("OtpForEndUser")]
+        public async Task<APIResponseModel> GenerateOtpForEndUser(string mobileNumber)
+        {
+            return await _otp.GenerateOtpForEndUser(mobileNumber);
+        }
+
+        [HttpPost("OtpForServiceProvider")]
+        public async Task<APIResponseModel> GenerateOtpForServiceProvider(string mobileNumber)
+        {
+            return await _otp.GenerateOtpForServiceProvider(mobileNumber);
         }
 
         [HttpGet("Verify")]

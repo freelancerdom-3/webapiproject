@@ -12,6 +12,9 @@ using Microsoft.EntityFrameworkCore;
 using ENT.BL.Offer;
 using ENT.BL.Offers;
 using ENT.BL.ServiceProviderAreaMapping;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,18 +22,41 @@ var builder = WebApplication.CreateBuilder(args);
 //builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer("Server= MOHSINMOMIN\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;"));
 //builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer("Server= (localdb)\\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;"));
 //Hemil-Fichadia
-//builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer(@"Server= (localdb)\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;"));
+builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer(@"Server= (localdb)\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;"));
 //Nency-Patel
 //builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer("Server= NENCY-PATEL21\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;"));
 
 //Alpesh-Gami
-builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;"));
+//builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;"));
 
 //builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;"));
+
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//JWT Authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options  =>
+{
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:JwtKey"]))
+    };
+});
+
+builder.Services.AddAuthorization();
 
 //builder.Services.AddSingleton // one instance per application
 builder.Services.AddScoped<IUser, User>(); // one instance, per request value will be assigned
@@ -56,6 +82,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//JWT
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseHttpsRedirection();
 

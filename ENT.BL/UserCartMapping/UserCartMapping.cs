@@ -10,15 +10,18 @@ using ENT.Model.EntityFramework;
 using ENT.BL.ServiceCartMapping;
 using ENT.BL.Cart;
 using Microsoft.EntityFrameworkCore;
+using ENT.Model.Cart;
 
 namespace ENT.BL.UserCartMapping
 {
     public class UserCartMapping : IUserCartMapping
     {
         private readonly MyDBContext _context;
-        public UserCartMapping(MyDBContext context)
+        private readonly IServiceCartMapping _serviceCartMappingService;
+        public UserCartMapping(MyDBContext context, IServiceCartMapping serviceCartMapping)
         {
             _context = context;
+            _serviceCartMappingService = serviceCartMapping;
         }
         public async Task<APIResponseModel> Add(UserCartMappingModel objUserCartMapping)
         {
@@ -27,12 +30,13 @@ namespace ENT.BL.UserCartMapping
             {
                 using (MyDBContext connection = _context)
                 {
-                    await _context.TblUserCartMappings.AddAsync(objUserCartMapping);
-                    await _context.SaveChangesAsync();
+                    await connection.TblUserCartMappings.AddAsync(objUserCartMapping);
+                    await connection.SaveChangesAsync();
                 }
 
                 response.Data = true;
                 response.statusCode = 200;
+                response.Message = "Data added successfully";
                 return response;
             }
             catch (Exception ex)
@@ -68,17 +72,17 @@ namespace ENT.BL.UserCartMapping
             
         }
 
-        public async Task<APIResponseModel> GetById(int UserCartMappingId)
+        public async Task<APIResponseModel> GetCartByUserId(int userId)
         {
             APIResponseModel response = new APIResponseModel();
             try
             {
                 using (MyDBContext connection = _context)
                 {
-                    var cartObject = await _context.TblUserCartMappings.Where(x => x.MappingId == UserCartMappingId).FirstOrDefaultAsync();
+                    var cartObject = await _context.TblUserCartMappings.Where(x => x.UserId == userId).FirstOrDefaultAsync();
                     if (cartObject == null)
                     {
-                        response.Data = "Id does not exists";
+                        response.Data = "userId "+ userId +" does not exists";
                     }
                     else
                     {
@@ -131,27 +135,42 @@ namespace ENT.BL.UserCartMapping
             }
         }
 
-        public async Task<APIResponseModel> Delete(int UserCartMappingId)
+        public async Task<APIResponseModel> DeleteByUserId(int userId)
         {
             APIResponseModel response = new APIResponseModel();
             try
             {
                 using (MyDBContext connection = _context)
                 {
-                    var deleteObject = await _context.TblUserCartMappings.FindAsync(UserCartMappingId);
-                    if (deleteObject == null)
+                    var deleteUserCart = await _context.TblUserCartMappings.Where(x => x.UserId == userId).FirstOrDefaultAsync();
+                    if (deleteUserCart != null)
                     {
-                        response.Data = "id does not exists";
+                        //Check if serivces exists in ServiceCartMappings table, if not then delete the user cart
+                        bool servicesExists = await connection.TblServiceCartMappings.AnyAsync(x => x.CartId == deleteUserCart.CartId);
+                        if (servicesExists == false)
+                        {
+                            connection.TblUserCartMappings.Remove(deleteUserCart);
+                            await connection.SaveChangesAsync();
+                            
+                            response.Data = true;
+                            response.Message = "Data deleted successfully";
+                            response.statusCode = 202;
+                        }
+                        else
+                        {
+                            response.Data = false;
+                            response.Message = "Cannot delete user cart mapping as cart contains services";
+                        }
+
                     }
                     else
                     {
-                        _context.TblUserCartMappings.Remove(deleteObject);
-
+                        response.Data = false;
+                        response.Message = "userId " + userId + " does not exists";
+                        response.statusCode = 204;
                     }
-                    await _context.SaveChangesAsync();
                 }
-                response.Data = true;
-                response.statusCode = 200;
+                
                 return response;
             }
             catch (Exception ex)

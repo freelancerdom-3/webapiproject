@@ -16,9 +16,11 @@ namespace ENT.BL.ServiceCartMapping
     public class ServiceCartMapping : IServiceCartMapping
     {
         private readonly MyDBContext _context;
+        //private readonly ICart _cartService;
         public ServiceCartMapping(MyDBContext context)
         {
             _context = context;
+            //_cartService = cartService;
         }
 
         //Update cart method that comes to effect after any kind of change in service cart mappings table
@@ -26,7 +28,10 @@ namespace ENT.BL.ServiceCartMapping
         {
             using(MyDBContext connection = _context)
             {
-                var listOfServicesInGivenCartId = await connection.TblServiceCartMappings
+                // find all service for cart
+                // sum of all service price
+                //update cart table
+                List<ServiceCartMappingModel> listOfServicesInGivenCartId = await connection.TblServiceCartMappings
                                                         .Where(x => x.CartId == cartId)
                                                         .ToListAsync();
                 decimal subTotal = 0;
@@ -40,13 +45,14 @@ namespace ENT.BL.ServiceCartMapping
                 }
                 if (cart != null)
                 {
+                    //Here price is updated
                     cart.Price = subTotal;
-                }
-                // find all service for cart
-                // sum of all service price
-                //update cart table
+                    //Here changes are saved
+                    await connection.SaveChangesAsync();
 
-                await connection.SaveChangesAsync();
+                    //It creates circular dependency
+                    //await _cartService.Update(cart);
+                }
             }
         }
 
@@ -87,7 +93,7 @@ namespace ENT.BL.ServiceCartMapping
             {
                 using (MyDBContext connection = _context)
                 {
-                    response.Data = _context.TblServiceCartMappings.ToList();
+                    response.Data = await connection.TblServiceCartMappings.ToListAsync();
                 }
 
 
@@ -113,14 +119,15 @@ namespace ENT.BL.ServiceCartMapping
                     var cartServiceObject = await connection.TblServiceCartMappings.Where(x => x.CartId == cartId).ToListAsync();
                     if (cartServiceObject == null)
                     {
-                        response.Data = "Cart Id does not exists";
+                        response.Message = "cartId " + cartId + " does not exists";
+                        response.statusCode = 204;
                     }
                     else
                     {
                         response.Data = cartServiceObject;
+                        response.statusCode = 200;
                     }
                 }
-                response.statusCode = 200;
                 return response;
             }
             catch (Exception ex)

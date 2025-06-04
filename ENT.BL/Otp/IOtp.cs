@@ -13,7 +13,9 @@ namespace ENT.BL.Otp
     {
        
        
-        Task<APIResponseModel> Add(string mobileNumber);
+        Task<APIResponseModel> GenerateOtpForAdmin(string mobileNumber);
+        Task<APIResponseModel> GenerateOtpForEndUser(string mobileNumber);
+        Task<APIResponseModel> GenerateOtpForServiceProvider(string mobileNumber);
         Task<APIResponseModel> Verify(int Otp, string mobileNumber);
     }
 }

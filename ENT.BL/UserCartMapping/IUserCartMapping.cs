@@ -12,9 +12,9 @@ namespace ENT.BL.UserCartMapping
     {
         Task<APIResponseModel> Add(UserCartMappingModel ObjUserCartMapping);
         Task<APIResponseModel> GetAll();
-        Task<APIResponseModel> GetById(int UserCartMappingId);
+        Task<APIResponseModel> GetCartByUserId(int userId);
         Task<APIResponseModel> Update(UserCartMappingModel ObjUserCartMapping);
-        Task<APIResponseModel> Delete(int UserCartMappingId);
+        Task<APIResponseModel> DeleteByUserId(int userId);
     }
 }
 

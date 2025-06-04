@@ -19,21 +19,15 @@ namespace WebAPI.Controllers.Cart
         }
 
         [HttpPost]
-        public async Task<APIResponseModel> Add(CartModel objCartModel)
+        public async Task<APIResponseModel> Add()
         {
-            return await _cart.Add(objCartModel);
+            return await _cart.Add();
         }
 
         [HttpGet]
         public async Task<APIResponseModel> GetAll()
         {
             return await _cart.GetAll();
-        }
-
-        [HttpGet("GetById")]
-        public async Task<APIResponseModel> GetById(int CartId)
-        {
-            return await _cart.GetById(CartId);
         }
 
         [HttpPut]
