@@ -21,6 +21,7 @@ using ENT.Model.City;
 using ENT.Model.State;
 using ENT.Model.Country;
 using ENT.Model.ServiceProviderAreaMapping;
+using ENT.Model.ServiceProviderSubCategoryMapping;
 
 
 namespace ENT.Model.EntityFramework
@@ -79,6 +80,8 @@ namespace ENT.Model.EntityFramework
             modelBuilder.Entity<StateModel>().ToTable("TblStates");
             modelBuilder.Entity<CountryModel>().ToTable("TblCountries");
             modelBuilder.Entity<ServiceProviderAreaMappingModel>().ToTable("TblServiceProviderAreaMapping");
+            modelBuilder.Entity<ServiceProviderSubCategoryMappingModel>().ToTable("TblServiceProviderSubCategoryMapping");
+            
         }
 
         public DbSet<UserModel> TblUsers { get; set; }
@@ -97,6 +100,9 @@ namespace ENT.Model.EntityFramework
         public DbSet<CityModel> TblCities { get; set; }
         public DbSet<StateModel> TblStates { get; set; }
         public DbSet<CountryModel> TblCountries { get; set; }
+        public DbSet<ServiceProviderSubCategoryMappingModel> TblServiceProviderSubCategoryMapping { get; set; }
+
+        public DbSet<ServiceProviderSubCategoryMappingViewModel> ServiceProviderSubCategoryMappingViewModel {  get; set; }
         public DbSet<ServiceProviderAreaMappingModel> TblServiceProviderAreaMapping { get; set; }
     }
 }
