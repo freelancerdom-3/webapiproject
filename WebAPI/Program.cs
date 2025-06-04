@@ -11,6 +11,7 @@ using ENT.Model.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using ENT.BL.Offer;
 using ENT.BL.Offers;
+using ENT.BL.ServiceProviderAreaMapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,7 @@ builder.Services.AddScoped<ICart, Cart>();
 builder.Services.AddScoped<IServiceCartMapping , ServiceCartMapping>();
 builder.Services.AddScoped<IUserCartMapping, UserCartMapping>();
 builder.Services.AddScoped<IOffer, Offer>();
+builder.Services.AddScoped<IServiceProviderAreMapping, ServiceProviderAreaMapping>();
 
 
 var app = builder.Build();

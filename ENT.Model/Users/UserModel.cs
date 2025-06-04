@@ -15,5 +15,6 @@ namespace ENT.Model.Users
         public string? Email { get; set; }
         public string? Gender { get; set; }
         public DateTime DOB { get; set; }
+        public int UserTypeId { get; set; }
     }
 }

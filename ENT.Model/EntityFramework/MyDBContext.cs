@@ -20,6 +20,7 @@ using ENT.Model.Area;
 using ENT.Model.City;
 using ENT.Model.State;
 using ENT.Model.Country;
+using ENT.Model.ServiceProviderAreaMapping;
 
 
 namespace ENT.Model.EntityFramework
@@ -77,6 +78,7 @@ namespace ENT.Model.EntityFramework
             modelBuilder.Entity<CityModel>().ToTable("TblCities");
             modelBuilder.Entity<StateModel>().ToTable("TblStates");
             modelBuilder.Entity<CountryModel>().ToTable("TblCountries");
+            modelBuilder.Entity<ServiceProviderAreaMappingModel>().ToTable("TblServiceProviderAreaMapping");
         }
 
         public DbSet<UserModel> TblUsers { get; set; }
@@ -95,5 +97,6 @@ namespace ENT.Model.EntityFramework
         public DbSet<CityModel> TblCities { get; set; }
         public DbSet<StateModel> TblStates { get; set; }
         public DbSet<CountryModel> TblCountries { get; set; }
+        public DbSet<ServiceProviderAreaMappingModel> TblServiceProviderAreaMapping { get; set; }
     }
 }
