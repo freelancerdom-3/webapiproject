@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using ENT.BL.Offer;
 using ENT.BL.Offers;
 using ENT.BL.ServiceProviderAreaMapping;
+using ENT.BL.ServiceProviderSubCategoryMapping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +47,7 @@ builder.Services.AddScoped<IServiceCartMapping , ServiceCartMapping>();
 builder.Services.AddScoped<IUserCartMapping, UserCartMapping>();
 builder.Services.AddScoped<IOffer, Offer>();
 builder.Services.AddScoped<IServiceProviderAreMapping, ServiceProviderAreaMapping>();
+builder.Services.AddScoped<IServiceProviderSubCategoryMapping, ServiceProviderSubCategoryMapping>();
 
 
 var app = builder.Build();

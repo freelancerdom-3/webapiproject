@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 namespace ENT.Model.CustomModel
 {
     [Keyless]
-    public class ServiceSubCatagoryNameViewModel
+    public class ServiceProviderSubCategoryMappingViewModel
     {
-        
+        public int UserId { get; set; }
+        public string FullName { get; set; }
         public string SubCategoryName { get; set; }
-        public string ServiceName { get; set; }
     }
 }
