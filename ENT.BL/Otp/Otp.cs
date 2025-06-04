@@ -17,30 +17,29 @@ namespace ENT.BL.Otp
 
         public object OtpRecord { get; private set; }
 
-        public async Task<APIResponseModel> Add(OtpModel objOtp)
+        public async Task<APIResponseModel> Add( string mobileNumber)
         {
             APIResponseModel response = new APIResponseModel();
             try
             {
 
-              
+                //add logic to create random 6 digit code -- 123456
+                OtpModel otpObject = new OtpModel();
+                Random random = new Random();
+                int otpCode = random.Next(100000, 999999);
+                otpObject.OTP = otpCode;
+                otpObject.MobileNumber = mobileNumber;
+                // add expiration time = current time + 5 mins
+                otpObject.ExpiryTime = DateTime.Now.AddMinutes(5);
+                otpObject.IsUsed = false;
 
                 using (var connection = _context)
                 {
-                    //add logic to create random 6 digit code -- 123456
-
-                    Random random = new Random();
-                    int otpCode = random.Next(100000, 999999);
-                    objOtp.OTP = otpCode;
-                    // add expiration time = current time + 5 mins
-                    objOtp.ExpiryTime = DateTime.UtcNow.AddMinutes(5);
-                    objOtp.IsUsed = false;
-                    //create final objOtp model and then submit to db
-
-                    await connection.TblOtp.AddAsync(objOtp);
+                    await connection.TblOtp.AddAsync(otpObject);
                     await connection.SaveChangesAsync();
                 }
-                response.Data = true;
+                response.Data = otpObject;
+                response.Message = "OTP Generated successfully";
                 response.statusCode = 200;
                 return response;
             }
@@ -58,26 +57,37 @@ namespace ENT.BL.Otp
             APIResponseModel response = new APIResponseModel();
             try
             {
-                using (var context = _context)
+                using (var connection = _context)
                 {
-                    var record =  await context.TblOtp.Where(x => x.MobileNumber == mobileNumber && x.OTP == Otp && x.IsUsed == false && x.ExpiryTime > DateTime.Now)
-                    .FirstOrDefaultAsync(); //isused=false && (expirationtime 10:35 less than expirationime)
-                    
-                    if (record == null)
-                    {
-                        response.statusCode = 204;
-                        response.Message = "Invalid OTP or Mobile Number.";
-                        return response;
-                    }
-                    else 
-                    {
+                   
 
-                        // update same otp as isused=true;
-                        record.IsUsed = true;
-                        response.Data = record;
-                        response.statusCode = 200;
-                        response.Message = "OTP has already been used.";
-                        return response;
+                    //mobile number does not exists
+                    OtpModel otpObject = await connection.TblOtp.Where(x => x.MobileNumber == mobileNumber).OrderByDescending(x => x.OTPId).LastAsync();
+
+                    if(otpObject != null)
+                    {
+                        if(otpObject.OTP == Otp && otpObject.ExpiryTime > DateTime.Now)
+                        {
+                            if(otpObject.OTP == Otp && otpObject.IsUsed == false)
+                            {
+                                //write update logic
+                                otpObject.IsUsed = true;
+                                await connection.SaveChangesAsync();
+                                response.Message = "OTP verified";
+                            }
+                            else
+                            {
+                                response.Message = "OTP is used";
+                            }
+                        }
+                        else
+                        {
+                            response.Message = "OTP expired";
+                        }
+                    }
+                    else
+                    {
+                        response.Message = "Mobile number or OTP invalid";
                     }
                 }      
             }
