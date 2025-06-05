@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ENT.Model.ServiceProviderAreaMapping;
 using ENT.Model.ServiceAreaMapping;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers.ServiceProviderAreaMapping
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ServiceProviderAreaMappingController : ControllerBase
     {
         private readonly IServiceProviderAreMapping _serviceProviderAreaMapping;

@@ -1,6 +1,7 @@
 ﻿using ENT.BL.Offer;
 using ENT.Model.Common;
 using ENT.Model.Offer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace WebAPI.Controllers.Offers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class OfferController : ControllerBase
     {
         private readonly IOffer _offer;

@@ -4,11 +4,13 @@ using ENT.Model.Cart;
 using ENT.BL.Cart;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers.Cart
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CartController : ControllerBase
     {
         private readonly ICart _cart;

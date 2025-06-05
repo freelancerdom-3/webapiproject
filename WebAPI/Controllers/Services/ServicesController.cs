@@ -2,6 +2,7 @@
 using ENT.Model.Category;
 using ENT.Model.Common;
 using ENT.Model.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace WebAPI.Controllers.Services
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ServicesController : Controller
     {
         private readonly IServices _Services;

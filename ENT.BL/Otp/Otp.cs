@@ -85,6 +85,7 @@ namespace ENT.BL.Otp
                     {
                         UserModel newUser = new UserModel() { MobileNumber = mobileNumber, UserTypeId = 2 };
                         await connection.TblUsers.AddAsync(newUser);
+                        await connection.SaveChangesAsync();
                     }
                     OtpModel otpObject = GenerateOtpObject(mobileNumber);
                     response.Data = otpObject;
@@ -118,6 +119,7 @@ namespace ENT.BL.Otp
                     {
                         UserModel newUser = new UserModel() { MobileNumber = mobileNumber, UserTypeId = 3 };
                         await connection.TblUsers.AddAsync(newUser);
+                        await connection.SaveChangesAsync();
                     }
                     await connection.TblOtp.AddAsync(otpObject);
                     await connection.SaveChangesAsync();
@@ -148,7 +150,7 @@ namespace ENT.BL.Otp
                    
 
                     //mobile number does not exists
-                    OtpModel otpObject = await connection.TblOtp.Where(x => x.MobileNumber == mobileNumber).OrderByDescending(x => x.OTPId).FirstAsync();
+                    OtpModel otpObject = await connection.TblOtp.Where(x => x.MobileNumber == mobileNumber).OrderByDescending(x => x.ExpiryTime).FirstAsync();
 
                     if(otpObject != null)
                     {
@@ -168,7 +170,7 @@ namespace ENT.BL.Otp
                                 string token = GenerateJSONWebToken(existingUser);
                                 response.Data = new
                                 {
-                                    data = token,
+                                    JwtToken = token,
                                     userId = existingUser.UserId,
                                     mobileNumber = existingUser.MobileNumber,
                                     userTypeId = existingUser.UserTypeId
@@ -203,12 +205,12 @@ namespace ENT.BL.Otp
         {
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, JwtSettings.subject),
+                //new Claim(JwtRegisteredClaimNames.Sub, JwtSettings.subject),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("UserId", objUser.UserId.ToString()),
                 new Claim("MobileNumber", objUser.MobileNumber.ToString()),
-                new Claim("UserTypeId", objUser.UserTypeId.ToString()),
-                new Claim("ExpiryTime", DateTime.Now.AddMinutes(JwtSettings.expiryMinutes).ToString())
+                new Claim("UserTypeId", objUser.UserTypeId.ToString())
+                //new Claim("ExpiryTime", DateTime.Now.AddMinutes(JwtSettings.expiryMinutes).ToString())
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtSettings.jwtKey));
             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -216,6 +218,7 @@ namespace ENT.BL.Otp
                     JwtSettings.issuer,
                     JwtSettings.audience,
                     claims,
+                    //expires : DateTime.Now.AddSeconds(20),
                     expires : DateTime.Now.AddMinutes(JwtSettings.expiryMinutes),
                     signingCredentials: signIn
                 );

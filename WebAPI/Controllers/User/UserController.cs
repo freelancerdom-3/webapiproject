@@ -1,6 +1,7 @@
 ﻿using ENT.BL.User;
 using ENT.Model.Common;
 using ENT.Model.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace WebAPI.Controllers.User
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUser _user;
@@ -37,6 +39,7 @@ namespace WebAPI.Controllers.User
             return await _user.GetById(userId);
         }
         [HttpGet]
+        [Authorize]
         public async Task<APIResponseModel> GetAll()
         {
             return await _user.GetAll();

@@ -1,5 +1,6 @@
 ﻿using ENT.BL.ServiceProviderSubCategoryMapping;
 using ENT.Model.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace WebAPI.Controllers.ServiceProviderSubCategoryMapping
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ServiceProviderSubCategoryMappingController : ControllerBase
     {
         private readonly IServiceProviderSubCategoryMapping _ServiceProviderSubCategoryMapping;

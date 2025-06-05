@@ -1,6 +1,7 @@
 ﻿using ENT.BL.SubCategory;
 using ENT.Model.Common;
 using ENT.Model.SubCategory;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace WebAPI.Controllers.SubCategory
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SubCategoryController : Controller
     {
         private readonly ISubCategory _SubCategory;

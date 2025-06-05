@@ -1,6 +1,7 @@
 ﻿using ENT.BL.ServiceAreaMapping;
 using ENT.Model.Common;
 using ENT.Model.ServiceAreaMapping;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace WebAPI.Controllers.ServiceAreaMapping
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ServiceAreaMappingController : ControllerBase
     {
         private readonly IServiceAreaMapping _serviceAreaMapping;

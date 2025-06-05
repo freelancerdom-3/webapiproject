@@ -4,12 +4,14 @@ using ENT.Model.UserCartMapping;
 using ENT.BL.UserCartMapping;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace WebAPI.Controllers.UserCartMapping
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserCartMappingController : ControllerBase
     {
         private readonly IUserCartMapping _UserCartMapping;

@@ -4,12 +4,14 @@ using ENT.Model.ServiceCartMapping;
 using ENT.BL.ServiceCartMapping;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace WebAPI.Controllers.ServiceCartMapping
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ServiceCartMappingController : ControllerBase
     {
         private readonly IServiceCartMapping _ServiceCartMapping;
