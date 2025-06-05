@@ -9,7 +9,7 @@ namespace WebAPI.Controllers.SubCategory
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class SubCategoryController : Controller
     {
         private readonly ISubCategory _SubCategory;
@@ -42,10 +42,10 @@ namespace WebAPI.Controllers.SubCategory
         {
             return await _SubCategory.GetAll();
         }
-        [HttpGet("GetByName")]
-        public async Task<APIResponseModel> GetByName(string subCategoryName)
+        [HttpGet("GetByCategoryId")]
+        public async Task<APIResponseModel> GetByCategoryId(int CategoryId )
         {
-            return await _SubCategory.GetByName(subCategoryName);
+            return await _SubCategory.GetBycategoryId(CategoryId);
         }
 
     }

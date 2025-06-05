@@ -17,7 +17,7 @@ namespace ENT.BL.SubCategory
         Task<APIResponseModel> Add(SubCategoryModel objSubCategory);
         Task<APIResponseModel> GetAll(); // inner join
         Task<APIResponseModel> GetById(int SubCategoryId);// add same for categoryId and result should ne in list
-        Task<APIResponseModel> GetByName(string subCategoryName);
+        Task<APIResponseModel> GetBycategoryId(int categoryId);
         Task<APIResponseModel> Update(SubCategoryModel objSubCategory);
         Task<APIResponseModel> Delete(int SubCategoryId);
     }

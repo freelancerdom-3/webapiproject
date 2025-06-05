@@ -104,8 +104,7 @@ namespace ENT.BL.SubCategory
                             SubCategoryName = sub.SubCategoryName,
                           //  CategoryId = cat.CategoryId,
                             CategoryName = cat.CategoryName
-                        })
-                    .ToListAsync();
+                        }).ToListAsync();
 
                 response.Data = data;
                 response.statusCode = 200;
@@ -185,14 +184,18 @@ namespace ENT.BL.SubCategory
             }
         }
 
-        public async Task<APIResponseModel> GetByName(string subCategoryName)
+        public async Task<APIResponseModel> GetBycategoryId(int categoryId)
         {
             APIResponseModel response = new APIResponseModel();
             try
             {
                 using (var connection = _context)
                 {
-                    response.Data = _context.TblSubCategorys.Where(x => x.SubCategoryName == subCategoryName).ToList();
+                    response.Data = await connection.SubCategoryNameViewModels.FromSqlRaw($@"
+                    SELECT sc.SubCategoryId AS SubCategoryId, sc.SubCategoryName AS SubCategoryName
+                    FROM TblSubCategorys sc 
+                    WHERE sc.CategoryId = {categoryId}
+                    ").ToListAsync();
                 }
                 response.statusCode = 200;
                 return response;

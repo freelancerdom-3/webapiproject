@@ -121,14 +121,27 @@ namespace ENT.BL.Services
             }
         }
 
-        public async Task<APIResponseModel> GetByName(string ServiceName)
+        public async Task<APIResponseModel> GetByName(string serviceName)
         {
             APIResponseModel response = new APIResponseModel();
             try
             {
                 using (var connection = _context)
                 {
-                    response.Data = await _context.TblServices.Where(x => x.ServiceName == ServiceName).ToListAsync();
+                    response.Data = await connection.GetAreaBySearchViewModel
+                        .FromSqlRaw($@"SELECT sc.SubCategoryName AS Name, sc.SubCategoryId AS Id, 'SubCategory' AS type, NULL AS parent
+                        FROM TblSubCategorys sc
+                        WHERE sc.SubCategoryName LIKE '%{serviceName}%'
+
+                        UNION
+
+                        SELECT se.ServiceName AS Name, se.ServiceId AS Id, 'Service' AS Type, sc.SubCategoryName AS parent
+                        FROM TblSubCategorys sc
+                        JOIN TblServices se
+                        ON sc.SubCategoryId = se.SubCategoryId
+                        WHERE se.ServiceName LIKE '%{serviceName}%';
+                        ")
+                        .ToListAsync();
                 }
                 response.statusCode = 200;
                 return response;
