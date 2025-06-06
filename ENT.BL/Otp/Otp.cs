@@ -1,4 +1,5 @@
 ﻿using ENT.BL.Common;
+using ENT.BL.User;
 using ENT.Model.Common;
 using ENT.Model.EntityFramework;
 using ENT.Model.Otp;
@@ -18,13 +19,15 @@ namespace ENT.BL.Otp
     {
         private readonly MyDBContext _context;
         //This is for jwt token generation
-        private readonly IConfiguration _configuration;
-        public Otp(MyDBContext context, IConfiguration configuration)
+        private readonly IUser _user;
+
+        public Otp(MyDBContext context, IUser userService)
         {
             _context = context;
-            _configuration = configuration;
+            _user = userService;
         }
 
+        //Generate OTP object
         private OtpModel GenerateOtpObject(string mobileNumber)
         {
             //add logic to create random 6 digit code -- 123456
@@ -51,8 +54,9 @@ namespace ENT.BL.Otp
                     bool userExists = await connection.TblUsers.AnyAsync(x => x.MobileNumber == mobileNumber);
                     if (userExists == false)
                     {
+                        //Add new user
                         UserModel newUser = new UserModel() { MobileNumber = mobileNumber, UserTypeId = 1};
-                        await connection.TblUsers.AddAsync(newUser);
+                        await _user.Add(newUser);
                     }
                     OtpModel otpObject = GenerateOtpObject(mobileNumber);
                     response.Data = otpObject;
@@ -83,9 +87,9 @@ namespace ENT.BL.Otp
                     bool userExists = await connection.TblUsers.AnyAsync(x => x.MobileNumber == mobileNumber);
                     if (userExists == false)
                     {
+                        //Add new user
                         UserModel newUser = new UserModel() { MobileNumber = mobileNumber, UserTypeId = 2 };
-                        await connection.TblUsers.AddAsync(newUser);
-                        await connection.SaveChangesAsync();
+                        await _user.Add(newUser);
                     }
                     OtpModel otpObject = GenerateOtpObject(mobileNumber);
                     response.Data = otpObject;
@@ -117,9 +121,9 @@ namespace ENT.BL.Otp
                     bool userExists = await connection.TblUsers.AnyAsync(x => x.MobileNumber == mobileNumber);
                     if (userExists == false)
                     {
+                        //Add new user
                         UserModel newUser = new UserModel() { MobileNumber = mobileNumber, UserTypeId = 3 };
-                        await connection.TblUsers.AddAsync(newUser);
-                        await connection.SaveChangesAsync();
+                        await _user.Add(newUser);
                     }
                     await connection.TblOtp.AddAsync(otpObject);
                     await connection.SaveChangesAsync();
@@ -164,16 +168,16 @@ namespace ENT.BL.Otp
                                 response.Message = "OTP verified";
                                 //Generate token if OTP is verified
                                 //Get exisiting user
-                                UserModel existingUser = await connection.TblUsers.FirstOrDefaultAsync(x => x.MobileNumber.Equals(mobileNumber));
+                                UserModel? existingUser = await connection.TblUsers.FirstOrDefaultAsync(x => x.MobileNumber.Equals(mobileNumber));
                                 
                                 //Generate token
                                 string token = GenerateJSONWebToken(existingUser);
                                 response.Data = new
                                 {
                                     JwtToken = token,
-                                    userId = existingUser.UserId,
-                                    mobileNumber = existingUser.MobileNumber,
-                                    userTypeId = existingUser.UserTypeId
+                                    userId = existingUser?.UserId,
+                                    mobileNumber = existingUser?.MobileNumber,
+                                    userTypeId = existingUser?.UserTypeId
                                 };
                             }
                             else
@@ -201,29 +205,36 @@ namespace ENT.BL.Otp
             return response;
         }
 
-        public string GenerateJSONWebToken(UserModel objUser)
+        public string GenerateJSONWebToken(UserModel? objUser)
         {
-            var claims = new[]
+            try
             {
-                //new Claim(JwtRegisteredClaimNames.Sub, JwtSettings.subject),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("UserId", objUser.UserId.ToString()),
-                new Claim("MobileNumber", objUser.MobileNumber.ToString()),
-                new Claim("UserTypeId", objUser.UserTypeId.ToString())
-                //new Claim("ExpiryTime", DateTime.Now.AddMinutes(JwtSettings.expiryMinutes).ToString())
-            };
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtSettings.jwtKey));
-            var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(
-                    JwtSettings.issuer,
-                    JwtSettings.audience,
-                    claims,
-                    //expires : DateTime.Now.AddSeconds(20),
-                    expires : DateTime.Now.AddMinutes(JwtSettings.expiryMinutes),
-                    signingCredentials: signIn
-                );
-            string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
-            return tokenValue;
+                var claims = new[]
+                {
+                    //new Claim(JwtRegisteredClaimNames.Sub, JwtSettings.subject),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim("UserId", objUser.UserId.ToString()),
+                    new Claim("MobileNumber", objUser.MobileNumber.ToString()),
+                    new Claim("UserTypeId", objUser.UserTypeId.ToString())
+                    //new Claim("ExpiryTime", DateTime.Now.AddMinutes(JwtSettings.expiryMinutes).ToString())
+                };
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtSettings.jwtKey));
+                var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                var token = new JwtSecurityToken(
+                        JwtSettings.issuer,
+                        JwtSettings.audience,
+                        claims,
+                        //expires : DateTime.Now.AddSeconds(20),
+                        expires: DateTime.Now.AddMinutes(JwtSettings.expiryMinutes),
+                        signingCredentials: signIn
+                    );
+                string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
+                return tokenValue;
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
         }
     }   
 }

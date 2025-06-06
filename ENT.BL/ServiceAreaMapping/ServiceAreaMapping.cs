@@ -236,7 +236,7 @@ namespace ENT.BL.ServiceAreaMapping
                         WHERE co.CountryName LIKE '{name}%'
                     ) AS AllResults
                     GROUP BY Id, Name, Type, Parent
-                    ").ToListAsync();
+                    ").AsNoTracking().ToListAsync();
                     
                 }
                 if(searchResults.Count() == 0)

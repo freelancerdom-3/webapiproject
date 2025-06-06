@@ -9,6 +9,7 @@ using ENT.Model.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using ENT.BL.ServiceCartMapping;
+using ENT.Model.ServiceCartMapping;
 
 namespace ENT.BL.Cart
 {
@@ -143,8 +144,8 @@ namespace ENT.BL.Cart
                     }
                     else
                     {
-                        bool servicesExists = await connection.TblServiceCartMappings.AnyAsync(x => x.CartId == cartId);
-                        if (servicesExists == false)
+                        APIResponseModel serviceCartResponse = await _serviceCartMappingService.GetByCartId(cartId);
+                        if (serviceCartResponse.Data == null)
                         {
                             connection.TblCarts.Remove(deleteObject);
                             await connection.SaveChangesAsync();

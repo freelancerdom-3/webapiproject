@@ -1,4 +1,5 @@
-﻿using ENT.BL.Cart;
+﻿
+using ENT.BL.Cart;
 using ENT.Model.Cart;
 using ENT.Model.Common;
 using ENT.Model.EntityFramework;
@@ -114,19 +115,16 @@ namespace ENT.BL.ServiceCartMapping
             APIResponseModel response = new APIResponseModel();
             try
             {
-                using (MyDBContext connection = _context)
+                var cartServiceObject = await _context.TblServiceCartMappings.Where(x => x.CartId == cartId).ToListAsync();
+                if (cartServiceObject == null)
                 {
-                    var cartServiceObject = await connection.TblServiceCartMappings.Where(x => x.CartId == cartId).ToListAsync();
-                    if (cartServiceObject == null)
-                    {
-                        response.Message = "cartId " + cartId + " does not exists";
-                        response.statusCode = 204;
-                    }
-                    else
-                    {
-                        response.Data = cartServiceObject;
-                        response.statusCode = 200;
-                    }
+                    response.Message = "cartId " + cartId + " does not exists";
+                    response.statusCode = 204;
+                }
+                else
+                {
+                    response.Data = cartServiceObject;
+                    response.statusCode = 200;
                 }
                 return response;
             }
