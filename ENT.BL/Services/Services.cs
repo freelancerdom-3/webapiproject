@@ -94,22 +94,16 @@ namespace ENT.BL.Services
             APIResponseModel response = new APIResponseModel();
             try
             {
+                List<ServicesModel> listOfServices = new List<ServicesModel>();
                 using (var connection = _context)
                 {
-                    //var result = await (from sr in _context.TblServices
-                    //                    join sc in _context.TblSubCategorys
-                    //                    on sr.SubCategoryId equals sc.SubCategoryId
-                    //                    select new ServiceWithSubCatagoryViewModel
-                    //                    {
-                    //                        SubCategoryName = sc.SubCategoryName,
-                    //                        ServiceName = sr.ServiceName
-                    //                    }).ToListAsync();
+                    listOfServices = await connection.TblServices.ToListAsync();
 
-                    //response.Data = result;
                     response.statusCode = 200;
-                    return response;
+                    response.Data = listOfServices;
+                    
                 }
-               
+                return response;
             }
             catch (Exception ex)
             {
