@@ -1,6 +1,21 @@
 USE [MyDb]
 GO
-/****** Object:  Table [dbo].[TblCarts]    Script Date: 29-05-2025 7.04.54 PM ******/
+/****** Object:  Table [dbo].[TblAreas]    Script Date: 06-06-2025 11:34:44 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TblAreas](
+	[AreaId] [int] IDENTITY(1,1) NOT NULL,
+	[AreaName] [varchar](100) NULL,
+	[CityId] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[AreaId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TblCarts]    Script Date: 06-06-2025 11:34:44 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -14,7 +29,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblCategorys]    Script Date: 29-05-2025 7.04.54 PM ******/
+/****** Object:  Table [dbo].[TblCategorys]    Script Date: 06-06-2025 11:34:44 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -28,7 +43,36 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblOffers]    Script Date: 29-05-2025 7.04.54 PM ******/
+/****** Object:  Table [dbo].[TblCities]    Script Date: 06-06-2025 11:34:44 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TblCities](
+	[CityId] [int] IDENTITY(1,1) NOT NULL,
+	[CityName] [varchar](100) NULL,
+	[StateId] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[CityId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TblCountries]    Script Date: 06-06-2025 11:34:44 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TblCountries](
+	[CountryId] [int] IDENTITY(1,1) NOT NULL,
+	[CountryName] [varchar](100) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[CountryId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TblOffers]    Script Date: 06-06-2025 11:34:44 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -45,7 +89,24 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblServiceAreaMappings]    Script Date: 29-05-2025 7.04.54 PM ******/
+/****** Object:  Table [dbo].[TblOtp]    Script Date: 06-06-2025 11:34:44 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TblOtp](
+	[OTPId] [int] IDENTITY(1,1) NOT NULL,
+	[MobileNumber] [varchar](10) NULL,
+	[OTP] [int] NULL,
+	[ExpiryTime] [datetime] NULL,
+	[IsUsed] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[OTPId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TblServiceAreaMappings]    Script Date: 06-06-2025 11:34:44 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -60,22 +121,54 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblServiceCartMappings]    Script Date: 29-05-2025 7.04.54 PM ******/
+/****** Object:  Table [dbo].[TblServiceCartMappings]    Script Date: 06-06-2025 11:34:44 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[TblServiceCartMappings](
 	[MappingId] [int] IDENTITY(1,1) NOT NULL,
-	[ServicesId] [int] NULL,
+	[ServiceId] [int] NULL,
 	[CartId] [int] NULL,
+	[Price] [decimal](10, 2) NULL,
+	[Quantity] [int] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[MappingId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblServices]    Script Date: 29-05-2025 7.04.54 PM ******/
+/****** Object:  Table [dbo].[TblServiceProviderAreaMapping]    Script Date: 06-06-2025 11:34:44 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TblServiceProviderAreaMapping](
+	[MappingId] [int] IDENTITY(1,1) NOT NULL,
+	[UserId] [int] NULL,
+	[AreaId] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[MappingId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TblServiceProviderSubCategoryMapping]    Script Date: 06-06-2025 11:34:44 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TblServiceProviderSubCategoryMapping](
+	[MappingId] [int] IDENTITY(1,1) NOT NULL,
+	[UserId] [int] NULL,
+	[SubCategoryId] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[MappingId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TblServices]    Script Date: 06-06-2025 11:34:44 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -92,7 +185,22 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblSubCategorys]    Script Date: 29-05-2025 7.04.54 PM ******/
+/****** Object:  Table [dbo].[TblStates]    Script Date: 06-06-2025 11:34:44 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TblStates](
+	[StateId] [int] IDENTITY(1,1) NOT NULL,
+	[StateName] [varchar](100) NULL,
+	[CountryId] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[StateId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TblSubCategorys]    Script Date: 06-06-2025 11:34:44 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -108,7 +216,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblUserCartMappings]    Script Date: 29-05-2025 7.04.54 PM ******/
+/****** Object:  Table [dbo].[TblUserCartMappings]    Script Date: 06-06-2025 11:34:44 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -123,30 +231,66 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblUsers]    Script Date: 29-05-2025 7.04.54 PM ******/
+/****** Object:  Table [dbo].[TblUsers]    Script Date: 06-06-2025 11:34:44 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[TblUsers](
 	[UserId] [int] IDENTITY(1,1) NOT NULL,
-	[FullName] [varchar](200) NULL,
+	[MobileNumber] [varchar](20) NULL,
+	[FullName] [varchar](100) NULL,
 	[Email] [varchar](200) NULL,
-	[Gender] [varchar](10) NULL,
-	[DOB] [datetime] NULL,
+	[Gender] [varchar](20) NULL,
+	[DateOfBirth] [date] NULL,
+	[UserTypeId] [int] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[UserId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+/****** Object:  Table [dbo].[TblUserTypes]    Script Date: 06-06-2025 11:34:44 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TblUserTypes](
+	[UserTypeId] [int] NOT NULL,
+	[UserTypeName] [varchar](20) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[UserTypeId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET IDENTITY_INSERT [dbo].[TblAreas] ON 
+GO
+INSERT [dbo].[TblAreas] ([AreaId], [AreaName], [CityId]) VALUES (1, N'Gota', 1)
+GO
+INSERT [dbo].[TblAreas] ([AreaId], [AreaName], [CityId]) VALUES (2, N'Navrangpura', 1)
+GO
+INSERT [dbo].[TblAreas] ([AreaId], [AreaName], [CityId]) VALUES (3, N'Naranpura', 1)
+GO
+INSERT [dbo].[TblAreas] ([AreaId], [AreaName], [CityId]) VALUES (4, N'Kalupur', 1)
+GO
+INSERT [dbo].[TblAreas] ([AreaId], [AreaName], [CityId]) VALUES (5, N'Sola', 1)
+GO
+INSERT [dbo].[TblAreas] ([AreaId], [AreaName], [CityId]) VALUES (6, N'Satellite', 1)
+GO
+INSERT [dbo].[TblAreas] ([AreaId], [AreaName], [CityId]) VALUES (7, N'Bopal', 1)
+GO
+SET IDENTITY_INSERT [dbo].[TblAreas] OFF
+GO
 SET IDENTITY_INSERT [dbo].[TblCarts] ON 
 GO
-INSERT [dbo].[TblCarts] ([CartId], [Price]) VALUES (1, CAST(200.50 AS Decimal(10, 2)))
+INSERT [dbo].[TblCarts] ([CartId], [Price]) VALUES (1, CAST(1600.00 AS Decimal(10, 2)))
 GO
 INSERT [dbo].[TblCarts] ([CartId], [Price]) VALUES (2, CAST(1000.00 AS Decimal(10, 2)))
 GO
-INSERT [dbo].[TblCarts] ([CartId], [Price]) VALUES (3, CAST(500.00 AS Decimal(10, 2)))
+INSERT [dbo].[TblCarts] ([CartId], [Price]) VALUES (3, CAST(2400.00 AS Decimal(10, 2)))
+GO
+INSERT [dbo].[TblCarts] ([CartId], [Price]) VALUES (4, CAST(1000.00 AS Decimal(10, 2)))
 GO
 SET IDENTITY_INSERT [dbo].[TblCarts] OFF
 GO
@@ -159,6 +303,32 @@ GO
 INSERT [dbo].[TblCategorys] ([CategoryId], [CategoryName]) VALUES (3, N'native')
 GO
 SET IDENTITY_INSERT [dbo].[TblCategorys] OFF
+GO
+SET IDENTITY_INSERT [dbo].[TblCities] ON 
+GO
+INSERT [dbo].[TblCities] ([CityId], [CityName], [StateId]) VALUES (1, N'Ahmedabad', 1)
+GO
+INSERT [dbo].[TblCities] ([CityId], [CityName], [StateId]) VALUES (2, N'Vadodara', 1)
+GO
+INSERT [dbo].[TblCities] ([CityId], [CityName], [StateId]) VALUES (3, N'Surat', 1)
+GO
+INSERT [dbo].[TblCities] ([CityId], [CityName], [StateId]) VALUES (4, N'Rajkot', 1)
+GO
+INSERT [dbo].[TblCities] ([CityId], [CityName], [StateId]) VALUES (5, N'Jamnagar', 1)
+GO
+SET IDENTITY_INSERT [dbo].[TblCities] OFF
+GO
+SET IDENTITY_INSERT [dbo].[TblCountries] ON 
+GO
+INSERT [dbo].[TblCountries] ([CountryId], [CountryName]) VALUES (1, N'India')
+GO
+INSERT [dbo].[TblCountries] ([CountryId], [CountryName]) VALUES (2, N'USA')
+GO
+INSERT [dbo].[TblCountries] ([CountryId], [CountryName]) VALUES (3, N'South-Africa')
+GO
+INSERT [dbo].[TblCountries] ([CountryId], [CountryName]) VALUES (4, N'Bhutan')
+GO
+SET IDENTITY_INSERT [dbo].[TblCountries] OFF
 GO
 SET IDENTITY_INSERT [dbo].[TblOffers] ON 
 GO
@@ -174,6 +344,40 @@ INSERT [dbo].[TblOffers] ([OfferId], [ServiceId], [StartDate], [EndDate], [Disco
 GO
 SET IDENTITY_INSERT [dbo].[TblOffers] OFF
 GO
+SET IDENTITY_INSERT [dbo].[TblOtp] ON 
+GO
+INSERT [dbo].[TblOtp] ([OTPId], [MobileNumber], [OTP], [ExpiryTime], [IsUsed]) VALUES (1, N'1234567891', 223280, CAST(N'2025-06-04T19:30:09.897' AS DateTime), 1)
+GO
+INSERT [dbo].[TblOtp] ([OTPId], [MobileNumber], [OTP], [ExpiryTime], [IsUsed]) VALUES (2, N'1234567891', 561349, CAST(N'2025-06-04T19:34:59.167' AS DateTime), 1)
+GO
+INSERT [dbo].[TblOtp] ([OTPId], [MobileNumber], [OTP], [ExpiryTime], [IsUsed]) VALUES (3, N'1234567891', 673770, CAST(N'2025-06-04T19:42:27.053' AS DateTime), 1)
+GO
+INSERT [dbo].[TblOtp] ([OTPId], [MobileNumber], [OTP], [ExpiryTime], [IsUsed]) VALUES (4, N'1234567891', 441374, CAST(N'2025-06-04T19:47:04.777' AS DateTime), 1)
+GO
+INSERT [dbo].[TblOtp] ([OTPId], [MobileNumber], [OTP], [ExpiryTime], [IsUsed]) VALUES (5, N'1234567891', 766268, CAST(N'2025-06-04T19:59:02.860' AS DateTime), 1)
+GO
+INSERT [dbo].[TblOtp] ([OTPId], [MobileNumber], [OTP], [ExpiryTime], [IsUsed]) VALUES (6, N'1234567891', 148984, CAST(N'2025-06-05T11:19:19.573' AS DateTime), 1)
+GO
+INSERT [dbo].[TblOtp] ([OTPId], [MobileNumber], [OTP], [ExpiryTime], [IsUsed]) VALUES (7, N'1234567891', 858881, CAST(N'2025-06-05T12:10:35.257' AS DateTime), 1)
+GO
+INSERT [dbo].[TblOtp] ([OTPId], [MobileNumber], [OTP], [ExpiryTime], [IsUsed]) VALUES (8, N'123456789', 246514, CAST(N'2025-06-05T12:17:55.097' AS DateTime), 0)
+GO
+INSERT [dbo].[TblOtp] ([OTPId], [MobileNumber], [OTP], [ExpiryTime], [IsUsed]) VALUES (9, N'1234567891', 763696, CAST(N'2025-06-05T12:18:37.923' AS DateTime), 1)
+GO
+INSERT [dbo].[TblOtp] ([OTPId], [MobileNumber], [OTP], [ExpiryTime], [IsUsed]) VALUES (10, N'1234567891', 544611, CAST(N'2025-06-05T12:28:21.787' AS DateTime), 1)
+GO
+INSERT [dbo].[TblOtp] ([OTPId], [MobileNumber], [OTP], [ExpiryTime], [IsUsed]) VALUES (11, N'1234567891', 145615, CAST(N'2025-06-05T12:33:21.640' AS DateTime), 1)
+GO
+INSERT [dbo].[TblOtp] ([OTPId], [MobileNumber], [OTP], [ExpiryTime], [IsUsed]) VALUES (12, N'1234567981', 563860, CAST(N'2025-06-05T12:45:36.777' AS DateTime), 0)
+GO
+INSERT [dbo].[TblOtp] ([OTPId], [MobileNumber], [OTP], [ExpiryTime], [IsUsed]) VALUES (13, N'1234567891', 502539, CAST(N'2025-06-05T12:58:28.403' AS DateTime), 1)
+GO
+INSERT [dbo].[TblOtp] ([OTPId], [MobileNumber], [OTP], [ExpiryTime], [IsUsed]) VALUES (14, N'1234567891', 653931, CAST(N'2025-06-05T13:17:48.033' AS DateTime), 1)
+GO
+INSERT [dbo].[TblOtp] ([OTPId], [MobileNumber], [OTP], [ExpiryTime], [IsUsed]) VALUES (15, N'9876543211', 913156, CAST(N'2025-06-05T15:22:22.107' AS DateTime), 1)
+GO
+SET IDENTITY_INSERT [dbo].[TblOtp] OFF
+GO
 SET IDENTITY_INSERT [dbo].[TblServiceAreaMappings] ON 
 GO
 INSERT [dbo].[TblServiceAreaMappings] ([MappingId], [ServiceId], [AreaId]) VALUES (1, 1, 1)
@@ -188,15 +392,41 @@ SET IDENTITY_INSERT [dbo].[TblServiceAreaMappings] OFF
 GO
 SET IDENTITY_INSERT [dbo].[TblServiceCartMappings] ON 
 GO
-INSERT [dbo].[TblServiceCartMappings] ([MappingId], [ServicesId], [CartId]) VALUES (1, 10134, 1)
+INSERT [dbo].[TblServiceCartMappings] ([MappingId], [ServiceId], [CartId], [Price], [Quantity]) VALUES (1, 1, 1, CAST(300.00 AS Decimal(10, 2)), 2)
 GO
-INSERT [dbo].[TblServiceCartMappings] ([MappingId], [ServicesId], [CartId]) VALUES (2, 20123, 2)
+INSERT [dbo].[TblServiceCartMappings] ([MappingId], [ServiceId], [CartId], [Price], [Quantity]) VALUES (2, 1, 2, CAST(500.00 AS Decimal(10, 2)), 1)
 GO
-INSERT [dbo].[TblServiceCartMappings] ([MappingId], [ServicesId], [CartId]) VALUES (3, 1000, 5)
+INSERT [dbo].[TblServiceCartMappings] ([MappingId], [ServiceId], [CartId], [Price], [Quantity]) VALUES (3, 1, 3, CAST(400.00 AS Decimal(10, 2)), 2)
 GO
-INSERT [dbo].[TblServiceCartMappings] ([MappingId], [ServicesId], [CartId]) VALUES (4, 2309, 4)
+INSERT [dbo].[TblServiceCartMappings] ([MappingId], [ServiceId], [CartId], [Price], [Quantity]) VALUES (4, 1, 4, CAST(1000.00 AS Decimal(10, 2)), 1)
+GO
+INSERT [dbo].[TblServiceCartMappings] ([MappingId], [ServiceId], [CartId], [Price], [Quantity]) VALUES (5, 2, 1, CAST(500.00 AS Decimal(10, 2)), 2)
+GO
+INSERT [dbo].[TblServiceCartMappings] ([MappingId], [ServiceId], [CartId], [Price], [Quantity]) VALUES (7, 2, 2, CAST(500.00 AS Decimal(10, 2)), 1)
+GO
+INSERT [dbo].[TblServiceCartMappings] ([MappingId], [ServiceId], [CartId], [Price], [Quantity]) VALUES (9, 5, 3, CAST(800.00 AS Decimal(10, 2)), 2)
 GO
 SET IDENTITY_INSERT [dbo].[TblServiceCartMappings] OFF
+GO
+SET IDENTITY_INSERT [dbo].[TblServiceProviderAreaMapping] ON 
+GO
+INSERT [dbo].[TblServiceProviderAreaMapping] ([MappingId], [UserId], [AreaId]) VALUES (1, 3, 1)
+GO
+INSERT [dbo].[TblServiceProviderAreaMapping] ([MappingId], [UserId], [AreaId]) VALUES (2, 3, 2)
+GO
+INSERT [dbo].[TblServiceProviderAreaMapping] ([MappingId], [UserId], [AreaId]) VALUES (3, 8, 1)
+GO
+SET IDENTITY_INSERT [dbo].[TblServiceProviderAreaMapping] OFF
+GO
+SET IDENTITY_INSERT [dbo].[TblServiceProviderSubCategoryMapping] ON 
+GO
+INSERT [dbo].[TblServiceProviderSubCategoryMapping] ([MappingId], [UserId], [SubCategoryId]) VALUES (1, 3, 1)
+GO
+INSERT [dbo].[TblServiceProviderSubCategoryMapping] ([MappingId], [UserId], [SubCategoryId]) VALUES (2, 3, 2)
+GO
+INSERT [dbo].[TblServiceProviderSubCategoryMapping] ([MappingId], [UserId], [SubCategoryId]) VALUES (3, 8, 3)
+GO
+SET IDENTITY_INSERT [dbo].[TblServiceProviderSubCategoryMapping] OFF
 GO
 SET IDENTITY_INSERT [dbo].[TblServices] ON 
 GO
@@ -213,6 +443,18 @@ GO
 INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken]) VALUES (7, N'premium signature therapy', 9, CAST(1500.00 AS Decimal(10, 2)), N'70 minutes')
 GO
 SET IDENTITY_INSERT [dbo].[TblServices] OFF
+GO
+SET IDENTITY_INSERT [dbo].[TblStates] ON 
+GO
+INSERT [dbo].[TblStates] ([StateId], [StateName], [CountryId]) VALUES (1, N'Gujarat', 1)
+GO
+INSERT [dbo].[TblStates] ([StateId], [StateName], [CountryId]) VALUES (2, N'Maharashtra', 1)
+GO
+INSERT [dbo].[TblStates] ([StateId], [StateName], [CountryId]) VALUES (3, N'Rajashthan', 1)
+GO
+INSERT [dbo].[TblStates] ([StateId], [StateName], [CountryId]) VALUES (4, N'Madhya-Pradesh', 1)
+GO
+SET IDENTITY_INSERT [dbo].[TblStates] OFF
 GO
 SET IDENTITY_INSERT [dbo].[TblSubCategorys] ON 
 GO
@@ -236,23 +478,41 @@ SET IDENTITY_INSERT [dbo].[TblSubCategorys] OFF
 GO
 SET IDENTITY_INSERT [dbo].[TblUserCartMappings] ON 
 GO
-INSERT [dbo].[TblUserCartMappings] ([MappingId], [UserId], [CartId]) VALUES (1, 1, 5)
+INSERT [dbo].[TblUserCartMappings] ([MappingId], [UserId], [CartId]) VALUES (1, 1, 1)
 GO
-INSERT [dbo].[TblUserCartMappings] ([MappingId], [UserId], [CartId]) VALUES (2, 2, 6)
+INSERT [dbo].[TblUserCartMappings] ([MappingId], [UserId], [CartId]) VALUES (2, 2, 2)
 GO
-INSERT [dbo].[TblUserCartMappings] ([MappingId], [UserId], [CartId]) VALUES (3, 3, 7)
+INSERT [dbo].[TblUserCartMappings] ([MappingId], [UserId], [CartId]) VALUES (3, 3, 3)
 GO
 SET IDENTITY_INSERT [dbo].[TblUserCartMappings] OFF
 GO
 SET IDENTITY_INSERT [dbo].[TblUsers] ON 
 GO
-INSERT [dbo].[TblUsers] ([UserId], [FullName], [Email], [Gender], [DOB]) VALUES (1, N'test', N'test@gmail.com', N'M', CAST(N'2000-01-15T00:00:00.000' AS DateTime))
+INSERT [dbo].[TblUsers] ([UserId], [MobileNumber], [FullName], [Email], [Gender], [DateOfBirth], [UserTypeId]) VALUES (1, N'1234567891', N'Chhagan', N'chhagan@mail.com', N'Male', CAST(N'2002-06-02' AS Date), 1)
 GO
-INSERT [dbo].[TblUsers] ([UserId], [FullName], [Email], [Gender], [DOB]) VALUES (2, N'XYZ', N'ABC@gmail.com', N'F', CAST(N'1975-05-27T05:44:15.730' AS DateTime))
+INSERT [dbo].[TblUsers] ([UserId], [MobileNumber], [FullName], [Email], [Gender], [DateOfBirth], [UserTypeId]) VALUES (2, N'789461231', N'Maagan', N'magan@mail.com', N'Male', CAST(N'2002-07-02' AS Date), 3)
 GO
-INSERT [dbo].[TblUsers] ([UserId], [FullName], [Email], [Gender], [DOB]) VALUES (3, N'Sardar-vallabhbhai-patel', N'sardarpatel@swaraaj.com', N'Male', CAST(N'1956-05-25T05:12:20.143' AS DateTime))
+INSERT [dbo].[TblUsers] ([UserId], [MobileNumber], [FullName], [Email], [Gender], [DateOfBirth], [UserTypeId]) VALUES (3, N'1234567892', N'Jhon', N'jhon@mail.com', N'Male', CAST(N'2002-06-02' AS Date), 3)
 GO
-INSERT [dbo].[TblUsers] ([UserId], [FullName], [Email], [Gender], [DOB]) VALUES (5, N'Gami-Alpesh', N'gamialpesh001@mail.com', N'Male', CAST(N'2003-05-29T06:23:36.013' AS DateTime))
+INSERT [dbo].[TblUsers] ([UserId], [MobileNumber], [FullName], [Email], [Gender], [DateOfBirth], [UserTypeId]) VALUES (4, N'1234567893', N'Rock', N'rock@mail.com', N'Male', CAST(N'2002-06-02' AS Date), 2)
+GO
+INSERT [dbo].[TblUsers] ([UserId], [MobileNumber], [FullName], [Email], [Gender], [DateOfBirth], [UserTypeId]) VALUES (5, N'1234567894', N'Natha', N'natha@mail.com', N'Male', CAST(N'2002-06-02' AS Date), 3)
+GO
+INSERT [dbo].[TblUsers] ([UserId], [MobileNumber], [FullName], [Email], [Gender], [DateOfBirth], [UserTypeId]) VALUES (6, N'1234567897', N'Chiman', N'chiman@mail.com', N'Male', CAST(N'2002-06-02' AS Date), 3)
+GO
+INSERT [dbo].[TblUsers] ([UserId], [MobileNumber], [FullName], [Email], [Gender], [DateOfBirth], [UserTypeId]) VALUES (7, N'1234567895', N'Girdhar', N'girdhar@mail.com', N'Male', CAST(N'2002-06-02' AS Date), 3)
+GO
+INSERT [dbo].[TblUsers] ([UserId], [MobileNumber], [FullName], [Email], [Gender], [DateOfBirth], [UserTypeId]) VALUES (8, N'123456789', N'MaxWell', N'maxy@mail.com', N'Male', CAST(N'2002-06-03' AS Date), 3)
+GO
+INSERT [dbo].[TblUsers] ([UserId], [MobileNumber], [FullName], [Email], [Gender], [DateOfBirth], [UserTypeId]) VALUES (9, N'1234567981', NULL, NULL, NULL, NULL, 1)
+GO
+INSERT [dbo].[TblUsers] ([UserId], [MobileNumber], [FullName], [Email], [Gender], [DateOfBirth], [UserTypeId]) VALUES (10, N'9876543211', N'Hemil Fichadia', N'hemil@mail.com', N'Male', CAST(N'2000-04-12' AS Date), 1)
 GO
 SET IDENTITY_INSERT [dbo].[TblUsers] OFF
+GO
+INSERT [dbo].[TblUserTypes] ([UserTypeId], [UserTypeName]) VALUES (1, N'Admin')
+GO
+INSERT [dbo].[TblUserTypes] ([UserTypeId], [UserTypeName]) VALUES (2, N'End User')
+GO
+INSERT [dbo].[TblUserTypes] ([UserTypeId], [UserTypeName]) VALUES (3, N'Service Provider')
 GO

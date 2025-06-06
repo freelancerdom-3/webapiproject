@@ -17,7 +17,7 @@ namespace ENT.BL.ServiceProviderSubCategoryMapping
         {
             _context = context;
         }
-        public async Task<APIResponseModel> GetByArea(string AreaName)
+        public async Task<APIResponseModel> GetByArea(string areaName)
         {
             APIResponseModel response = new APIResponseModel();
             try
@@ -27,15 +27,21 @@ namespace ENT.BL.ServiceProviderSubCategoryMapping
                 {
                     searchResults = await connection.ServiceProviderSubCategoryMappingViewModel.FromSqlRaw( $@"                                      
                          SELECT DISTINCT 
-            users.UserId AS UserId, 
-            users.FullName AS FullName, 
-            sc.SubCategoryName AS SubCategoryName
-        FROM TblAreas areas
-        JOIN TblServiceProviderAreaMapping spareamap ON areas.AreaId = spareamap.AreaId
-        JOIN TblUsers users ON spareamap.UserId = users.UserId
-        JOIN TblServiceProviderSubCategoryMapping spscmap ON users.UserId = spscmap.UserId
-        JOIN TblSubCategorys sc ON spscmap.SubcategoryId = sc.SubCategoryId
-        WHERE areas.AreaName LIKE '{AreaName}%'").AsNoTracking().ToListAsync();
+                        users.UserId AS UserId, 
+                        users.FullName AS FullName, 
+                        sc.SubCategoryName AS SubCategoryName
+                        FROM TblAreas areas
+                        JOIN TblServiceProviderAreaMapping spareamap 
+                        ON areas.AreaId = spareamap.AreaId
+                        JOIN TblUsers users 
+                        ON spareamap.UserId = users.UserId
+                        JOIN TblServiceProviderSubCategoryMapping spscmap 
+                        ON users.UserId = spscmap.UserId
+                        JOIN TblSubCategorys sc 
+                        ON spscmap.SubcategoryId = sc.SubCategoryId
+                        WHERE users.UserTypeId = 3 
+                        AND areas.AreaName LIKE '{areaName}%';
+                        ").AsNoTracking().ToListAsync();
            
                 }
                 

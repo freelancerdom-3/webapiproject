@@ -8,7 +8,7 @@ namespace WebAPI.Controllers.ServiceProviderSubCategoryMapping
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ServiceProviderSubCategoryMappingController : ControllerBase
     {
         private readonly IServiceProviderSubCategoryMapping _ServiceProviderSubCategoryMapping;

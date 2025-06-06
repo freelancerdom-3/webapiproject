@@ -9,7 +9,7 @@ namespace ENT.BL.ServiceProviderSubCategoryMapping
 {
     public interface IServiceProviderSubCategoryMapping
     {
-        Task<APIResponseModel> GetByArea(string AreaName);
+        Task<APIResponseModel> GetByArea(string areaName);
         Task<APIResponseModel> GetBySubCategoryName(string SubCategoryName);
 
     }
