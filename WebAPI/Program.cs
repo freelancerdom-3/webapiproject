@@ -104,6 +104,12 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddCors(c =>
+{
+    c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -112,6 +118,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+//To allow any request from front-end to reach back-end
+app.UseCors("AllowOrigin");
 
 //JWT
 app.UseAuthentication();

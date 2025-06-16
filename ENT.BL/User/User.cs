@@ -135,6 +135,8 @@ namespace ENT.BL.User
             }
         }
 
+        //Get user by mobile number
+
         public async Task<APIResponseModel> Update(UserModel objUser)
         {
             APIResponseModel response = new APIResponseModel();

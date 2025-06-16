@@ -9,7 +9,7 @@ namespace WebAPI.Controllers.Category
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class CategoryController : Controller
     {
         private readonly ICategory _Category;
@@ -43,6 +43,7 @@ namespace WebAPI.Controllers.Category
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<APIResponseModel> GetAll()
         {
             return await _Category.GetAll();

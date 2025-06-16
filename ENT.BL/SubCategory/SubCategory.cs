@@ -210,5 +210,29 @@ namespace ENT.BL.SubCategory
 
         }
 
+        public async Task<APIResponseModel> GetTopFiveTrending()
+        {
+            APIResponseModel response = new APIResponseModel();
+            try
+            {
+                using(var connection = _context)
+                {
+                    response.Data = await connection.SubCategoryNameViewModels.FromSqlRaw($@"
+                                    SELECT TOP (5) sc.SubCategoryId AS SubCategoryId, sc.SubCategoryName AS SubCategoryName
+                                    FROM TblSubCategorys sc
+                                    WHERE sc.SubCategoryId IS NOT NULL;
+                                    ").ToListAsync();
+                }
+                response.statusCode = 200;
+                return response;
+            }
+            catch(Exception ex)
+            {
+                response.statusCode = 400;
+                response.Message = ex.Message;
+                response.Data = false;
+                return response;
+            }
+        }
     }
 }

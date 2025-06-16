@@ -12,41 +12,47 @@ namespace WebAPI.Controllers.SubCategory
     //[Authorize]
     public class SubCategoryController : Controller
     {
-        private readonly ISubCategory _SubCategory;
+        private readonly ISubCategory _subCategory;
         public SubCategoryController(ISubCategory SubCategory)
         {
-            _SubCategory = SubCategory;
+            _subCategory = SubCategory;
         }
         [HttpPost]
         public async Task<APIResponseModel> Add(SubCategoryModel objSubCategoryModel)
         {
-            return await _SubCategory.Add(objSubCategoryModel);
+            return await _subCategory.Add(objSubCategoryModel);
         }
         [HttpPut]
         public async Task<APIResponseModel> Update(SubCategoryModel objSubCategoryModel)
         {
-            return await _SubCategory.Update(objSubCategoryModel);
+            return await _subCategory.Update(objSubCategoryModel);
         }
         [HttpDelete]
         public async Task<APIResponseModel> Delete(int SubCategoryId)
         {
-            return await _SubCategory.Delete(SubCategoryId);
+            return await _subCategory.Delete(SubCategoryId);
         }
         [HttpGet("GetById")]
         public async Task<APIResponseModel> GetById(int SubCategoryId)
         {
-            return await _SubCategory.GetById(SubCategoryId);
+            return await _subCategory.GetById(SubCategoryId);
         }
         [HttpGet]
         public async Task<APIResponseModel> GetAll()
         {
-            return await _SubCategory.GetAll();
+            return await _subCategory.GetAll();
         }
+        
         [HttpGet("GetByCategoryId")]
         public async Task<APIResponseModel> GetByCategoryId(int CategoryId )
         {
-            return await _SubCategory.GetBycategoryId(CategoryId);
+            return await _subCategory.GetBycategoryId(CategoryId);
         }
 
+        [HttpGet("GetTopFiveTrending")]
+        public async Task<APIResponseModel> getTrendingSubCategories()
+        {
+            return await _subCategory.GetTopFiveTrending();
+        }
     }
 }

@@ -55,7 +55,7 @@ namespace ENT.BL.UserCartMapping
             {
                 using (MyDBContext connection = _context)
                 {
-                    response.Data = _context.TblUserCartMappings.ToList();
+                    response.Data = await connection.TblUserCartMappings.ToListAsync();
                 }
 
 
@@ -79,7 +79,7 @@ namespace ENT.BL.UserCartMapping
             {
                 using (MyDBContext connection = _context)
                 {
-                    var cartObject = await _context.TblUserCartMappings.Where(x => x.UserId == userId).FirstOrDefaultAsync();
+                    var cartObject = await connection.TblUserCartMappings.Where(x => x.UserId == userId).FirstOrDefaultAsync();
                     if (cartObject == null)
                     {
                         response.Data = "userId "+ userId +" does not exists";
@@ -110,7 +110,7 @@ namespace ENT.BL.UserCartMapping
             {
                 using (MyDBContext connection = _context)
                 {
-                   var cartObject = _context.TblUserCartMappings.Update(objUserCartMapping);
+                   var cartObject = connection.TblUserCartMappings.Update(objUserCartMapping);
                     if (cartObject == null)
                     {
                         response.Data = "Id does not Exists";
@@ -124,6 +124,7 @@ namespace ENT.BL.UserCartMapping
 
                 response.Data = true;
                 response.statusCode = 200;
+                response.Message = "Data updated successfully";
                 return response;
             }
             catch (Exception ex)
@@ -142,7 +143,7 @@ namespace ENT.BL.UserCartMapping
             {
                 using (MyDBContext connection = _context)
                 {
-                    var deleteUserCart = await _context.TblUserCartMappings.Where(x => x.UserId == userId).FirstOrDefaultAsync();
+                    var deleteUserCart = await connection.TblUserCartMappings.Where(x => x.UserId == userId).FirstOrDefaultAsync();
                     if (deleteUserCart != null)
                     {
                         //Check if serivces exists in ServiceCartMappings table, if not then delete the user cart
