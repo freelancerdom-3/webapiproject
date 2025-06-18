@@ -15,6 +15,6 @@ namespace ENT.Model.SubCategory
         public string? SubCategoryName { get; set; }
         public int? CategoryId { get; set; }
         public int? SubCategoreId { get; set; }
-
+        public string? ImageName { get; set; }
     }
 }

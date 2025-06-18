@@ -20,6 +20,6 @@ namespace ENT.BL.SubCategory
         Task<APIResponseModel> GetBycategoryId(int categoryId);
         Task<APIResponseModel> Update(SubCategoryModel objSubCategory);
         Task<APIResponseModel> Delete(int SubCategoryId);
-        Task<APIResponseModel> GetTopFiveTrending();
+        Task<APIResponseModel> GetTopTrending(int maxTrendingRecords);
     }
 }

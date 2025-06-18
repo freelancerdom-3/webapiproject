@@ -13,5 +13,7 @@ namespace ENT.Model.CustomModel
         public int SubCategoryId { get; set; }
 
         public string? SubCategoryName { get; set; }
+
+        public string? ImageName { get; set; }
     }
 }

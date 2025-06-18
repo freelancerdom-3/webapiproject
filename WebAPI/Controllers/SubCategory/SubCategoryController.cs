@@ -49,10 +49,10 @@ namespace WebAPI.Controllers.SubCategory
             return await _subCategory.GetBycategoryId(CategoryId);
         }
 
-        [HttpGet("GetTopFiveTrending")]
-        public async Task<APIResponseModel> getTrendingSubCategories()
+        [HttpGet("GetTopTrending")]
+        public async Task<APIResponseModel> getTrendingSubCategories(int maxTrendingRecords)
         {
-            return await _subCategory.GetTopFiveTrending();
+            return await _subCategory.GetTopTrending(maxTrendingRecords);
         }
     }
 }

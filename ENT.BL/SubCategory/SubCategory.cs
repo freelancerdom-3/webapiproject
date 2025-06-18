@@ -210,7 +210,7 @@ namespace ENT.BL.SubCategory
 
         }
 
-        public async Task<APIResponseModel> GetTopFiveTrending()
+        public async Task<APIResponseModel> GetTopTrending(int maxTrendingRecords)
         {
             APIResponseModel response = new APIResponseModel();
             try
@@ -218,9 +218,11 @@ namespace ENT.BL.SubCategory
                 using(var connection = _context)
                 {
                     response.Data = await connection.SubCategoryNameViewModels.FromSqlRaw($@"
-                                    SELECT TOP (5) sc.SubCategoryId AS SubCategoryId, sc.SubCategoryName AS SubCategoryName
+                                    SELECT TOP ({maxTrendingRecords}) sc.SubCategoryId AS SubCategoryId, 
+                                    sc.SubCategoryName AS SubCategoryName,
+                                    sc.ImageName AS ImageName
                                     FROM TblSubCategorys sc
-                                    WHERE sc.SubCategoryId IS NOT NULL;
+                                    WHERE sc.CategoryId != 0;
                                     ").ToListAsync();
                 }
                 response.statusCode = 200;
