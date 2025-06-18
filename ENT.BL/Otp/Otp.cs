@@ -166,6 +166,7 @@ namespace ENT.BL.Otp
                                 otpObject.IsUsed = true;
                                 await connection.SaveChangesAsync();
                                 response.Message = "OTP verified";
+                                response.statusCode=200;
                                 //Generate token if OTP is verified
                                 //Get exisiting user
                                 UserModel? existingUser = await connection.TblUsers.FirstOrDefaultAsync(x => x.MobileNumber.Equals(mobileNumber));
@@ -183,16 +184,19 @@ namespace ENT.BL.Otp
                             else
                             {
                                 response.Message = "OTP is used";
+                                response.statusCode = 403;
                             }
                         }
                         else
                         {
                             response.Message = "OTP expired";
+                            response.statusCode = 403;
                         }
                     }
                     else
                     {
                         response.Message = "Mobile number or OTP invalid";
+                        response.statusCode = 403;
                     }
                 }      
             }

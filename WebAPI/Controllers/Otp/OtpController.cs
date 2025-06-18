@@ -25,7 +25,7 @@ namespace WebAPI.Controllers.Otp
             return await _otp.GenerateOtpForAdmin(mobileNumber);
         }
 
-        [HttpPost("OtpForEndUser")]
+        [HttpGet("OtpForEndUser")]
         public async Task<APIResponseModel> GenerateOtpForEndUser(string mobileNumber)
         {
             return await _otp.GenerateOtpForEndUser(mobileNumber);
