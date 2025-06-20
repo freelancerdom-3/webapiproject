@@ -192,7 +192,7 @@ namespace ENT.BL.SubCategory
                 using (var connection = _context)
                 {
                     response.Data = await connection.SubCategoryNameViewModels.FromSqlRaw($@"
-                    SELECT sc.SubCategoryId AS SubCategoryId, sc.SubCategoryName AS SubCategoryName
+                    SELECT sc.SubCategoryId AS SubCategoryId, sc.SubCategoryName AS SubCategoryName, sc.ImageName
                     FROM TblSubCategorys sc 
                     WHERE sc.CategoryId = {categoryId}
                     ").ToListAsync();

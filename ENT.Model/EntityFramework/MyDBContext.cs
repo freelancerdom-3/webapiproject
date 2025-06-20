@@ -46,7 +46,7 @@ namespace ENT.Model.EntityFramework
             //optionsBuilder.UseSqlServer("Server= NENCY-PATEL21\\SQLEXPRESS; Database= MyDB; Integrated Security=True; Encrypt=false;");
 
             //Alpesh-Gami          
-            optionsBuilder.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;");
+            //optionsBuilder.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;");
             
             //Mohsin-Ali-Momin
          //   optionsBuilder.UseSqlServer("Server= MOHSINMOMIN\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
@@ -105,5 +105,6 @@ namespace ENT.Model.EntityFramework
         public DbSet<ServiceProviderSubCategoryMappingViewModel> ServiceProviderSubCategoryMappingViewModel {  get; set; }
         public DbSet<ServiceProviderAreaMappingModel> TblServiceProviderAreaMapping { get; set; }
         public DbSet<SubCategoryNameViewModel> SubCategoryNameViewModels { get; set; }
+        public DbSet<ServicesBySearchViewModel> ServicesBySearchViewModel { get; set; }
     }
 }

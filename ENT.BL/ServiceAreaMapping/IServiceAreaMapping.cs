@@ -21,6 +21,6 @@ namespace ENT.BL.ServiceAreaMapping
         Task<APIResponseModel> Update(ServiceAreaMappingModel objServiceAreaMapping);
         Task<APIResponseModel> GetAreaBySearch(string name,int maxrecord);
 
-        Task<APIResponseModel> GetServicesByRegionType(string regionType, int regionId);
+        Task<APIResponseModel> GetServicesByRegionType(string? regionType, int? regionId);
     }
 }

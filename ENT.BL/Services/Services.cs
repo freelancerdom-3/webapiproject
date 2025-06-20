@@ -115,15 +115,41 @@ namespace ENT.BL.Services
             }
         }
 
-        public async Task<APIResponseModel> GetByName(string serviceName)
+        public async Task<APIResponseModel> GetByName(string serviceName, string? regionType, int? regionId)
         {
             APIResponseModel response = new APIResponseModel();
             try
             {
                 using (var connection = _context)
                 {
-                    response.Data = await connection.GetAreaBySearchViewModel
-                        .FromSqlRaw($@"SELECT sc.SubCategoryName AS Name, sc.SubCategoryId AS Id, 'SubCategory' AS type, NULL AS parent
+                    if (regionType != null && regionType.Equals("Area"))
+                    {
+
+                        response.Data = await connection.ServicesBySearchViewModel
+                        .FromSqlRaw($@"SELECT sc.SubCategoryName AS Name, sc.SubCategoryId AS Id, 'SubCategory' AS Type, NULL AS Parent
+                            FROM TblSubCategorys sc
+                            WHERE sc.SubCategoryName LIKE '%{serviceName}%'
+
+                            UNION
+
+                            SELECT se.ServiceName AS Name, se.ServiceId AS Id, 'Service' AS Type, sc.SubCategoryName AS parent
+                            FROM TblSubCategorys sc
+                            JOIN TblServices se
+                            ON sc.SubCategoryId = se.SubCategoryId
+                            JOIN TblServiceAreaMappings sam
+                            ON sam.ServiceId = se.ServiceId
+                            JOIN TblAreas a
+                            ON a.AreaId = sam.AreaId
+                            WHERE se.ServiceName LIKE '%{serviceName}%'
+                            AND a.AreaId = {regionId};
+
+                        ")
+                        .ToListAsync();
+                    }
+                    else
+                    {
+                        response.Data = await connection.ServicesBySearchViewModel
+                        .FromSqlRaw($@"SELECT sc.SubCategoryName AS Name, sc.SubCategoryId AS Id, 'SubCategory' AS Type, NULL AS Parent
                         FROM TblSubCategorys sc
                         WHERE sc.SubCategoryName LIKE '%{serviceName}%'
 
@@ -136,6 +162,7 @@ namespace ENT.BL.Services
                         WHERE se.ServiceName LIKE '%{serviceName}%';
                         ")
                         .ToListAsync();
+                    }
                 }
                 response.statusCode = 200;
                 return response;
@@ -196,6 +223,44 @@ namespace ENT.BL.Services
                 response.Message = ex.Message;
                 return response;
                 
+            }
+        }
+
+        public async Task<APIResponseModel> GetBySubCategoryId(int id, string type)
+        {
+            APIResponseModel response = new APIResponseModel();
+            try
+            {
+                List<ServicesModel> servicesList = new List<ServicesModel>();
+                using (var connection = _context)
+                {
+                    int subCategoryId = id;
+                    if (type.Equals("Service"))
+                    {
+                        subCategoryId = await connection.TblServices.Where(x => x.ServiceId == id).Select(x => x.MainSubCategoryId).FirstAsync();
+                    }
+                    servicesList = await connection.TblServices.Where(x => x.MainSubCategoryId == subCategoryId).ToListAsync();
+                    
+                    if (servicesList.Count == 0)
+                    {
+                        response.Data = false;
+                        response.statusCode = 204;
+                        response.Message = "No services found";
+                    }
+                    else
+                    {
+                        response.Data = servicesList;
+                        response.statusCode = 200;
+                    }
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.statusCode = 400;
+                response.Message = ex.Message;
+                response.Data = false;
+                return response;
             }
         }
     }

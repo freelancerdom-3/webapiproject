@@ -15,5 +15,6 @@ namespace ENT.Model.Services
         public int? SubCategoryId { get; set; }
         public decimal Price { get; set; }
         public string TimeTaken { get; set; }
+        public int MainSubCategoryId { get; set; }
     }
 }

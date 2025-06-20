@@ -259,7 +259,7 @@ namespace ENT.BL.ServiceAreaMapping
             }
         }
 
-        public async Task<APIResponseModel> GetServicesByRegionType(string regionType, int regionId)
+        public async Task<APIResponseModel> GetServicesByRegionType(string? regionType, int? regionId)
         {
             APIResponseModel response = new APIResponseModel();
             try
@@ -267,7 +267,7 @@ namespace ENT.BL.ServiceAreaMapping
                 List<ServicesModel> serviceList = new List<ServicesModel>();
                 using(MyDBContext connection = _context)
                 {
-                    if (regionType.Equals("Area"))
+                    if (regionType != null && regionType.Equals("Area"))
                     {
                         serviceList = await connection.TblServices.FromSqlRaw($@"
                             SELECT s.ServiceId AS ServiceId, s.ServiceName AS ServiceName, s.SubCategoryId AS SubCategoryId, s.Price AS Price, s.TimeTaken AS TimeTaken
