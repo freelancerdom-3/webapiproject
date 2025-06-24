@@ -22,6 +22,7 @@ using ENT.Model.State;
 using ENT.Model.Country;
 using ENT.Model.ServiceProviderAreaMapping;
 using ENT.Model.ServiceProviderSubCategoryMapping;
+using ENT.Model.ImageNames;
 
 
 namespace ENT.Model.EntityFramework
@@ -81,6 +82,7 @@ namespace ENT.Model.EntityFramework
             modelBuilder.Entity<CountryModel>().ToTable("TblCountries");
             modelBuilder.Entity<ServiceProviderAreaMappingModel>().ToTable("TblServiceProviderAreaMapping");
             modelBuilder.Entity<ServiceProviderSubCategoryMappingModel>().ToTable("TblServiceProviderSubCategoryMapping");
+            modelBuilder.Entity<ImageNameModel>().ToTable("TblImageNames");
             
         }
 
@@ -106,5 +108,8 @@ namespace ENT.Model.EntityFramework
         public DbSet<ServiceProviderAreaMappingModel> TblServiceProviderAreaMapping { get; set; }
         public DbSet<SubCategoryNameViewModel> SubCategoryNameViewModels { get; set; }
         public DbSet<ServicesBySearchViewModel> ServicesBySearchViewModel { get; set; }
+        public DbSet<ChildSubCategoryNameViewModel> childSubCategoryNameViewModels { get; set; }
+        public DbSet<ImageNameModel> TblImageNames { get; set; }
+        public DbSet<ServiceNameViewModel> ServiceNameViewModels { get; set; }
     }
 }

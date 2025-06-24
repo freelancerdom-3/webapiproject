@@ -52,9 +52,10 @@ namespace WebAPI.Controllers.Services
         }
 
         [HttpGet("GetBySubCategoryId")]
-        public async Task<APIResponseModel> GetBySubCategoryId(int id, string type)
+        [AllowAnonymous]
+        public async Task<APIResponseModel> GetBySubCategoryId(int subCategoryId)
         {
-            return await _services.GetBySubCategoryId(id, type);
+            return await _services.GetBySubCategoryId(subCategoryId);
         }
     }
 }

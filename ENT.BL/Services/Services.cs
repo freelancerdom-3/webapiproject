@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ENT.BL.Category;
 using ENT.Model.Common;
+using ENT.Model.CustomModel;
 using ENT.Model.EntityFramework;
 using ENT.Model.Services;
 using Microsoft.EntityFrameworkCore;
@@ -149,13 +150,14 @@ namespace ENT.BL.Services
                     else
                     {
                         response.Data = await connection.ServicesBySearchViewModel
-                        .FromSqlRaw($@"SELECT sc.SubCategoryName AS Name, sc.SubCategoryId AS Id, 'SubCategory' AS Type, NULL AS Parent
+                        .FromSqlRaw($@"
+                        SELECT sc.SubCategoryName AS Name, sc.SubCategoryId AS Id, 'SubCategory' AS Type, NULL AS Parent, sc.SubCategoryMappingId AS ParentId
                         FROM TblSubCategorys sc
                         WHERE sc.SubCategoryName LIKE '%{serviceName}%'
 
                         UNION
 
-                        SELECT se.ServiceName AS Name, se.ServiceId AS Id, 'Service' AS Type, sc.SubCategoryName AS parent
+                        SELECT se.ServiceName AS Name, se.ServiceId AS Id, 'Service' AS Type, sc.SubCategoryName AS parent, se.MainSubCategoryId AS ParentId
                         FROM TblSubCategorys sc
                         JOIN TblServices se
                         ON sc.SubCategoryId = se.SubCategoryId
@@ -226,7 +228,7 @@ namespace ENT.BL.Services
             }
         }
 
-        public async Task<APIResponseModel> GetBySubCategoryId(int id, string type)
+        public async Task<APIResponseModel> GetBySubCategoryId(int subCategoryId)
         {
             APIResponseModel response = new APIResponseModel();
             try
@@ -234,24 +236,60 @@ namespace ENT.BL.Services
                 List<ServicesModel> servicesList = new List<ServicesModel>();
                 using (var connection = _context)
                 {
-                    int subCategoryId = id;
-                    if (type.Equals("Service"))
-                    {
-                        subCategoryId = await connection.TblServices.Where(x => x.ServiceId == id).Select(x => x.MainSubCategoryId).FirstAsync();
-                    }
-                    servicesList = await connection.TblServices.Where(x => x.MainSubCategoryId == subCategoryId).ToListAsync();
+                    //create new response model
+                    SubCategoryServicesListViewModel responseList = new SubCategoryServicesListViewModel();
+                    responseList.SubCategoryId = subCategoryId;
                     
-                    if (servicesList.Count == 0)
+                    //Get parent SubCategoryName
+                    string SubCategoryName = await connection.TblSubCategorys.Where(x => x.SubCategoryId == subCategoryId).Select(x => x.SubCategoryName).FirstAsync();
+                    responseList.SubCategoryName = SubCategoryName;
+
+                    List <ChildSubCategoryNameViewModel> childSubCategoryList = new List<ChildSubCategoryNameViewModel>();
+                    //Get list of all the child sub-category ids
+                    childSubCategoryList = await connection.childSubCategoryNameViewModels.FromSqlRaw($@"
+                    SELECT sc.SubCategoryId AS ChildSubCategoryId, sc.SubCategoryName AS ChildSubCategoryName, IName.ImageName AS ChildSubCategoryImageName
+                    FROM TblSubCategorys sc
+                    JOIN TblImageNames IName
+                    ON sc.SubCategoryId = IName.CategorizedTypeId AND IName.CategorizedTypeName = 'SubCategory'
+                    WHERE sc.SubCategoryMappingId = {subCategoryId}
+                    ").ToListAsync();
+                    //SET CHILD-SUB-CATEGORY-LIST
+                    responseList.ChildSubCategoriesList = childSubCategoryList;
+
+                    //This model is to pair ChildSubCategory Name with services in it
+                    List<ChildSubCategoryServicesViewModel> childSubCategoryAndServicesList = new List<ChildSubCategoryServicesViewModel>();
+
+                    //Get the services according to child-sub-category-id and pair each service with its child sub category
+                    for (int i = 0; i < childSubCategoryList.Count; i++)
                     {
-                        response.Data = false;
-                        response.statusCode = 204;
-                        response.Message = "No services found";
+                        ChildSubCategoryServicesViewModel childSubCategoryService = new ChildSubCategoryServicesViewModel();
+                        childSubCategoryService.ChildSubCategoryName = childSubCategoryList[i].ChildSubCategoryName;
+                        //Actual services with child-subcategoryId
+
+                        childSubCategoryService.servicesList = await connection.ServiceNameViewModels.FromSqlRaw($@"
+                                SELECT se.ServiceId AS ServiceId,
+                                se.ServiceName AS ServiceName, 
+                                se.SubCategoryId AS SubCategoryId, 
+                                se.Price AS Price, 
+                                se.TimeTaken AS TimeTaken, 
+                                se.MainSubCategoryId AS MainSubCategoryId,
+                                Iname.ImageName AS ImageName
+                                FROM TblSubCategorys sc
+                                JOIN TblServices se
+                                ON sc.SubCategoryId = se.SubCategoryId
+                                JOIN TblImageNames IName
+                                ON se.ServiceId = IName.CategorizedTypeId AND IName.CategorizedTypeName = 'Service'
+                                WHERE sc.SubCategoryId = {childSubCategoryList[i].ChildSubCategoryId};
+                        ").ToListAsync();
+
+                        //Add object to list
+                        childSubCategoryAndServicesList.Add(childSubCategoryService);
+
                     }
-                    else
-                    {
-                        response.Data = servicesList;
-                        response.statusCode = 200;
-                    }
+                    responseList.ChildSubCategoryServicesList = childSubCategoryAndServicesList;
+
+                    response.Data = responseList;
+                    response.statusCode = 200;
                 }
                 return response;
             }

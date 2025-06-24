@@ -168,7 +168,7 @@ namespace ENT.BL.SubCategory
               
                 existingSubCategory.SubCategoryName = objSubCategory.SubCategoryName;
                 existingSubCategory.CategoryId = objSubCategory.CategoryId;
-                existingSubCategory.SubCategoreId = objSubCategory.SubCategoreId;              
+                existingSubCategory.SubCategoryMappingId = objSubCategory.SubCategoryMappingId;              
                 await _context.SaveChangesAsync();
 
                 response.statusCode = 200;
@@ -192,9 +192,12 @@ namespace ENT.BL.SubCategory
                 using (var connection = _context)
                 {
                     response.Data = await connection.SubCategoryNameViewModels.FromSqlRaw($@"
-                    SELECT sc.SubCategoryId AS SubCategoryId, sc.SubCategoryName AS SubCategoryName, sc.ImageName
+                    SELECT sc.SubCategoryId AS SubCategoryId, sc.SubCategoryName AS SubCategoryName, IName.ImageName AS ImageName
                     FROM TblSubCategorys sc 
-                    WHERE sc.CategoryId = {categoryId}
+                    JOIN TblImageNames IName
+                    ON sc.SubCategoryId = IName.CategorizedTypeId AND IName.CategorizedTypeName = 'SubCategory'
+                    WHERE sc.CategoryId = {categoryId};
+
                     ").ToListAsync();
                 }
                 response.statusCode = 200;
@@ -220,8 +223,10 @@ namespace ENT.BL.SubCategory
                     response.Data = await connection.SubCategoryNameViewModels.FromSqlRaw($@"
                                     SELECT TOP ({maxTrendingRecords}) sc.SubCategoryId AS SubCategoryId, 
                                     sc.SubCategoryName AS SubCategoryName,
-                                    sc.ImageName AS ImageName
+                                    IName.ImageName AS ImageName
                                     FROM TblSubCategorys sc
+                                    JOIN TblImageNames IName
+                                    ON sc.SubCategoryId = IName.CategorizedTypeId AND IName.CategorizedTypeName = 'SubCategory'
                                     WHERE sc.CategoryId != 0;
                                     ").ToListAsync();
                 }

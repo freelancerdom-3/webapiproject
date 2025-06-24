@@ -1,6 +1,6 @@
 USE [MyDb]
 GO
-/****** Object:  Table [dbo].[TblAreas]    Script Date: 06-06-2025 11:34:44 AM ******/
+/****** Object:  Table [dbo].[TblAreas]    Script Date: 24-06-2025 05:09:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -15,7 +15,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblCarts]    Script Date: 06-06-2025 11:34:44 AM ******/
+/****** Object:  Table [dbo].[TblCarts]    Script Date: 24-06-2025 05:09:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -29,7 +29,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblCategorys]    Script Date: 06-06-2025 11:34:44 AM ******/
+/****** Object:  Table [dbo].[TblCategorys]    Script Date: 24-06-2025 05:09:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -43,7 +43,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblCities]    Script Date: 06-06-2025 11:34:44 AM ******/
+/****** Object:  Table [dbo].[TblCities]    Script Date: 24-06-2025 05:09:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -58,7 +58,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblCountries]    Script Date: 06-06-2025 11:34:44 AM ******/
+/****** Object:  Table [dbo].[TblCountries]    Script Date: 24-06-2025 05:09:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -72,7 +72,23 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblOffers]    Script Date: 06-06-2025 11:34:44 AM ******/
+/****** Object:  Table [dbo].[TblImageNames]    Script Date: 24-06-2025 05:09:29 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TblImageNames](
+	[ImageNameId] [int] IDENTITY(1,1) NOT NULL,
+	[CategorizedTypeId] [int] NULL,
+	[CategorizedTypeName] [varchar](100) NULL,
+	[ImageName] [varchar](100) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ImageNameId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TblOffers]    Script Date: 24-06-2025 05:09:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -89,7 +105,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblOtp]    Script Date: 06-06-2025 11:34:44 AM ******/
+/****** Object:  Table [dbo].[TblOtp]    Script Date: 24-06-2025 05:09:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -106,7 +122,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblServiceAreaMappings]    Script Date: 06-06-2025 11:34:44 AM ******/
+/****** Object:  Table [dbo].[TblServiceAreaMappings]    Script Date: 24-06-2025 05:09:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -121,7 +137,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblServiceCartMappings]    Script Date: 06-06-2025 11:34:44 AM ******/
+/****** Object:  Table [dbo].[TblServiceCartMappings]    Script Date: 24-06-2025 05:09:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -138,7 +154,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblServiceProviderAreaMapping]    Script Date: 06-06-2025 11:34:44 AM ******/
+/****** Object:  Table [dbo].[TblServiceProviderAreaMapping]    Script Date: 24-06-2025 05:09:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -153,7 +169,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblServiceProviderSubCategoryMapping]    Script Date: 06-06-2025 11:34:44 AM ******/
+/****** Object:  Table [dbo].[TblServiceProviderSubCategoryMapping]    Script Date: 24-06-2025 05:09:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -168,7 +184,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblServices]    Script Date: 06-06-2025 11:34:44 AM ******/
+/****** Object:  Table [dbo].[TblServices]    Script Date: 24-06-2025 05:09:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -179,13 +195,14 @@ CREATE TABLE [dbo].[TblServices](
 	[SubCategoryId] [int] NULL,
 	[Price] [decimal](10, 2) NULL,
 	[TimeTaken] [varchar](50) NULL,
+	[MainSubCategoryId] [int] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[ServiceId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblStates]    Script Date: 06-06-2025 11:34:44 AM ******/
+/****** Object:  Table [dbo].[TblStates]    Script Date: 24-06-2025 05:09:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -200,7 +217,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblSubCategorys]    Script Date: 06-06-2025 11:34:44 AM ******/
+/****** Object:  Table [dbo].[TblSubCategorys]    Script Date: 24-06-2025 05:09:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -209,14 +226,14 @@ CREATE TABLE [dbo].[TblSubCategorys](
 	[SubCategoryId] [int] IDENTITY(1,1) NOT NULL,
 	[SubCategoryName] [varchar](50) NULL,
 	[CategoryId] [int] NULL,
-	[SubCategoreId] [int] NULL,
+	[SubCategoryMappingId] [int] NULL,
 PRIMARY KEY CLUSTERED 
 (
 	[SubCategoryId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblUserCartMappings]    Script Date: 06-06-2025 11:34:44 AM ******/
+/****** Object:  Table [dbo].[TblUserCartMappings]    Script Date: 24-06-2025 05:09:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -231,7 +248,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblUsers]    Script Date: 06-06-2025 11:34:44 AM ******/
+/****** Object:  Table [dbo].[TblUsers]    Script Date: 24-06-2025 05:09:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -250,7 +267,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TblUserTypes]    Script Date: 06-06-2025 11:34:44 AM ******/
+/****** Object:  Table [dbo].[TblUserTypes]    Script Date: 24-06-2025 05:09:29 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -330,6 +347,102 @@ INSERT [dbo].[TblCountries] ([CountryId], [CountryName]) VALUES (4, N'Bhutan')
 GO
 SET IDENTITY_INSERT [dbo].[TblCountries] OFF
 GO
+SET IDENTITY_INSERT [dbo].[TblImageNames] ON 
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (1, 1, N'SubCategory', N'appliance-repair')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (2, 2, N'SubCategory', N'electrician')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (3, 3, N'SubCategory', N'plumber')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (4, 4, N'SubCategory', N'carpenter')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (5, 5, N'SubCategory', N'bathroom-kitchen-cleaning')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (6, 6, N'SubCategory', N'cleaning')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (7, 7, N'SubCategory', N'full-home-painting')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (8, 8, N'SubCategory', N'ac-repair-service')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (9, 9, N'SubCategory', N'laptop-checkup')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (10, 10, N'SubCategory', N'switch-socket')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (11, 11, N'SubCategory', N'fan')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (12, 12, N'SubCategory', N'mcb-submeter')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (13, 13, N'SubCategory', N'bath-fittings')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (14, 14, N'SubCategory', N'basin-sink')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (15, 15, N'SubCategory', N'clothes-hanger')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (16, 16, N'SubCategory', N'bathroom-cleaning')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (17, 17, N'SubCategory', N'kitchen-cleaning')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (18, 18, N'SubCategory', N'salon-for-women')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (19, 19, N'SubCategory', N'spa-for-women')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (20, 20, N'SubCategory', N'massage-for-men')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (21, 21, N'SubCategory', N'salon-luxe')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (22, 22, N'SubCategory', N'salon-classic')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (23, 23, N'SubCategory', N'spa-ayurveda')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (24, 24, N'SubCategory', N'blow-dry-style')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (25, 25, N'SubCategory', N'royal')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (26, 26, N'SubCategory', N'wall-ceiling-light')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (27, 27, N'SubCategory', N'wiring')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (28, 28, N'SubCategory', N'doorbell')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (29, 29, N'SubCategory', N'inverter-stabiliser')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (30, 30, N'SubCategory', N'appliance')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (31, 1, N'Service', N'basin-installation')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (32, 2, N'Service', N'basin-replacement')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (33, 3, N'Service', N'fan-replacement')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (34, 4, N'Service', N'fan-installation')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (35, 5, N'Service', N'pain-relief')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (36, 7, N'Service', N'premium-signature-therapy')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (37, 8, N'Service', N'fan-uninstallation')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (38, 9, N'Service', N'fan-regulator-repair-replacement')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (39, 10, N'Service', N'switchbox-installation')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (40, 11, N'Service', N'ac-switchbox-installation')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (41, 12, N'Service', N'switchboard-installation')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (42, 13, N'Service', N'smart-switch-installation')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (43, 14, N'Service', N'smart-appliance-controller')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (44, 15, N'Service', N'wi-fi-smart-switch-installation')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (45, 16, N'Service', N'switch-socket-replacement')
+GO
+INSERT [dbo].[TblImageNames] ([ImageNameId], [CategorizedTypeId], [CategorizedTypeName], [ImageName]) VALUES (46, 17, N'Service', N'switchboard-switchbox-repair')
+GO
+SET IDENTITY_INSERT [dbo].[TblImageNames] OFF
+GO
 SET IDENTITY_INSERT [dbo].[TblOffers] ON 
 GO
 INSERT [dbo].[TblOffers] ([OfferId], [ServiceId], [StartDate], [EndDate], [Discount]) VALUES (1, 1, CAST(N'2025-05-01T09:00:00.000' AS DateTime), CAST(N'2025-05-15T23:59:59.000' AS DateTime), 10)
@@ -375,6 +488,10 @@ GO
 INSERT [dbo].[TblOtp] ([OTPId], [MobileNumber], [OTP], [ExpiryTime], [IsUsed]) VALUES (14, N'1234567891', 653931, CAST(N'2025-06-05T13:17:48.033' AS DateTime), 1)
 GO
 INSERT [dbo].[TblOtp] ([OTPId], [MobileNumber], [OTP], [ExpiryTime], [IsUsed]) VALUES (15, N'9876543211', 913156, CAST(N'2025-06-05T15:22:22.107' AS DateTime), 1)
+GO
+INSERT [dbo].[TblOtp] ([OTPId], [MobileNumber], [OTP], [ExpiryTime], [IsUsed]) VALUES (16, N'9876543211', 490555, CAST(N'2025-06-06T11:58:19.270' AS DateTime), 1)
+GO
+INSERT [dbo].[TblOtp] ([OTPId], [MobileNumber], [OTP], [ExpiryTime], [IsUsed]) VALUES (17, N'1234567891', 495748, CAST(N'2025-06-19T17:23:37.350' AS DateTime), 1)
 GO
 SET IDENTITY_INSERT [dbo].[TblOtp] OFF
 GO
@@ -430,17 +547,37 @@ SET IDENTITY_INSERT [dbo].[TblServiceProviderSubCategoryMapping] OFF
 GO
 SET IDENTITY_INSERT [dbo].[TblServices] ON 
 GO
-INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken]) VALUES (1, N'Basin installation', 5, CAST(300.00 AS Decimal(10, 2)), N'60 minutes')
+INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken], [MainSubCategoryId]) VALUES (1, N'Basin installation', 5, CAST(300.00 AS Decimal(10, 2)), N'60 minutes', 3)
 GO
-INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken]) VALUES (2, N'Basin relacement', 5, CAST(500.00 AS Decimal(10, 2)), N'80 minutes')
+INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken], [MainSubCategoryId]) VALUES (2, N'Basin relacement', 5, CAST(500.00 AS Decimal(10, 2)), N'80 minutes', 3)
 GO
-INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken]) VALUES (3, N'fan replaceement', 6, CAST(250.00 AS Decimal(10, 2)), N'30 minutes')
+INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken], [MainSubCategoryId]) VALUES (3, N'fan replaceement', 11, CAST(250.00 AS Decimal(10, 2)), N'30 minutes', 2)
 GO
-INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken]) VALUES (4, N'fan installation', 6, CAST(200.00 AS Decimal(10, 2)), N'20 minutes')
+INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken], [MainSubCategoryId]) VALUES (4, N'fan installation', 11, CAST(200.00 AS Decimal(10, 2)), N'20 minutes', 2)
 GO
-INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken]) VALUES (5, N'pain relief', 7, CAST(800.00 AS Decimal(10, 2)), N'60 minutes')
+INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken], [MainSubCategoryId]) VALUES (5, N'pain relief', 7, CAST(800.00 AS Decimal(10, 2)), N'60 minutes', NULL)
 GO
-INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken]) VALUES (7, N'premium signature therapy', 9, CAST(1500.00 AS Decimal(10, 2)), N'70 minutes')
+INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken], [MainSubCategoryId]) VALUES (7, N'premium signature therapy', 9, CAST(1500.00 AS Decimal(10, 2)), N'70 minutes', NULL)
+GO
+INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken], [MainSubCategoryId]) VALUES (8, N'Fan Uninstallation', 11, CAST(300.00 AS Decimal(10, 2)), N'30 minutes', 2)
+GO
+INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken], [MainSubCategoryId]) VALUES (9, N'Fan regulator repair/replacement', 11, CAST(100.00 AS Decimal(10, 2)), N'20 minutes', 2)
+GO
+INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken], [MainSubCategoryId]) VALUES (10, N'Switchbox installation', 10, CAST(350.00 AS Decimal(10, 2)), N'30 minutes', 2)
+GO
+INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken], [MainSubCategoryId]) VALUES (11, N'AC Switchbox installation', 10, CAST(370.00 AS Decimal(10, 2)), N'30 minutes', 2)
+GO
+INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken], [MainSubCategoryId]) VALUES (12, N'Switchboard installation', 10, CAST(280.00 AS Decimal(10, 2)), N'30 minutes', 2)
+GO
+INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken], [MainSubCategoryId]) VALUES (13, N'Smart switch installation', 10, CAST(150.00 AS Decimal(10, 2)), N'15 minutes', 2)
+GO
+INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken], [MainSubCategoryId]) VALUES (14, N'Smart appliance controller', 10, CAST(200.00 AS Decimal(10, 2)), N'15 minutes', 2)
+GO
+INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken], [MainSubCategoryId]) VALUES (15, N'Wi-Fi smart switch installation', 10, CAST(200.00 AS Decimal(10, 2)), N'15 minutes', 2)
+GO
+INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken], [MainSubCategoryId]) VALUES (16, N'Switch/socket replacement', 10, CAST(110.00 AS Decimal(10, 2)), N'10 minutes', 2)
+GO
+INSERT [dbo].[TblServices] ([ServiceId], [ServiceName], [SubCategoryId], [Price], [TimeTaken], [MainSubCategoryId]) VALUES (17, N'Switchboard/switchbox repair', 10, CAST(110.00 AS Decimal(10, 2)), N'30 minutes', 2)
 GO
 SET IDENTITY_INSERT [dbo].[TblServices] OFF
 GO
@@ -458,21 +595,65 @@ SET IDENTITY_INSERT [dbo].[TblStates] OFF
 GO
 SET IDENTITY_INSERT [dbo].[TblSubCategorys] ON 
 GO
-INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoreId]) VALUES (1, N'plumber', 1, NULL)
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (1, N'Appliance Repair & Service', 1, 0)
 GO
-INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoreId]) VALUES (2, N'electrician', 1, NULL)
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (2, N'Electrician', 1, 0)
 GO
-INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoreId]) VALUES (3, N'spa', 2, NULL)
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (3, N'Plumber', 1, 0)
 GO
-INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoreId]) VALUES (4, N'massage', 2, NULL)
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (4, N'Carpenter', 1, 0)
 GO
-INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoreId]) VALUES (5, N'Basin & sink', NULL, 1)
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (5, N'Bathroom & kitchen cleaning', 1, 0)
 GO
-INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoreId]) VALUES (6, N'fan', NULL, 2)
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (6, N'Cleaning', 1, 0)
 GO
-INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoreId]) VALUES (7, N'prime', NULL, 3)
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (7, N'Full home painting', 1, 0)
 GO
-INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoreId]) VALUES (9, N'royel', NULL, 4)
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (8, N'AC Repair & Service', 0, 1)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (9, N'Laptop check up', 0, 1)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (10, N'Switch & socket', 0, 2)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (11, N'Fan', 0, 2)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (12, N'MCB & submeter', 0, 2)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (13, N'Bath fittings', 0, 3)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (14, N'Basin & sink', 0, 3)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (15, N'Clothes hanger', 0, 4)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (16, N'Bathroom cleaning', 0, 5)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (17, N'Kitchen cleaning', 0, 5)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (18, N'Salon for Women', 2, 0)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (19, N'Spa for Women', 2, 0)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (20, N'Massage for Men', 2, 0)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (21, N'Salon Luxe', 0, 18)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (22, N'Salon Classic', 0, 18)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (23, N'Spa Ayurveda', 0, 19)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (24, N'Blow-dry & style', 0, 20)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (25, N'Royal', 0, 22)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (26, N'Wall/Ceiling-light', 0, 2)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (27, N'Wiring', 0, 2)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (28, N'Doorbell', 0, 2)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (29, N'Inverter & Stabilisers', 0, 2)
+GO
+INSERT [dbo].[TblSubCategorys] ([SubCategoryId], [SubCategoryName], [CategoryId], [SubCategoryMappingId]) VALUES (30, N'Appliance', 0, 2)
 GO
 SET IDENTITY_INSERT [dbo].[TblSubCategorys] OFF
 GO

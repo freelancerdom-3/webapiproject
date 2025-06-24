@@ -16,6 +16,6 @@ namespace ENT.BL.Services
         Task<APIResponseModel> GetByName(string serviceName, string? regionType, int? regionId);  // string service name
         Task<APIResponseModel> Update(ServicesModel objServices);
         Task<APIResponseModel> Delete(int ServiceId);
-        Task<APIResponseModel> GetBySubCategoryId(int id, string type);
+        Task<APIResponseModel> GetBySubCategoryId(int subCategoryId);
     }
 }
