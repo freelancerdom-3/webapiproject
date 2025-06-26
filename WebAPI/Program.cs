@@ -18,6 +18,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using ENT.BL.ImageName;
+using ENT.BL.TimeSlots;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,6 +79,7 @@ builder.Services.AddScoped<IOffer, Offer>();
 builder.Services.AddScoped<IServiceProviderAreMapping, ServiceProviderAreaMapping>();
 builder.Services.AddScoped<IServiceProviderSubCategoryMapping, ServiceProviderSubCategoryMapping>();
 builder.Services.AddScoped<IImageName, ImageName>();
+builder.Services.AddScoped<ITimeSlots, TimeSlots>();
 
 builder.Services.AddSwaggerGen(options =>
 {
