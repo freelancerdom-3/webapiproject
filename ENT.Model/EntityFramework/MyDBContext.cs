@@ -24,6 +24,7 @@ using ENT.Model.ServiceProviderAreaMapping;
 using ENT.Model.ServiceProviderSubCategoryMapping;
 using ENT.Model.ImageNames;
 using ENT.Model.TimeSlots;
+using ENT.Model.Fees;
 
 
 namespace ENT.Model.EntityFramework
@@ -48,7 +49,7 @@ namespace ENT.Model.EntityFramework
             //optionsBuilder.UseSqlServer("Server= NENCY-PATEL21\\SQLEXPRESS; Database= MyDB; Integrated Security=True; Encrypt=false;");
 
             //Alpesh-Gami          
-            //optionsBuilder.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;");
+            optionsBuilder.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;");
             
             //Mohsin-Ali-Momin
             optionsBuilder.UseSqlServer("Server= MOHSINMOMIN\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
@@ -85,6 +86,7 @@ namespace ENT.Model.EntityFramework
             modelBuilder.Entity<ServiceProviderSubCategoryMappingModel>().ToTable("TblServiceProviderSubCategoryMapping");
             modelBuilder.Entity<ImageNameModel>().ToTable("TblImageNames");
             modelBuilder.Entity<TimeSlotsModel>().ToTable("TblTimeSlots");
+            modelBuilder.Entity<FeesModel>().ToTable("TblFees");
             
         }
 
@@ -114,5 +116,7 @@ namespace ENT.Model.EntityFramework
         public DbSet<ImageNameModel> TblImageNames { get; set; }
         public DbSet<ServiceNameViewModel> ServiceNameViewModels { get; set; }
         public DbSet<TimeSlotsModel> TblTimeSlots { get; set; }
+        public DbSet<FeesModel> TblFees { get; set; }
+       
     }
 }
