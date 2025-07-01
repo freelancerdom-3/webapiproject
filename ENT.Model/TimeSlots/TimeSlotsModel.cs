@@ -10,9 +10,9 @@ namespace ENT.Model.TimeSlots
     public class TimeSlotsModel
     {
         [Key]
-        public int SlotId { get; set; }
-        public TimeOnly Time {  get; set; }
-        public int? SlotExtrafee { get; set; }
+        public int TimeSlotId { get; set; }
+        public string Time {  get; set; }
+        public Boolean SpecialSlot { get; set; }
 
 
     }

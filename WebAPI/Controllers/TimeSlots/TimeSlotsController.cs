@@ -17,7 +17,8 @@ namespace WebAPI.Controllers.TimeSlots
         }
 
         [HttpGet]
-        public async Task<APIResponseModel> GetAll()
+        public async Task<APIResponseModel> GetAll
+            ()
         {
             return await _TimeSlots.GetAll();
         }
