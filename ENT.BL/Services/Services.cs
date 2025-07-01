@@ -236,13 +236,17 @@ namespace ENT.BL.Services
                 List<ServicesModel> servicesList = new List<ServicesModel>();
                 using (var connection = _context)
                 {
-                    //create new response model
+                    //create new response list model
                     SubCategoryServicesListViewModel responseList = new SubCategoryServicesListViewModel();
-                    responseList.SubCategoryId = subCategoryId;
                     
-                    //Get parent SubCategoryName
-                    string SubCategoryName = await connection.TblSubCategorys.Where(x => x.SubCategoryId == subCategoryId).Select(x => x.SubCategoryName).FirstAsync();
-                    responseList.SubCategoryName = SubCategoryName;
+                    //using subCategoryNameViewModel get ==> SubCategoryId, SubCategoryName and SubCategoryImageName
+                    responseList.SubCategoryImageNameData = await connection.SubCategoryImageNameViewModels.FromSqlRaw($@"
+                                                        SELECT sc.SubCategoryId AS SubCategoryId, sc.SubCategoryName AS SubCategoryName, IName.ImageName AS subCategoryImageName
+                                                        FROM TblSubCategorys sc
+                                                        JOIN TblImageNames IName
+                                                        ON sc.SubCategoryId = IName.CategorizedTypeId AND IName.CategorizedTypeName = 'SubCategory'
+                                                        WHERE sc.SubCategoryId = {subCategoryId}
+                                                        ").FirstAsync();
 
                     List <ChildSubCategoryNameViewModel> childSubCategoryList = new List<ChildSubCategoryNameViewModel>();
                     //Get list of all the child sub-category ids

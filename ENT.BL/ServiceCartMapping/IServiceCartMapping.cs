@@ -14,7 +14,7 @@ namespace ENT.BL.ServiceCartMapping
         Task<APIResponseModel> GetAll();
         Task<APIResponseModel> GetByCartId(int cartId);
         Task<APIResponseModel> Update(ServiceCartMappingModel ObjServiceCartMapping);
-        Task<APIResponseModel> Delete(int ServiceCartMappingId);
+        Task<APIResponseModel> Delete(int cartId, int serviceId);
     }
 }
 

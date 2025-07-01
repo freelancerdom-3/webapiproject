@@ -9,9 +9,7 @@ namespace ENT.Model.CustomModel
 {
     public class SubCategoryServicesListViewModel
     {
-        public int SubCategoryId { get; set; }
-        public string SubCategoryName { get; set; }
-
+        public SubCategoryImageNameViewModel SubCategoryImageNameData { get; set; }
         public List<ChildSubCategoryNameViewModel> ChildSubCategoriesList { get; set; }
         public List<ChildSubCategoryServicesViewModel> ChildSubCategoryServicesList { get; set; }
     }

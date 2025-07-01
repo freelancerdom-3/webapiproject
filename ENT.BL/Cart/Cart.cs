@@ -33,12 +33,10 @@ namespace ENT.BL.Cart
                     //Create new cart with price = 0.00;
                     CartModel cart = new CartModel();
                     cart.Price = 0.00m;
-
+                    response.Data = cart;
                     await connection.TblCarts.AddAsync(cart);
                     await connection.SaveChangesAsync();
                 }
-
-                response.Data = true;
                 response.statusCode = 200;
                 return response;
             }

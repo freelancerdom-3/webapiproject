@@ -9,6 +9,7 @@ namespace ENT.Model.CustomModel
 {
     public class ServiceNameViewModel
     {
+        //this model is created in order to send image name along with service
         [Key]
         public int ServiceId { get; set; }
         public string ServiceName { get; set; }

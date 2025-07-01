@@ -28,18 +28,21 @@ namespace WebAPI.Controllers.ServiceCartMapping
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<APIResponseModel> GetAll()
         {
             return await _ServiceCartMapping.GetAll();
         }
 
         [HttpGet("GetByCartId")]
+        [AllowAnonymous]
         public async Task<APIResponseModel> GetByCartId(int ServiceCartMappingId)
         {
             return await _ServiceCartMapping.GetByCartId(ServiceCartMappingId);
         }
 
         [HttpPut]
+        [AllowAnonymous]
         public async Task<APIResponseModel> Update(ServiceCartMappingModel objServiceCartMappingModel)
         {
             return await _ServiceCartMapping.Update(objServiceCartMappingModel);
@@ -47,9 +50,10 @@ namespace WebAPI.Controllers.ServiceCartMapping
 
 
         [HttpDelete]
-        public async Task<APIResponseModel> Delete(int ServiceCartMappingId)
+        [AllowAnonymous]
+        public async Task<APIResponseModel> Delete(int cartId, int serviceId)
         {
-            return await _ServiceCartMapping.Delete(ServiceCartMappingId);
+            return await _ServiceCartMapping.Delete(cartId, serviceId);
         }
     }
 }

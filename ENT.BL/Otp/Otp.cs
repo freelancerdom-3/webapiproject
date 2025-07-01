@@ -156,7 +156,7 @@ namespace ENT.BL.Otp
                     //mobile number does not exists
                     OtpModel otpObject = await connection.TblOtp.Where(x => x.MobileNumber == mobileNumber).OrderByDescending(x => x.ExpiryTime).FirstAsync();
 
-                    if(otpObject != null)
+                    if(otpObject.OTP == Otp)
                     {
                         if(otpObject.OTP == Otp && otpObject.ExpiryTime > DateTime.Now)
                         {

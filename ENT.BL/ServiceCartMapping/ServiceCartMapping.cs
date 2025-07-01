@@ -25,37 +25,37 @@ namespace ENT.BL.ServiceCartMapping
         }
 
         //Update cart method that comes to effect after any kind of change in service cart mappings table
-        public async Task updateCart(int cartId)
-        {
-            using(MyDBContext connection = _context)
-            {
-                // find all service for cart
-                // sum of all service price
-                //update cart table
-                List<ServiceCartMappingModel> listOfServicesInGivenCartId = await connection.TblServiceCartMappings
-                                                        .Where(x => x.CartId == cartId)
-                                                        .ToListAsync();
-                decimal subTotal = 0;
-                CartModel? cart = await connection.TblCarts.Where(x => x.CartId == cartId).FirstOrDefaultAsync();
-                if (listOfServicesInGivenCartId.Count > 0)
-                {
-                    foreach (var service in listOfServicesInGivenCartId)
-                    {
-                        subTotal += service.Quantity * service.Price;
-                    }
-                }
-                if (cart != null)
-                {
-                    //Here price is updated
-                    cart.Price = subTotal;
-                    //Here changes are saved
-                    await connection.SaveChangesAsync();
+        //public async Task updateCart(int cartId)
+        //{
+        //    using(MyDBContext connection = _context)
+        //    {
+        //        // find all service for cart
+        //        // sum of all service price
+        //        //update cart table
+        //        List<ServiceCartMappingModel> listOfServicesInGivenCartId = await connection.TblServiceCartMappings
+        //                                                .Where(x => x.CartId == cartId)
+        //                                                .ToListAsync();
+        //        decimal subTotal = 0;
+        //        CartModel? cart = await connection.TblCarts.Where(x => x.CartId == cartId).FirstOrDefaultAsync();
+        //        if (listOfServicesInGivenCartId.Count > 0)
+        //        {
+        //            foreach (var service in listOfServicesInGivenCartId)
+        //            {
+        //                subTotal += service.Quantity * service.Price;
+        //            }
+        //        }
+        //        if (cart != null)
+        //        {
+        //            //Here price is updated
+        //            cart.Price = subTotal;
+        //            //Here changes are saved
+        //            await connection.SaveChangesAsync();
 
-                    //It creates circular dependency
-                    //await _cartService.Update(cart);
-                }
-            }
-        }
+        //            //It creates circular dependency
+        //            //await _cartService.Update(cart);
+        //        }
+        //    }
+        //}
 
         public async Task<APIResponseModel> Add(ServiceCartMappingModel objServiceCartMapping)
         {
@@ -69,7 +69,7 @@ namespace ENT.BL.ServiceCartMapping
                     await connection.SaveChangesAsync();
                     //Logic to update the respective cart's subtotal amount
                     //Update status of cart after every change
-                    await updateCart(objServiceCartMapping.CartId);
+                    //await updateCart(objServiceCartMapping.CartId);
                     
                 }
 
@@ -152,7 +152,7 @@ namespace ENT.BL.ServiceCartMapping
                         response.Message = "Data updated successfully";
                         response.statusCode = 200;
                         //Update status of cart after every change
-                        await updateCart(objServiceCartMapping.CartId);
+                        //await updateCart(objServiceCartMapping.CartId);
                     }
                     else
                     {
@@ -171,7 +171,7 @@ namespace ENT.BL.ServiceCartMapping
             }
         }
 
-        public async Task<APIResponseModel> Delete(int serviceCartMappingId)
+        public async Task<APIResponseModel> Delete(int cartId, int serviceId)
         {
             APIResponseModel response = new APIResponseModel();
             try
@@ -179,23 +179,22 @@ namespace ENT.BL.ServiceCartMapping
                 using (MyDBContext connection = _context)
                 {
 
-                    bool deleteObjectExists = await connection.TblServiceCartMappings.AnyAsync(x => x.MappingId == serviceCartMappingId);
+                    ServiceCartMappingModel? existingService = await connection.TblServiceCartMappings.FirstOrDefaultAsync(x => x.CartId == cartId && x.ServiceId == serviceId);
 
                     // find all service for cart
                     // sum of all service price
                     //update cart table
 
 
-                    if (deleteObjectExists)
+                    if (existingService != null)
                     {
-                        ServiceCartMappingModel? deleteObject = connection.TblServiceCartMappings.Where(x => x.MappingId == serviceCartMappingId).FirstOrDefault();
-                        _ = connection.TblServiceCartMappings.Remove(deleteObject);
+                        _ = connection.TblServiceCartMappings.Remove(existingService);
                         response.Message = "Service deleted successfully";
                         response.statusCode = 200;
                         await connection.SaveChangesAsync();
 
                         //Update cart with latest services total
-                        await updateCart(deleteObject.CartId);
+                        //await updateCart(deleteObject.CartId);
                     }
                     else
                     {

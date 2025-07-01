@@ -42,7 +42,7 @@ namespace ENT.Model.EntityFramework
             //optionsBuilder.UseSqlServer("Server= (localdb)\\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;");
 
             //Hemil-Fichadia
-            //optionsBuilder.UseSqlServer(@"Server= LAPTOP-LHKLMKKD\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
+            optionsBuilder.UseSqlServer(@"Server= LAPTOP-LHKLMKKD\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
             
 
             //NENCY
@@ -52,7 +52,7 @@ namespace ENT.Model.EntityFramework
             //optionsBuilder.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;");
             
             //Mohsin-Ali-Momin
-            optionsBuilder.UseSqlServer("Server= MOHSINMOMIN\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
+            //optionsBuilder.UseSqlServer("Server= MOHSINMOMIN\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
                    
           
         
@@ -118,5 +118,6 @@ namespace ENT.Model.EntityFramework
         public DbSet<TimeSlotsModel> TblTimeSlots { get; set; }
         public DbSet<FeesModel> TblFees { get; set; }
        
+        public DbSet<SubCategoryImageNameViewModel> SubCategoryImageNameViewModels { get; set; }
     }
 }

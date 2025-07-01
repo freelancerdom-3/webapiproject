@@ -20,7 +20,8 @@ namespace WebAPI.Controllers.Cart
             _cart = cart;
         }
 
-        [HttpPost]
+        [HttpGet("GenerateCart")]
+        [AllowAnonymous]
         public async Task<APIResponseModel> Add()
         {
             return await _cart.Add();
