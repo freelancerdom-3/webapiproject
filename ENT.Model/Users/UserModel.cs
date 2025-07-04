@@ -16,6 +16,10 @@ namespace ENT.Model.Users
         public string? Email { get; set; }
         public string? Gender { get; set; }
         public DateOnly? DateOfBirth { get; set; }
-        public int UserTypeId { get; set; }
+        public int? UserTypeId { get; set; }
+        public string? HouseNumber { get; set; }
+        public string? Landmark { get; set; }
+        public string? AriaName { get; set; }
+        public string? LocationType { get; set; }
     }
 }

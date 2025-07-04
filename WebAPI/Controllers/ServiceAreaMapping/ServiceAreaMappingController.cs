@@ -56,6 +56,7 @@ namespace WebAPI.Controllers.ServiceAreaMapping
         }
 
         [HttpGet("GetServicesByRegionType")]
+        [AllowAnonymous]
         public async Task<APIResponseModel> GetServicesByRegionType(string regionType, int regionId)
         {
             return await _serviceAreaMapping.GetServicesByRegionType(regionType, regionId);

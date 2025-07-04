@@ -11,6 +11,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using ENT.Model.CustomModel;
 
 namespace ENT.BL.User
 {
@@ -50,6 +51,8 @@ namespace ENT.BL.User
                 return response;
             }
         }
+
+      
 
         public async Task<APIResponseModel> Delete(int userId)
         {
@@ -145,12 +148,43 @@ namespace ENT.BL.User
                 using(MyDBContext connection = _context)
                 {
                     UserModel? existingUser = await connection.TblUsers.FirstOrDefaultAsync(x => x.UserId == objUser.UserId);
-                    if (existingUser != null)
+                    if (existingUser != null && objUser.MobileNumber != null)
                     {
-                        existingUser.MobileNumber = objUser.MobileNumber;
-                        existingUser.FullName = objUser.FullName;
-                        existingUser.DateOfBirth = objUser.DateOfBirth;
-                        existingUser.Email = objUser.Email;
+                        //existingUser.MobileNumber = objUser.MobileNumber;
+                        if(objUser.FullName != null)
+                        {
+                            existingUser.FullName = objUser.FullName;
+                        }
+                        if (objUser.DateOfBirth != null)
+                        {
+                            existingUser.DateOfBirth = objUser.DateOfBirth;
+
+                        }
+                        if (objUser.Email != null)
+                        {
+                            existingUser.Email = objUser.Email;
+
+                        }
+                        if (objUser.HouseNumber != null)
+                        {
+                            existingUser.HouseNumber = objUser.HouseNumber;
+
+                        }
+                        if (objUser.Landmark != null)
+                        {
+                            existingUser.Landmark = objUser.Landmark;
+
+                        }
+                        if (objUser.AriaName != null)
+                        {
+                            existingUser.AriaName = objUser.AriaName;
+
+                        }
+                        if (objUser.LocationType != null)
+                        {
+                            existingUser.LocationType = objUser.LocationType;
+
+                        }
                         //User won't be able to update role type
                         //existingUser.UserTypeId = objUser.UserTypeId;
                         //Update user by saving changes
@@ -160,7 +194,7 @@ namespace ENT.BL.User
                     }
                     else
                     {
-                        response.Message = "User with id " + objUser.UserId + " does not exists";
+                        response.Message = "User with id " + objUser.UserId + " does not exists or could not found mobile number : "+objUser.MobileNumber;
                     }
                     response.statusCode = 200;
                 }
@@ -174,6 +208,8 @@ namespace ENT.BL.User
                 return response;
             }
         }
+
+
 
 
         //public async Task<APIResponseModel> GetAll(string? searchBy = null)

@@ -1,5 +1,6 @@
 ﻿using ENT.BL.User;
 using ENT.Model.Common;
+using ENT.Model.CustomModel;
 using ENT.Model.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -24,6 +25,7 @@ namespace WebAPI.Controllers.User
             return await _user.Add(objUserModel);
         }
         [HttpPut]
+        [AllowAnonymous]
         public async Task<APIResponseModel> Update(UserModel objUserModel)
         {
             return await _user.Update(objUserModel);
@@ -34,6 +36,7 @@ namespace WebAPI.Controllers.User
             return await _user.Delete(userId);
         }
         [HttpGet("GetById")]
+        [AllowAnonymous]
         public async Task<APIResponseModel> GetById(int userId)
         {
             return await _user.GetById(userId);
@@ -45,6 +48,8 @@ namespace WebAPI.Controllers.User
             return await _user.GetAll();
         }
 
+
+      
 
     }
 }
