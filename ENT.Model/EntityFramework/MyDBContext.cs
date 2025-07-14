@@ -117,7 +117,7 @@ namespace ENT.Model.EntityFramework
         public DbSet<ServiceNameViewModel> ServiceNameViewModels { get; set; }
         public DbSet<TimeSlotsModel> TblTimeSlots { get; set; }
         public DbSet<FeesModel> TblFees { get; set; }
-       
         public DbSet<SubCategoryImageNameViewModel> SubCategoryImageNameViewModels { get; set; }
+        public DbSet<ServiceQuantityViewModel> ServiceQuantityViewModels { get; set; }
     }
 }

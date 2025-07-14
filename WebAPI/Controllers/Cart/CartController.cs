@@ -22,9 +22,9 @@ namespace WebAPI.Controllers.Cart
 
         [HttpGet("GenerateCart")]
         [AllowAnonymous]
-        public async Task<APIResponseModel> Add()
+        public async Task<APIResponseModel> GenerateCartByUserId(int userId)
         {
-            return await _cart.Add();
+            return await _cart.GenerateCartByUserId(userId);
         }
 
         [HttpGet]

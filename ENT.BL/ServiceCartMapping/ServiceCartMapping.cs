@@ -1,7 +1,9 @@
 ﻿
+using Azure;
 using ENT.BL.Cart;
 using ENT.Model.Cart;
 using ENT.Model.Common;
+using ENT.Model.CustomModel;
 using ENT.Model.EntityFramework;
 using ENT.Model.ServiceCartMapping;
 using Microsoft.EntityFrameworkCore;
@@ -144,10 +146,11 @@ namespace ENT.BL.ServiceCartMapping
             {
                 using (MyDBContext connection = _context)
                 {
-                    bool updateObjectExists = await connection.TblServiceCartMappings.AnyAsync(x => x.CartId == objServiceCartMapping.CartId);
-                    if (updateObjectExists)
+                    ServiceCartMappingModel? updateExistingObject = await connection.TblServiceCartMappings.Where(x => x.CartId == objServiceCartMapping.CartId && x.ServiceId == objServiceCartMapping.ServiceId).FirstOrDefaultAsync();
+                    if (updateExistingObject != null)
                     {
-                        connection.TblServiceCartMappings.Update(objServiceCartMapping);
+                        updateExistingObject.Quantity = objServiceCartMapping.Quantity;
+                        connection.TblServiceCartMappings.Update(updateExistingObject);
                         await connection.SaveChangesAsync();
                         response.Message = "Data updated successfully";
                         response.statusCode = 200;
@@ -171,8 +174,10 @@ namespace ENT.BL.ServiceCartMapping
             }
         }
 
-        public async Task<APIResponseModel> Delete(int cartId, int serviceId)
+        public async Task<APIResponseModel> Delete(DeleteServiceViewModel objDeleteServiceViewModel)
         {
+            int cartId = objDeleteServiceViewModel.CartId;
+            int serviceId = objDeleteServiceViewModel.ServiceId;
             APIResponseModel response = new APIResponseModel();
             try
             {
@@ -211,6 +216,139 @@ namespace ENT.BL.ServiceCartMapping
                 response.Data = false;
                 response.statusCode = 400;
                 response.Message = ex.Message;
+                return response;
+            }
+        }
+
+        /*This API is responsible to receive list of services, and send this response as 
+         * list of object {subCategoryId, subCategoryName, subCategoryImageName, services[which are under this subCategoryId]}
+        */
+        public async Task<APIResponseModel> AddServicesByList(CartServiceQuantityViewModel objCartServiceViewModel)
+        {
+            APIResponseModel response = new APIResponseModel();
+            try
+            {
+                //Fetch data from the received object
+                int cartId = objCartServiceViewModel.CartId;
+                List<ServiceQuantityViewModel> servicesList = objCartServiceViewModel.ServiceQuantityList;
+
+                using (var connection = _context)
+                {
+                    //Initial cart state
+                    int initialCartServicesCount = await connection.TblServiceCartMappings.CountAsync(x => x.CartId == cartId);
+
+
+                    /* Update services in UI's cart first with database cart
+                     */
+                    //This means user added some services to cart without logging-in so process of merging them
+                    if(servicesList != null && servicesList.Count > 0)
+                    {
+
+                        // Step 1: Get all existing mappings for this cartId in a map
+                        var existingMappings = await connection.TblServiceCartMappings
+                            .Where(s => s.CartId == cartId)
+                            .ToDictionaryAsync(s => s.ServiceId);
+
+                        // Step 2: Iterate and add/update
+                        /* If existing mappings are empty, then simply create new object and add it 
+                         */
+                        foreach (var item in servicesList)
+                        {
+                            if (existingMappings.TryGetValue(item.ServiceId, out var existingMapping))
+                            {
+                                // Update existing
+                                existingMapping.Quantity = item.Quantity;
+                                existingMapping.Price = item.Price;
+
+                                connection.TblServiceCartMappings.Update(existingMapping);
+                            }
+                            else
+                            {
+                                // Add new
+                                var newService = new ServiceCartMappingModel
+                                {
+                                    ServiceId = item.ServiceId,
+                                    CartId = cartId,
+                                    Quantity = item.Quantity,
+                                    Price = item.Price
+                                };
+
+                                await connection.TblServiceCartMappings.AddAsync(newService);
+                            }
+                        }
+
+                        // Save changes when all the services are merged to cart
+                        await connection.SaveChangesAsync();
+                    }
+
+                    /*Here I will only carry out the response generation operation if cart had some data previously, otherwise the
+                     * UI's cart is already up to date, means no data is missing to be considered.
+                    */
+                    List<SubCategoryServiceQuantityViewModel> subCategoryServiceQuantityListToBeSentToUpdateCart = new List<SubCategoryServiceQuantityViewModel>(); 
+                    if (initialCartServicesCount > 0)
+                    {
+                        /*Here there will be the logic of generating the final response that will be containing
+                         * the response object {subCategoryId, subCategoryName, subCategoryImageName, services[which are under this subCategoryId]}
+                        */
+
+                        /*Now we have to fetch all the services on the basis of the subCategoryIds so first get all the subCategoryIds that 
+                         * are there with services in current cart
+                        */
+                        //Step - 1 ---> get all service Ids from cart, at this point I will have updated all the services with existing services
+                        List<int> serviceListIdsFromCart = await connection.TblServiceCartMappings.Where(x => x.CartId == cartId).Select(x => x.ServiceId).ToListAsync();
+
+                        //Step - 2 Fetch all unique subCategoryIds in 
+                        HashSet<int> subCategoryIdsSet = new HashSet<int>();
+                        for (int i = 0; i < serviceListIdsFromCart.Count; i++)
+                        {
+                            int subCategoryId = (int)await connection.TblServices.Where(x => x.ServiceId == serviceListIdsFromCart[i]).Select(x => x.MainSubCategoryId).FirstAsync();
+                            subCategoryIdsSet.Add(subCategoryId);
+                        }
+
+
+                        //Step - 3
+                        //Now get subCategoryImageName data and from SubcategoryId ----> get services that have this subCategoryId
+                        
+                        foreach(int subCategoryIdForCartService in subCategoryIdsSet)
+                        {
+                            SubCategoryServiceQuantityViewModel subCategoryServiceQuantityItem = new SubCategoryServiceQuantityViewModel();
+                            subCategoryServiceQuantityItem.SubCategoryImageNameData = await connection.SubCategoryImageNameViewModels.FromSqlRaw($@"
+                                SELECT sc.SubCategoryId AS SubCategoryId, sc.SubCategoryName AS SubCategoryName, IName.ImageName AS SubCategoryImageName
+                                FROM TblSubCategorys sc
+                                JOIN TblImageNames IName
+                                ON sc.SubCategoryId = IName.CategorizedTypeId
+                                AND IName.CategorizedTypeName = 'SubCategory'
+                                AND sc.SubCategoryId = {subCategoryIdForCartService}
+                            ").FirstAsync();
+                            //Fetch list of services for this SubCategoryId
+                            subCategoryServiceQuantityItem.serviceQuantityList = await connection.ServiceQuantityViewModels.FromSqlRaw($@"
+                                SELECT se.ServiceId AS ServiceId, se.ServiceName AS ServiceName, se.Price AS Price, scm.Quantity AS Quantity
+                                FROM TblServiceCartMappings scm
+                                JOIN TblServices se
+                                ON se.ServiceId = scm.ServiceId
+                                JOIN TblSubCategorys sc
+                                ON se.MainSubCategoryId = sc.SubCategoryId
+                                WHERE sc.SubCategoryId = {subCategoryIdForCartService}
+                            ").ToListAsync();
+                            subCategoryServiceQuantityListToBeSentToUpdateCart.Add(subCategoryServiceQuantityItem);
+                        }
+
+                    }
+                    /*This response will only contain data to be sent if there was some data in cart already other wise simply cart is 
+                     * in updated state.
+                    */
+                    response.Data = subCategoryServiceQuantityListToBeSentToUpdateCart;
+
+
+                }
+                response.statusCode = 200;
+                return response;
+            }
+            catch(Exception ex)
+            {
+                response.statusCode = 400;
+                response.Message = ex.Message;
+                response.Data = false;
                 return response;
             }
         }

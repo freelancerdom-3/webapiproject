@@ -5,6 +5,7 @@ using ENT.BL.ServiceCartMapping;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using ENT.Model.CustomModel;
 
 
 namespace WebAPI.Controllers.ServiceCartMapping
@@ -51,9 +52,15 @@ namespace WebAPI.Controllers.ServiceCartMapping
 
         [HttpDelete]
         [AllowAnonymous]
-        public async Task<APIResponseModel> Delete(int cartId, int serviceId)
+        public async Task<APIResponseModel> Delete(DeleteServiceViewModel objDeleteServiceViewModel)
         {
-            return await _ServiceCartMapping.Delete(cartId, serviceId);
+            return await _ServiceCartMapping.Delete(objDeleteServiceViewModel);
+        }
+
+        [HttpPost("AddServicesByList")]
+        public async Task<APIResponseModel> AddServicesByList([FromBody]CartServiceQuantityViewModel objCartServiceViewModel)
+        {
+            return await _ServiceCartMapping.AddServicesByList(objCartServiceViewModel);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ENT.Model.ServiceCartMapping;
 using ENT.Model.Common;
+using ENT.Model.CustomModel;
 
 namespace ENT.BL.ServiceCartMapping
 {
@@ -14,7 +15,8 @@ namespace ENT.BL.ServiceCartMapping
         Task<APIResponseModel> GetAll();
         Task<APIResponseModel> GetByCartId(int cartId);
         Task<APIResponseModel> Update(ServiceCartMappingModel ObjServiceCartMapping);
-        Task<APIResponseModel> Delete(int cartId, int serviceId);
+        Task<APIResponseModel> Delete(DeleteServiceViewModel objDeleteServiceViewModel);
+        Task<APIResponseModel> AddServicesByList(CartServiceQuantityViewModel objCartServiceViewModel);
     }
 }
 
