@@ -19,7 +19,7 @@ namespace ENT.BL.ServiceAreaMapping
         Task<APIResponseModel> Delete(int serviceAreaMappingId);
 
         Task<APIResponseModel> Update(ServiceAreaMappingModel objServiceAreaMapping);
-        Task<APIResponseModel> GetAreaBySearch(string name,int maxrecord);
+        Task<APIResponseModel> GetAreaBySearch(string name,int maxrecord,string? searchType);
 
         Task<APIResponseModel> GetServicesByRegionType(string? regionType, int? regionId);
     }

@@ -50,9 +50,9 @@ namespace WebAPI.Controllers.ServiceAreaMapping
 
         [HttpGet("GetAreaBySearch")]
         [AllowAnonymous]
-        public async Task<APIResponseModel> GetAreaBySearch(string? name, int maxrecord)
+        public async Task<APIResponseModel> GetAreaBySearch(string? name, int maxrecord, string? searchType)
         {
-            return await _serviceAreaMapping.GetAreaBySearch(name, maxrecord);
+            return await _serviceAreaMapping.GetAreaBySearch(name, maxrecord,searchType);
         }
 
         [HttpGet("GetServicesByRegionType")]

@@ -166,82 +166,113 @@ namespace ENT.BL.ServiceAreaMapping
             }
         }
 
-        public async Task<APIResponseModel> GetAreaBySearch(string? name, int maxrecord)
+
+
+
+
+        public async Task<APIResponseModel> GetAreaBySearch(string? name, int maxrecord, string? searchType)
         {
             APIResponseModel response = new();
             try
             {
+                searchType = searchType?.ToLower() ?? "all";
+
+                if (searchType != "all" && searchType != "area")
+                {
+                    response.statusCode = 400;
+                    response.Message = "Invalid searchType. Use 'all' or 'area'.";
+                    return response;
+                }
+
                 List<GetAreaBySearchViewModel> searchResults = new();
+
                 using (MyDBContext connection = _context)
                 {
-                    //lstUsers = string.IsNullOrEmpty(searchBy)? connection.TblUsers.ToList():
-                    //    connection.TblUsers.Where(x=>x.FullName.ToLower()==searchBy.ToLower()).
-                    //    ToList();
+                    string query = "";
 
-                    //            lstUsers = connection.GetTblUserViewModel.FromSqlRaw($@"SELECT tuser.*,trole.rolename 
-                    //            FROM [HSMDB].[dbo].[TblUser] tuser
-                    //            inner join tblrole trole on trole.roleid=tuser.roleid where RoleName like '%{searchBy}%'").ToList();
+                    // ✅ ALL: Area + City + State + Country
+                    if (searchType == "all")
+                    {
+                        query = $@"
+                SELECT TOP {maxrecord}
+                    Id,
+                    Name,
+                    Type,
+                    Parent
+                FROM (
+                    SELECT 
+                        CAST(a.AreaId AS INT) AS Id,
+                        a.AreaName AS Name,
+                        'Area' AS Type,
+                        CONCAT(c.CityName, ' > ', s.StateName, ' > ', co.CountryName) AS Parent
+                    FROM TblAreas a
+                    INNER JOIN TblCities c ON a.CityId = c.CityId
+                    INNER JOIN TblStates s ON c.StateId = s.StateId
+                    INNER JOIN TblCountries co ON s.CountryId = co.CountryId
+                    WHERE a.AreaName LIKE '{name}%'
 
-                    
+                    UNION
 
-                    searchResults = await connection.GetAreaBySearchViewModel.FromSqlRaw($@"
-                    SELECT TOP {maxrecord}
-                        Id,
-                        Name,
-                        Type,
-                        Parent
-                    FROM (
-                        SELECT 
-                            CAST(c.CityId AS INT) AS Id,
-                            c.CityName AS Name,
-                            'City' AS Type,
-                            CONCAT(s.StateName, ' > ', co.CountryName) AS Parent
-                        FROM TblCities c
-                        INNER JOIN TblStates s ON c.StateId = s.StateId
-                        INNER JOIN TblCountries co ON s.CountryId = co.CountryId
-                        WHERE c.CityName LIKE '{name}%'
+                    SELECT 
+                        CAST(c.CityId AS INT) AS Id,
+                        c.CityName AS Name,
+                        'City' AS Type,
+                        CONCAT(s.StateName, ' > ', co.CountryName) AS Parent
+                    FROM TblCities c
+                    INNER JOIN TblStates s ON c.StateId = s.StateId
+                    INNER JOIN TblCountries co ON s.CountryId = co.CountryId
+                    WHERE c.CityName LIKE '{name}%'
 
-                        UNION
+                    UNION
 
-                        SELECT 
-                            CAST(a.AreaId AS INT) AS Id,
-                            a.AreaName AS Name,
-                            'Area' AS Type,
-                            CONCAT(c.CityName, ' > ', s.StateName, ' > ', co.CountryName) AS Parent
-                        FROM TblAreas a
-                        INNER JOIN TblCities c ON a.CityId = c.CityId
-                        INNER JOIN TblStates s ON c.StateId = s.StateId
-                        INNER JOIN TblCountries co ON s.CountryId = co.CountryId
-                        WHERE a.AreaName LIKE '{name}%'
+                    SELECT 
+                        CAST(s.StateId AS INT) AS Id,
+                        s.StateName AS Name,
+                        'State' AS Type,
+                        co.CountryName AS Parent
+                    FROM TblStates s
+                    INNER JOIN TblCountries co ON s.CountryId = co.CountryId
+                    WHERE s.StateName LIKE '{name}%'
 
-                        UNION
+                    UNION
 
-                        SELECT 
-                            CAST(s.StateId AS INT) AS Id,
-                            s.StateName AS Name,
-                            'State' AS Type,
-                            co.CountryName AS Parent
-                        FROM TblStates s
-                        INNER JOIN TblCountries co ON s.CountryId = co.CountryId
-                        WHERE s.StateName LIKE '{name}%'
+                    SELECT 
+                        CAST(co.CountryId AS INT) AS Id,
+                        co.CountryName AS Name,
+                        'Country' AS Type,
+                        NULL AS Parent
+                    FROM TblCountries co
+                    WHERE co.CountryName LIKE '{name}%'
+                ) AS AllResults
+                GROUP BY Id, Name, Type, Parent";
+                    }
 
-                        UNION
+                    // ✅ AREA ONLY
+                    else if (searchType == "area")
+                    {
+                        query = $@"
+                SELECT TOP {maxrecord}
+                    CAST(a.AreaId AS INT) AS Id,
+                    a.AreaName AS Name,
+                    'Area' AS Type,
+                    CONCAT(c.CityName, ' > ', s.StateName, ' > ', co.CountryName) AS Parent
+                FROM TblAreas a
+                INNER JOIN TblCities c ON a.CityId = c.CityId
+                INNER JOIN TblStates s ON c.StateId = s.StateId
+                INNER JOIN TblCountries co ON s.CountryId = co.CountryId
+                WHERE a.AreaName LIKE '{name}%'
+                GROUP BY a.AreaId, a.AreaName, c.CityName, s.StateName, co.CountryName";
+                    }
 
-                        SELECT 
-                            CAST(co.CountryId AS INT) AS Id,
-                            co.CountryName AS Name,
-                            'Country' AS Type,
-                            NULL AS Parent
-                        FROM TblCountries co
-                        WHERE co.CountryName LIKE '{name}%'
-                    ) AS AllResults
-                    GROUP BY Id, Name, Type, Parent
-                    ").AsNoTracking().ToListAsync();
-                    
+                    searchResults = await connection.GetAreaBySearchViewModel
+                        .FromSqlRaw(query)
+                        .AsNoTracking()
+                        .ToListAsync();
                 }
-                if(searchResults.Count() == 0)
+
+                if (searchResults.Count == 0)
                 {
-                    response.Message = "Data does not exists";
+                    response.Message = "Data does not exist";
                     response.statusCode = 204;
                 }
                 else
@@ -249,6 +280,7 @@ namespace ENT.BL.ServiceAreaMapping
                     response.Data = searchResults;
                     response.statusCode = 200;
                 }
+
                 return response;
             }
             catch (Exception ex)
@@ -258,6 +290,92 @@ namespace ENT.BL.ServiceAreaMapping
                 return response;
             }
         }
+
+
+        //public async Task<APIResponseModel> GetAreaBySearch(string? name, int maxrecord, string? searchType)
+        //{
+        //    APIResponseModel response = new();
+        //    try
+        //    {
+        //        List<GetAreaBySearchViewModel> searchResults = new();
+        //        using (MyDBContext connection = _context)
+        //        {
+
+
+        //            searchResults = await connection.GetAreaBySearchViewModel.FromSqlRaw($@"
+        //            SELECT TOP {maxrecord}
+        //                Id,
+        //                Name,
+        //                Type,
+        //                Parent
+        //            FROM (
+        //                SELECT 
+        //                    CAST(c.CityId AS INT) AS Id,
+        //                    c.CityName AS Name,
+        //                    'City' AS Type,
+        //                    CONCAT(s.StateName, ' > ', co.CountryName) AS Parent
+        //                FROM TblCities c
+        //                INNER JOIN TblStates s ON c.StateId = s.StateId
+        //                INNER JOIN TblCountries co ON s.CountryId = co.CountryId
+        //                WHERE c.CityName LIKE '{name}%'
+
+        //                UNION
+
+        //                SELECT 
+        //                    CAST(a.AreaId AS INT) AS Id,
+        //                    a.AreaName AS Name,
+        //                    'Area' AS Type,
+        //                    CONCAT(c.CityName, ' > ', s.StateName, ' > ', co.CountryName) AS Parent
+        //                FROM TblAreas a
+        //                INNER JOIN TblCities c ON a.CityId = c.CityId
+        //                INNER JOIN TblStates s ON c.StateId = s.StateId
+        //                INNER JOIN TblCountries co ON s.CountryId = co.CountryId
+        //                WHERE a.AreaName LIKE '{name}%'
+
+        //                UNION
+
+        //                SELECT 
+        //                    CAST(s.StateId AS INT) AS Id,
+        //                    s.StateName AS Name,
+        //                    'State' AS Type,
+        //                    co.CountryName AS Parent
+        //                FROM TblStates s
+        //                INNER JOIN TblCountries co ON s.CountryId = co.CountryId
+        //                WHERE s.StateName LIKE '{name}%'
+
+        //                UNION
+
+        //                SELECT 
+        //                    CAST(co.CountryId AS INT) AS Id,
+        //                    co.CountryName AS Name,
+        //                    'Country' AS Type,
+        //                    NULL AS Parent
+        //                FROM TblCountries co
+        //                WHERE co.CountryName LIKE '{name}%'
+        //            ) AS AllResults
+        //            GROUP BY Id, Name, Type, Parent
+        //            ").AsNoTracking().ToListAsync();
+
+        //        }
+        //        if(searchResults.Count() == 0)
+        //        {
+        //            response.Message = "Data does not exists";
+        //            response.statusCode = 204;
+        //        }
+        //        else
+        //        {
+        //            response.Data = searchResults;
+        //            response.statusCode = 200;
+        //        }
+        //        return response;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.statusCode = 400;
+        //        response.Message = ex.Message;
+        //        return response;
+        //    }
+        //}
 
         public async Task<APIResponseModel> GetServicesByRegionType(string? regionType, int? regionId)
         {
