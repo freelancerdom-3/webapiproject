@@ -3,7 +3,7 @@ using ENT.Model.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebAPI.Controllers
+namespace WebAPI.Controllers.ImageName
 {
     [Route("api/[controller]")]
     [ApiController]

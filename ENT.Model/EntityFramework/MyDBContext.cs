@@ -25,6 +25,8 @@ using ENT.Model.ServiceProviderSubCategoryMapping;
 using ENT.Model.ImageNames;
 using ENT.Model.TimeSlots;
 using ENT.Model.Fees;
+using ENT.Model.OrderID;
+using ENT.Model.OrderServiceMapping;
 
 
 namespace ENT.Model.EntityFramework
@@ -87,6 +89,8 @@ namespace ENT.Model.EntityFramework
             modelBuilder.Entity<ImageNameModel>().ToTable("TblImageNames");
             modelBuilder.Entity<TimeSlotsModel>().ToTable("TblTimeSlots");
             modelBuilder.Entity<FeesModel>().ToTable("TblFees");
+            modelBuilder.Entity<OrderIDModel>().ToTable("TblOrderIDS");
+            modelBuilder.Entity<OrderServiceMappingModel>().ToTable("TblOrderServiceMapping");
             
         }
 
@@ -119,5 +123,7 @@ namespace ENT.Model.EntityFramework
         public DbSet<FeesModel> TblFees { get; set; }
         public DbSet<SubCategoryImageNameViewModel> SubCategoryImageNameViewModels { get; set; }
         public DbSet<ServiceQuantityViewModel> ServiceQuantityViewModels { get; set; }
+        public DbSet<OrderIDModel> TblOrderIDS { get; set; }
+        public DbSet<OrderServiceMappingModel> TblOrderServiceMappings { get; set; }
     }
 }
