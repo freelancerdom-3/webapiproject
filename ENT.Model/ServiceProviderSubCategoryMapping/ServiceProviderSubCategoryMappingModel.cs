@@ -9,10 +9,9 @@ using System.Threading.Tasks;
 
 namespace ENT.Model.ServiceProviderSubCategoryMapping
 {
-    [Keyless]
     public class ServiceProviderSubCategoryMappingModel
     {
-
+        [Key]
         public int MappingId { get; set; }
         public int UserId { get; set; }
         public int SubCategoryId { get; set; }

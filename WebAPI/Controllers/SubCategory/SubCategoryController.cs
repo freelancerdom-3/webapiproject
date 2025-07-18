@@ -54,5 +54,13 @@ namespace WebAPI.Controllers.SubCategory
         {
             return await _subCategory.GetTopTrending(maxTrendingRecords);
         }
+
+        [HttpGet("GetAllSkill")]
+        [AllowAnonymous]
+        public async Task<APIResponseModel> GetAllSkillType( )
+        {
+            return await _subCategory.GetAllSkillType();
+        }
+
     }
 }

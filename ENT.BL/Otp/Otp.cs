@@ -142,7 +142,18 @@ namespace ENT.BL.Otp
             return response;
         }
 
-        
+        private async Task<bool> CheckIfRegistered(int? userId)
+        {
+            using(var connection = _context)
+            {
+                string? fullName = await connection.TblUsers.Where(x => x.UserId == userId).Select(x => x.FullName).FirstOrDefaultAsync();
+                if(fullName == null)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
 
         public async Task<APIResponseModel> Verify(int Otp, string mobileNumber) //123456, 9033342003
         {
@@ -178,7 +189,9 @@ namespace ENT.BL.Otp
                                     JwtToken = token,
                                     userId = existingUser?.UserId,
                                     mobileNumber = existingUser?.MobileNumber,
-                                    userTypeId = existingUser?.UserTypeId
+                                    userTypeId = existingUser?.UserTypeId,
+                                    
+                                    //isRegistered = CheckIfRegistered(existingUser?.UserId)
                                 };
                             }
                             else

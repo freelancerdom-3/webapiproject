@@ -1,5 +1,6 @@
 ﻿using ENT.BL.ServiceProviderSubCategoryMapping;
 using ENT.Model.Common;
+using ENT.Model.CustomModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -26,5 +27,20 @@ namespace WebAPI.Controllers.ServiceProviderSubCategoryMapping
         {
             return await _ServiceProviderSubCategoryMapping.GetBySubCategoryName(SubCategoryName);
         }
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<APIResponseModel> GetBySkill(SkillViewModel objSkill)
+        {
+            return await _ServiceProviderSubCategoryMapping.GetBySkill(objSkill);
+        }
+
+        [HttpGet("HasSkills")]
+        public async Task<IActionResult> HasSkills(int userId)
+        {
+            var response = await _ServiceProviderSubCategoryMapping.HasSkills(userId);
+            return Ok(response);
+        }
+
+     
     }
 }

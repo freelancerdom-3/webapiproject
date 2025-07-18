@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ENT.BL.ServiceAreaMapping;
 using ENT.Model.Common;
+using ENT.Model.CustomModel;
 using ENT.Model.EntityFramework;
 using ENT.Model.ServiceProviderAreaMapping;
 using Microsoft.EntityFrameworkCore;
@@ -159,6 +160,40 @@ namespace ENT.BL.ServiceProviderAreaMapping
                 response.Data = false;
                 return response;
             }
+        }
+
+        public async Task<APIResponseModel> GetByArias(AriaMappingViewModel objAria)
+        {
+            APIResponseModel response = new APIResponseModel();
+            try
+            {
+                using (MyDBContext connection = _context)
+                {
+                    for (int i = 0; i < objAria.AriaListID.Count(); i++)
+                    {
+                        ServiceProviderAreaMappingModel myobj = new ServiceProviderAreaMappingModel();
+                        myobj.UserId = objAria.UserId;
+                        myobj.AreaId = objAria.AriaListID[i];
+                        await connection.TblServiceProviderAreaMapping.AddAsync(myobj);
+
+                    }
+                    await connection.SaveChangesAsync();
+
+                    response.statusCode = 200;
+                    response.Message = "Skills fetched successfully.";
+                    response.Data = true;
+                    return response;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                response.statusCode = 400;
+                response.Message = ex.Message;
+                response.Data = false;
+                return response;
+            }
+
         }
 
         

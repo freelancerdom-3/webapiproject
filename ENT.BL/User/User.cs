@@ -155,6 +155,11 @@ namespace ENT.BL.User
                         {
                             existingUser.FullName = objUser.FullName;
                         }
+                        if (objUser.Gender != null)
+                        {
+                            existingUser.Gender = objUser.Gender;
+                        }
+
                         if (objUser.DateOfBirth != null)
                         {
                             existingUser.DateOfBirth = objUser.DateOfBirth;

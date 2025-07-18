@@ -1,12 +1,8 @@
 ﻿using ENT.Model.Common;
 using ENT.Model.CustomModel;
 using ENT.Model.EntityFramework;
+using ENT.Model.ServiceProviderSubCategoryMapping;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ENT.BL.ServiceProviderSubCategoryMapping
 {
@@ -25,7 +21,7 @@ namespace ENT.BL.ServiceProviderSubCategoryMapping
                 List<ServiceProviderSubCategoryMappingViewModel> searchResults = new();
                 using (MyDBContext connection = _context)
                 {
-                    searchResults = await connection.ServiceProviderSubCategoryMappingViewModel.FromSqlRaw( $@"                                      
+                    searchResults = await connection.ServiceProviderSubCategoryMappingViewModel.FromSqlRaw($@"                                      
                          SELECT DISTINCT 
                         users.UserId AS UserId, 
                         users.FullName AS FullName, 
@@ -42,9 +38,9 @@ namespace ENT.BL.ServiceProviderSubCategoryMapping
                         WHERE users.UserTypeId = 3 
                         AND areas.AreaName LIKE '{areaName}%';
                         ").AsNoTracking().ToListAsync();
-           
+
                 }
-                
+
 
                 if (searchResults.Count() == 0)
                 {
@@ -105,6 +101,68 @@ namespace ENT.BL.ServiceProviderSubCategoryMapping
                 return response;
             }
         }
+        public async Task<APIResponseModel> GetBySkill(SkillViewModel objSkill)
+        {
+            APIResponseModel response = new APIResponseModel();
+            try
+            {
+                using (MyDBContext connection = _context)
+                {
+
+                    for (int i = 0; i < objSkill.SkillIDList.Count(); i++)
+                    {
+                        ServiceProviderSubCategoryMappingModel myobj = new ServiceProviderSubCategoryMappingModel();
+                        myobj.UserId = objSkill.UserId;
+                        myobj.SubCategoryId = objSkill.SkillIDList[i];
+                        await connection.TblServiceProviderSubCategoryMapping.AddAsync(myobj);
+                    }
+                    await connection.SaveChangesAsync();
+
+                    response.statusCode = 200;
+                    response.Message = "Skills fetched successfully.";
+                    response.Data = true;
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.statusCode = 400;
+                response.Message = ex.Message;
+                response.Data = false;
+                return response;
+            }
+
+        }
+        public async Task<APIResponseModel> HasSkills(int userId)
+        {
+            APIResponseModel response = new APIResponseModel();
+            try
+            {
+                using (MyDBContext connection = _context)
+                {
+                    bool hasSkills = await connection.TblServiceProviderSubCategoryMapping
+                                                     .AnyAsync(x => x.UserId == userId);
+
+                    response.statusCode = 200;
+                    response.Message = hasSkills ? "Skills found" : "No skills registered";
+                    response.Data = hasSkills;
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.statusCode = 500;
+                response.Message = "Error: " + ex.Message;
+                response.Data = false;
+                return response;
+            }
+        }
+
+       
+
+
+
+
 
 
 

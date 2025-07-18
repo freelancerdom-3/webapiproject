@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using ENT.Model.ServiceProviderAreaMapping;
 using ENT.Model.ServiceAreaMapping;
 using Microsoft.AspNetCore.Authorization;
+using ENT.Model.CustomModel;
 
 namespace WebAPI.Controllers.ServiceProviderAreaMapping
 {
@@ -45,6 +46,12 @@ namespace WebAPI.Controllers.ServiceProviderAreaMapping
         public async Task<APIResponseModel> Update(ServiceProviderAreaMappingModel objServiceproviderAreaMapping)
         {
             return await _serviceProviderAreaMapping.Update(objServiceproviderAreaMapping);
+        }
+        [HttpPost("PostbyAriaMapping")]
+        [AllowAnonymous]
+        public async Task<APIResponseModel> GetByArias(AriaMappingViewModel objAria)
+        {
+            return await _serviceProviderAreaMapping.GetByArias(objAria);
         }
     }
 }

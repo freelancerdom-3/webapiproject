@@ -21,5 +21,6 @@ namespace ENT.BL.SubCategory
         Task<APIResponseModel> Update(SubCategoryModel objSubCategory);
         Task<APIResponseModel> Delete(int SubCategoryId);
         Task<APIResponseModel> GetTopTrending(int maxTrendingRecords);
+        Task<APIResponseModel> GetAllSkillType();
     }
 }

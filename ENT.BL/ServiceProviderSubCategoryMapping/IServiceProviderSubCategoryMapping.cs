@@ -1,4 +1,5 @@
 ﻿using ENT.Model.Common;
+using ENT.Model.CustomModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,9 @@ namespace ENT.BL.ServiceProviderSubCategoryMapping
     {
         Task<APIResponseModel> GetByArea(string areaName);
         Task<APIResponseModel> GetBySubCategoryName(string SubCategoryName);
+        Task<APIResponseModel> GetBySkill(SkillViewModel objSkill);
 
+        Task<APIResponseModel> HasSkills(int userId);
+       
     }
 }

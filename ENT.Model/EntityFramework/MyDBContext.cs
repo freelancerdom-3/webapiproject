@@ -44,14 +44,14 @@ namespace ENT.Model.EntityFramework
             //optionsBuilder.UseSqlServer("Server= (localdb)\\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;");
 
             //Hemil-Fichadia
-            optionsBuilder.UseSqlServer(@"Server= LAPTOP-LHKLMKKD\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
+           // optionsBuilder.UseSqlServer(@"Server= LAPTOP-LHKLMKKD\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
             
 
             //NENCY
             //optionsBuilder.UseSqlServer("Server= NENCY-PATEL21\\SQLEXPRESS; Database= MyDB; Integrated Security=True; Encrypt=false;");
 
             //Alpesh-Gami          
-            //optionsBuilder.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;");
+            optionsBuilder.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;");
             
             //Mohsin-Ali-Momin
             //optionsBuilder.UseSqlServer("Server= MOHSINMOMIN\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
@@ -125,5 +125,13 @@ namespace ENT.Model.EntityFramework
         public DbSet<ServiceQuantityViewModel> ServiceQuantityViewModels { get; set; }
         public DbSet<OrderIDModel> TblOrderIDS { get; set; }
         public DbSet<OrderServiceMappingModel> TblOrderServiceMappings { get; set; }
+        public DbSet<SubCategoryIdNameViewModul> SubCategoryIdNameViewModul { get; set; }
+        public DbSet<ServiceProviderSubCategoryMappingModel> ServiceProviderSubCategoryMappingModel { get; set; }
+        public DbSet<SkillViewModel> SkillViewModel { get; set; }
+
+        public DbSet<RegionNameViewModel> RegionNameViewModels {  get; set; }
+        public DbSet<AriaMappingViewModel> AriaMappingViewModels { get; set; }
+
+
     }
 }

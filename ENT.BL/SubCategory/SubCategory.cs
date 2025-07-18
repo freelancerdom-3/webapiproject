@@ -241,5 +241,31 @@ namespace ENT.BL.SubCategory
                 return response;
             }
         }
+
+
+        public async Task<APIResponseModel> GetAllSkillType()
+        {
+            APIResponseModel response = new APIResponseModel();
+            try
+            {
+                using (var connection = _context)
+                {
+                    response.Data = await connection.SubCategoryIdNameViewModul.FromSqlRaw($@"SELECT sc.SubCategoryId AS SubCategoryId, sc.SubCategoryName AS SubCategoryName
+                    FROM TblSubCategorys sc
+                    WHERE sc.SubCategoryMappingId = 0;                
+                    ").ToListAsync();
+                }
+                response.statusCode = 200;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Data = false;
+                response.statusCode = 400;
+                response.Message = ex.Message;
+                return response;
+            }
+
+        }
     }
 }

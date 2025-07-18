@@ -31,7 +31,7 @@ namespace WebAPI.Controllers.Otp
             return await _otp.GenerateOtpForEndUser(mobileNumber);
         }
 
-        [HttpPost("OtpForServiceProvider")]
+        [HttpGet("OtpForServiceProvider")]
         public async Task<APIResponseModel> GenerateOtpForServiceProvider(string mobileNumber)
         {
             return await _otp.GenerateOtpForServiceProvider(mobileNumber);

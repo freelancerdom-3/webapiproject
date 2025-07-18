@@ -1,4 +1,5 @@
 ﻿using ENT.Model.Common;
+using ENT.Model.CustomModel;
 using ENT.Model.Users;
 using System;
 using System.Collections.Generic;
@@ -16,5 +17,6 @@ namespace ENT.BL.User
         Task<APIResponseModel> GetById(int userId);
         Task<APIResponseModel> Update(UserModel objUser);
         Task<APIResponseModel> Delete(int userId);
+       
     }
 }

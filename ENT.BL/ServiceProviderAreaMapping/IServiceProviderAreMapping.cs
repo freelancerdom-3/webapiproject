@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ENT.Model.Common;
+using ENT.Model.CustomModel;
 using ENT.Model.ServiceProviderAreaMapping;
 
 namespace ENT.BL.ServiceProviderAreaMapping
@@ -19,5 +20,6 @@ namespace ENT.BL.ServiceProviderAreaMapping
         Task<APIResponseModel> Delete(int MappingId);
 
         Task<APIResponseModel> Update(ServiceProviderAreaMappingModel objServiceProviderAreaMapping);
+        Task<APIResponseModel> GetByArias(AriaMappingViewModel objAria);
     }
 }
