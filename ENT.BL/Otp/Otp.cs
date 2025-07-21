@@ -109,7 +109,6 @@ namespace ENT.BL.Otp
             }
             return response;
         }
-
         public async Task<APIResponseModel> GenerateOtpForServiceProvider(string mobileNumber)
         {
             APIResponseModel response = new APIResponseModel();
@@ -118,16 +117,31 @@ namespace ENT.BL.Otp
                 OtpModel otpObject = GenerateOtpObject(mobileNumber);
                 using (var connection = _context)
                 {
-                    bool userExists = await connection.TblUsers.AnyAsync(x => x.MobileNumber == mobileNumber);
-                    if (userExists == false)
+                    var existingUser = await connection.TblUsers
+                        .FirstOrDefaultAsync(x => x.MobileNumber == mobileNumber);
+
+                    if (existingUser != null)
                     {
-                        //Add new user
+                        if (existingUser.UserTypeId == 2) // End user
+                        {
+                            response.Data = null;
+                            response.Message = "You are logged in as a user, so you can't use this number as a service provider.";
+                            response.statusCode = 403;
+                            return response;
+                        }
+                        // else: user exists and is a service provider or another type, proceed
+                    }
+                    else
+                    {
+                        // Add new user as service provider
                         UserModel newUser = new UserModel() { MobileNumber = mobileNumber, UserTypeId = 3 };
                         await _user.Add(newUser);
                     }
+
                     await connection.TblOtp.AddAsync(otpObject);
                     await connection.SaveChangesAsync();
                 }
+
                 response.Data = otpObject;
                 response.Message = "OTP Generated successfully";
                 response.statusCode = 200;
@@ -141,6 +155,39 @@ namespace ENT.BL.Otp
             }
             return response;
         }
+
+
+        //public async Task<APIResponseModel> GenerateOtpForServiceProvider(string mobileNumber)
+        //{
+        //    APIResponseModel response = new APIResponseModel();
+        //    try
+        //    {
+        //        OtpModel otpObject = GenerateOtpObject(mobileNumber);
+        //        using (var connection = _context)
+        //        {
+        //            bool userExists = await connection.TblUsers.AnyAsync(x => x.MobileNumber == mobileNumber);
+        //            if (userExists == false)
+        //            {
+        //                //Add new user
+        //                UserModel newUser = new UserModel() { MobileNumber = mobileNumber, UserTypeId = 3 };
+        //                await _user.Add(newUser);
+        //            }
+        //            await connection.TblOtp.AddAsync(otpObject);
+        //            await connection.SaveChangesAsync();
+        //        }
+        //        response.Data = otpObject;
+        //        response.Message = "OTP Generated successfully";
+        //        response.statusCode = 200;
+        //        return response;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response.Data = false;
+        //        response.statusCode = 400;
+        //        response.Message = ex.Message;
+        //    }
+        //    return response;
+        //}
 
         private async Task<bool> CheckIfRegistered(int? userId)
         {
