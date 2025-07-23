@@ -20,7 +20,6 @@ using Microsoft.OpenApi.Models;
 using ENT.BL.ImageName;
 using ENT.BL.TimeSlots;
 using ENT.BL.Fees;
-using ENT.BL.OrderID;
 using ENT.BL.OrderServiceMapping;
 using ENT.BL.RegionSearch;
 
@@ -85,7 +84,6 @@ builder.Services.AddScoped<IServiceProviderSubCategoryMapping, ServiceProviderSu
 builder.Services.AddScoped<IImageName, ImageName>();
 builder.Services.AddScoped<ITimeSlots, TimeSlots>();
 builder.Services.AddScoped<IFees, Fees>();
-builder.Services.AddScoped<IOrderID, OrderIDLogic>();
 builder.Services.AddScoped<IOrderServiceMapping, OrderServiceMapping>();
 builder.Services.AddScoped<IRegionSearch, RegionSearch>();
 

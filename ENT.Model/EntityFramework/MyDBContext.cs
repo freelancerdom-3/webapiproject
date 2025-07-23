@@ -25,8 +25,9 @@ using ENT.Model.ServiceProviderSubCategoryMapping;
 using ENT.Model.ImageNames;
 using ENT.Model.TimeSlots;
 using ENT.Model.Fees;
-using ENT.Model.OrderID;
+
 using ENT.Model.OrderServiceMapping;
+using ENT.Model.Order;
 
 
 namespace ENT.Model.EntityFramework
@@ -44,14 +45,14 @@ namespace ENT.Model.EntityFramework
             //optionsBuilder.UseSqlServer("Server= (localdb)\\MSSQLLocalDB; Database= MyDb; Integrated Security=True; Encrypt=false;");
 
             //Hemil-Fichadia
-           // optionsBuilder.UseSqlServer(@"Server= LAPTOP-LHKLMKKD\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
+            optionsBuilder.UseSqlServer(@"Server= LAPTOP-LHKLMKKD\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
             
 
             //NENCY
             //optionsBuilder.UseSqlServer("Server= NENCY-PATEL21\\SQLEXPRESS; Database= MyDB; Integrated Security=True; Encrypt=false;");
 
             //Alpesh-Gami          
-            optionsBuilder.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;");
+            //optionsBuilder.UseSqlServer("Server=DESKTOP-05KIL3J; Database= MyDb; Integrated Security=True; Encrypt=false;");
             
             //Mohsin-Ali-Momin
             //optionsBuilder.UseSqlServer("Server= MOHSINMOMIN\\SQLEXPRESS; Database= MyDb; Integrated Security=True; Encrypt=false;");
@@ -89,8 +90,8 @@ namespace ENT.Model.EntityFramework
             modelBuilder.Entity<ImageNameModel>().ToTable("TblImageNames");
             modelBuilder.Entity<TimeSlotsModel>().ToTable("TblTimeSlots");
             modelBuilder.Entity<FeesModel>().ToTable("TblFees");
-            modelBuilder.Entity<OrderIDModel>().ToTable("TblOrderIDS");
             modelBuilder.Entity<OrderServiceMappingModel>().ToTable("TblOrderServiceMapping");
+            modelBuilder.Entity<OrderModel>().ToTable("TblOrders");
             
         }
 
@@ -123,7 +124,6 @@ namespace ENT.Model.EntityFramework
         public DbSet<FeesModel> TblFees { get; set; }
         public DbSet<SubCategoryImageNameViewModel> SubCategoryImageNameViewModels { get; set; }
         public DbSet<ServiceQuantityViewModel> ServiceQuantityViewModels { get; set; }
-        public DbSet<OrderIDModel> TblOrderIDS { get; set; }
         public DbSet<OrderServiceMappingModel> TblOrderServiceMappings { get; set; }
         public DbSet<SubCategoryIdNameViewModul> SubCategoryIdNameViewModul { get; set; }
         public DbSet<ServiceProviderSubCategoryMappingModel> ServiceProviderSubCategoryMappingModel { get; set; }
@@ -131,7 +131,7 @@ namespace ENT.Model.EntityFramework
 
         public DbSet<RegionNameViewModel> RegionNameViewModels {  get; set; }
         public DbSet<AriaMappingViewModel> AriaMappingViewModels { get; set; }
-
-
+        public DbSet<OrderModel> TblOrders { get; set; }
+        public DbSet<OrderDetailsViewModel> OrderDetailsViewModels { get; set; }
     }
 }

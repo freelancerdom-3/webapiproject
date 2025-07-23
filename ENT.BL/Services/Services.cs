@@ -257,7 +257,8 @@ namespace ENT.BL.Services
                     ON sc.SubCategoryId = IName.CategorizedTypeId AND IName.CategorizedTypeName = 'SubCategory'
                     WHERE sc.SubCategoryMappingId = {subCategoryId}
                     ").ToListAsync();
-                    //SET CHILD-SUB-CATEGORY-LIST
+
+                    //SET CHILD-SUB-CATEGORY-LIST TO MAIN CARRIER OBJECT
                     responseList.ChildSubCategoriesList = childSubCategoryList;
 
                     //This model is to pair ChildSubCategory Name with services in it
@@ -267,6 +268,7 @@ namespace ENT.BL.Services
                     for (int i = 0; i < childSubCategoryList.Count; i++)
                     {
                         ChildSubCategoryServicesViewModel childSubCategoryService = new ChildSubCategoryServicesViewModel();
+                        childSubCategoryService.ChildSubCategoryId = childSubCategoryList[i].ChildSubCategoryId;
                         childSubCategoryService.ChildSubCategoryName = childSubCategoryList[i].ChildSubCategoryName;
                         //Actual services with child-subcategoryId
 

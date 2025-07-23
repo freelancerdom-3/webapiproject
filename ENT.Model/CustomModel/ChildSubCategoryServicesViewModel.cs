@@ -10,8 +10,8 @@ namespace ENT.Model.CustomModel
     //To store pair of child sub-cateogry and services list
     public class ChildSubCategoryServicesViewModel
     {
+        public int ChildSubCategoryId { get; set; }
         public string ChildSubCategoryName { get; set; }
-
         public List<ServiceNameViewModel> servicesList { get; set; }
     }
 }

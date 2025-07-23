@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ENT.BL.OrderID
+namespace ENT.BL.Order
 {
-    public interface IOrderID
+    public interface IOrder
     {
-        //Only to generate new OrderID
-        Task<APIResponseModel> GenerateOrderID();
+        Task<APIResponseModel> GetConfirmedOrder(int OrderID);
     }
 }
