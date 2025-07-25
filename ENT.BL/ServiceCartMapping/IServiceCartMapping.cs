@@ -17,6 +17,7 @@ namespace ENT.BL.ServiceCartMapping
         Task<APIResponseModel> Update(ServiceCartMappingModel ObjServiceCartMapping);
         Task<APIResponseModel> Delete(DeleteServiceViewModel objDeleteServiceViewModel);
         Task<APIResponseModel> AddServicesByList(CartServiceQuantityViewModel objCartServiceViewModel);
+        Task<APIResponseModel> DeletePlacedServices(DeletePlacedServicesViewModel objDeletePlacedServices);
     }
 }
 

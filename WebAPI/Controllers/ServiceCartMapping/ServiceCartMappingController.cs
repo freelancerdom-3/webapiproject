@@ -62,5 +62,11 @@ namespace WebAPI.Controllers.ServiceCartMapping
         {
             return await _ServiceCartMapping.AddServicesByList(objCartServiceViewModel);
         }
+
+        [HttpDelete("DeletePlacedServices")]
+        public async Task<APIResponseModel> DeletePlacedServices([FromBody]DeletePlacedServicesViewModel objDeletePlacedServices)
+        {
+            return await _ServiceCartMapping.DeletePlacedServices(objDeletePlacedServices);
+        }
     }
 }

@@ -352,5 +352,39 @@ namespace ENT.BL.ServiceCartMapping
                 return response;
             }
         }
+
+        public async Task<APIResponseModel> DeletePlacedServices(DeletePlacedServicesViewModel objDeletePlacedServices)
+        {
+            APIResponseModel response = new APIResponseModel();
+            try
+            {
+                int cartId = objDeletePlacedServices.CartId;
+                List<ServiceQuantityViewModel> placedServicesList = objDeletePlacedServices.serviceQuantityList;
+
+                using(var connection = _context)
+                {
+                    //Get all service ids from services list
+                    var serviceIds = placedServicesList.Select(s => s.ServiceId).ToList();
+                    //Fetch all services with matching id from database table
+                    var servicesToRemove = await connection.TblServiceCartMappings
+                        .Where(x => x.CartId == cartId && serviceIds.Contains(x.ServiceId))
+                        .ToListAsync();
+                    //Use RemoveRange function to carry out bulk deletion operation
+                    connection.RemoveRange(servicesToRemove);
+                    //Save the state after removing all services
+                    await connection.SaveChangesAsync();
+                }
+                response.statusCode = 200;
+                response.Message = "Services deleted successfully from cart";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.statusCode = 400;
+                response.Message = ex.Message;
+                return response;
+
+            }
+        }
     }
 }
